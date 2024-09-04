@@ -2,7 +2,7 @@ version: "3"
 
 services:
   discuit:
-    build: .
+    build: docker/Dockerfile.amd64
     restart: unless-stopped
     ports:
       - "8080:80"
