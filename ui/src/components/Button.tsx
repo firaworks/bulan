@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React, { useRef } from 'react';
+import { SVGClose } from '../SVGs';
 import Spinner from './Spinner';
 
 type ButtonVariant = 'normal' | 'text';
@@ -68,25 +69,11 @@ export const ButtonClose = ({
 }: {
   className?: string;
   style?: React.CSSProperties;
-}) => {
+} & ButtonProps) => {
   const cls = 'button-icon' + (className ? ` ${className}` : '');
   return (
     <Button className={cls} style={{ padding: '9px', ...style }} {...props}>
-      <svg
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 512.001 512.001"
-        xmlSpace="preserve"
-      >
-        <path
-          d="M284.286,256.002L506.143,34.144c7.811-7.811,7.811-20.475,0-28.285c-7.811-7.81-20.475-7.811-28.285,0L256,227.717
-			L34.143,5.859c-7.811-7.811-20.475-7.811-28.285,0c-7.81,7.811-7.811,20.475,0,28.285l221.857,221.857L5.858,477.859
-			c-7.811,7.811-7.811,20.475,0,28.285c3.905,3.905,9.024,5.857,14.143,5.857c5.119,0,10.237-1.952,14.143-5.857L256,284.287
-			l221.857,221.857c3.905,3.905,9.024,5.857,14.143,5.857s10.237-1.952,14.143-5.857c7.811-7.811,7.811-20.475,0-28.285
-			L284.286,256.002z"
-          strokeWidth={2}
-        />
-      </svg>
+      <SVGClose />
     </Button>
   );
 };
@@ -100,7 +87,7 @@ export const ButtonMore = ({
   vertical?: boolean;
   outlined?: boolean;
   className?: string;
-}) => {
+} & ButtonProps) => {
   const style: React.CSSProperties = {
     transform: vertical ? 'rotate(90deg)' : 'initial',
   };
@@ -160,7 +147,7 @@ export const ButtonMore = ({
   );
 };
 
-export const ButtonHamburger = ({ className, ...props }: { className?: string }) => {
+export const ButtonHamburger = ({ className, ...props }: { className?: string } & ButtonProps) => {
   const cls = 'button-hamburger' + (className ? ` ${className}` : '');
   return (
     <Button className={cls} {...props}>
@@ -180,13 +167,13 @@ export const ButtonSearch = ({
 }: {
   className?: string;
   noBackground?: boolean;
-}) => {
+} & ButtonProps) => {
   const cls =
     (noBackground ? 'button-clear' : 'button-icon') +
     ' button-search' +
     (className ? ` ${className}` : '');
   return (
-    <button className={cls} {...props}>
+    <Button className={cls} {...props}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"
@@ -200,11 +187,11 @@ export const ButtonSearch = ({
       >
         <path d="M21 21l-4.486-4.494M19 10.5a8.5 8.5 0 1 1-17 0 8.5 8.5 0 0 1 17 0z" />
       </svg>
-    </button>
+    </Button>
   );
 };
 
-export const ButtonNotifications = ({ count = 0, ...props }: { count?: number }) => {
+export const ButtonNotifications = ({ count = 0, ...props }: { count?: number } & ButtonProps) => {
   return (
     <Button className="notifications-button button-icon-simple" {...props}>
       {count > 0 && <div className="notifications-count">{count}</div>}

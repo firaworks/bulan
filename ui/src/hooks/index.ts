@@ -2,7 +2,8 @@ import { useEffect, useInsertionEffect, useReducer, useRef, useState } from 'rea
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
 import { APIError, mfetch, mfetchjson, usernameLegalLetters } from '../helper';
-import { selectUsersLists, usersListsAdded } from '../slices/listsSlice';
+import { List } from '../serverTypes';
+import { ListsFilter, ListsOrder, selectUsersLists, usersListsAdded } from '../slices/listsSlice';
 import {
   muteCommunity,
   muteUser,
@@ -95,7 +96,10 @@ export function useIsMobile(breakpoint = mobileBreakpointWidth) {
 
 export type LoadingState = 'initial' | 'loading' | 'loaded' | 'error';
 
-export function useLoading(initialState: LoadingState = 'initial', timeout = 80) {
+export function useLoading(
+  initialState: LoadingState = 'initial',
+  timeout = 80
+): [LoadingState, (loading: LoadingState) => void] {
   const [loading, setLoading] = useState<LoadingState>(initialState);
   useEffect(() => {
     if (loading === initialState) {
@@ -440,9 +444,9 @@ export function useFetchUsersLists(username: string, showSnackAlertOnError = tru
     order,
     filter,
   }: {
-    lists: unknown;
-    order: unknown;
-    filter: unknown;
+    lists: List[] | null;
+    order: ListsOrder;
+    filter: ListsFilter;
   } = useSelector(selectUsersLists(username));
   const [error, setError] = useState<unknown>(null);
 
@@ -456,7 +460,7 @@ export function useFetchUsersLists(username: string, showSnackAlertOnError = tru
         const lists = await mfetchjson(
           `/api/users/${username}/lists?sort=${order}&filter=${filter}`
         );
-        dispatch(usersListsAdded(username, lists, order as string, filter as string));
+        dispatch(usersListsAdded(username, lists, order, filter));
       } catch (error: unknown) {
         setError(error);
         if (showSnackAlertOnError) {

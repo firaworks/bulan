@@ -961,7 +961,7 @@ a,
 
 .page-content {
     padding-top: var(--page-top-margin);
-    min-height: calc(100vh - var(--navbar-height));
+    min-height: calc(100vh - var(--navbar-height) - var(--page-top-margin));
     &.page-grid {
         display: grid;
         grid-template-columns: var(--grid-home);
@@ -1295,6 +1295,18 @@ table {
 
 .is-no-m {
     @include mixins.mobile() {
+        display: none !important;
+    }
+}
+
+.is-t {
+    @include mixins.not-tablet() {
+        display: none !important;
+    }
+}
+
+.is-no-t {
+    @include mixins.tablet() {
         display: none !important;
     }
 }
