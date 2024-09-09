@@ -19,8 +19,12 @@ import { homeReloaded } from '../../views/PostsFeed';
 import { ButtonHamburger, ButtonNotifications } from '../Button';
 import Dropdown from '../Dropdown';
 import Search from './Search';
+import { useTranslation } from "react-i18next";
 
 const Navbar = ({ offline = false }) => {
+
+  const [t, i18n] = useTranslation("global");
+
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.main.user);
@@ -179,7 +183,7 @@ const Navbar = ({ offline = false }) => {
                 </Link>
                 {user.isAdmin && (
                   <Link className="link-reset dropdown-item" to={`/admin`}>
-                    Admin dashboard
+                    {t("admin")}
                   </Link>
                 )}
                 {/*<div className="dropdown-item">Darkmode</div>*/}
