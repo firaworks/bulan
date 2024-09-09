@@ -14,8 +14,10 @@ import {
 import { ButtonMore } from '../Button';
 import Dropdown from '../Dropdown';
 import NotificationItem from './NotificationItem';
+import { useTranslation } from "react-i18next";
 
 const NotificationsView = () => {
+  const [t, i18n] = useTranslation("global");
   const notifications = useSelector((state) => state.main.notifications);
   const { loaded, next, items, count, newCount } = notifications;
 
@@ -117,7 +119,7 @@ const NotificationsView = () => {
     return (
       <div className={className}>
         <div className="notifs-head">
-          <div className="notifs-title">Notifications</div>
+          <div className="notifs-title">{t("notifications.title")}</div>
         </div>
         <div className="notifs-body">
           <div className="notifs-list">{renderSkeletons()}</div>
@@ -129,21 +131,21 @@ const NotificationsView = () => {
   return (
     <div className={className}>
       <div className="notifs-head">
-        <div className="notifs-title">Notifications</div>
+        <div className="notifs-title">{t("notifications.title")}</div>
         {count > 0 && (
           <Dropdown target={<ButtonMore />} aligned="right">
             <div className="dropdown-list">
               <button className="button-clear dropdown-item" onClick={() => handleMarkAllAsSeen()}>
-                Mark all as seen
+                {t("notifications.actions.mark_all_as_seen")}
               </button>
               <button
                 className="button-clear dropdown-item"
                 onClick={() => handleMarkAllAsSeen('new_votes')}
               >
-                Mark all upvotes as seen
+                {t("notifications.actions.mark_all_upvotes_as_seen")}
               </button>
               <button className="button-clear dropdown-item" onClick={handleDeleteAll}>
-                Delete all
+                {t("notifications.actions.delete_all")}
               </button>
             </div>
           </Dropdown>
@@ -152,7 +154,7 @@ const NotificationsView = () => {
       <div className="notifs-body">
         {count === 0 && (
           <div className="notifs-empty">
-            <p>No notifications</p>
+            <p>{t("notifications.state")}</p>
           </div>
         )}
         <div className="notifs-list">

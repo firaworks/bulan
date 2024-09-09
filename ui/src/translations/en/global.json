@@ -1,3 +1,36 @@
 {
-    "admin": "Admin Dashboard"
+    "navbar": {
+        "admin": "Admin Dashboard",
+        "profile": "Profile",
+        "settings": "Settings",
+        "dark_mode": "Dark mode",
+        "logout": "Logout",
+        "search": "Search"
+    },
+    "notifications": {
+        "title": "Notifications",
+        "actions": {
+            "delete_all": "Delete all",
+            "mark_all_as_seen": "Mark all as seen",
+            "mark_all_upvotes_as_seen": "Mark all upvotes as seen"
+        },
+        "data": {
+            "comment": "commented on your post",
+            "comments": "new comments on your post",
+            "reply": "replied to your comment on post",
+            "replies": "new replies to your comment on post",
+            "upvote": "new upvote",
+            "vote": "new vote",
+            "on_your_post": "on your post",
+            "on_your_comment_in": "on your comment in",
+            "deleted_post": {
+                "your_post": "Your post",
+                "has_been_removed_by": "has been removed by",
+                "moderators_of": "moderators of"
+            },
+            "mod_add_1": "You are added as a moderator of",
+            "mod_add_2": "by"
+        },
+        "state": "No notifications"
+    }
 }

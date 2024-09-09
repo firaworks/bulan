@@ -14,10 +14,11 @@ import { ButtonMore } from '../Button';
 import Dropdown from '../Dropdown';
 import Image from '../Image';
 import TimeAgo from '../TimeAgo';
+import { useTranslation } from "react-i18next";
 
 const NotificationItem = ({ notification, ...rest }) => {
   const { type, seen, createdAt, notif } = notification;
-
+  const [t, i18n] = useTranslation("global");
   const viewer = useSelector((state) => state.main.user);
 
   const [actionBtnHovering, setActionBtnHovering] = useState(false);
@@ -40,13 +41,13 @@ const NotificationItem = ({ notification, ...rest }) => {
         if (notif.noComments === 1) {
           return (
             <>
-              <b>@{notif.commentAuthor}</b> commented on your post <b>{notif.post.title}</b>.
+              <b>@{notif.commentAuthor}</b>{ t("notifications.data.comment") }<b>{notif.post.title}</b>.
             </>
           );
         } else {
           return (
             <>
-              {notif.noComments} new comments on your post <b>{notif.post.title}</b>.
+              {notif.noComments} { t("notifications.data.comments") } <b>{notif.post.title}</b>.
             </>
           );
         }
@@ -55,14 +56,14 @@ const NotificationItem = ({ notification, ...rest }) => {
         if (notif.noComments === 1) {
           return (
             <>
-              <b>@{notif.commentAuthor}</b> replied to your comment on post{' '}
+              <b>@{notif.commentAuthor}</b>{ t("notifications.data.reply")}{' '}
               <b>{notif.post.title}</b>.
             </>
           );
         } else {
           return (
             <>
-              {notif.noComments} new replies to your comment on post <b>{notif.post.title}</b>.
+              {notif.noComments} { t("notifications.data.replies")} <b>{notif.post.title}</b>.
             </>
           );
         }
@@ -71,14 +72,14 @@ const NotificationItem = ({ notification, ...rest }) => {
         if (notif.targetType === 'post') {
           return (
             <>
-              {stringCount(notif.noVotes, false, 'new upvote')} on your post{' '}
+              {stringCount(notif.noVotes, false, t("notifications.data.upvote"))} {t("notifications.data.on_your_post")}{' '}
               <b>{notif.post.title}</b>.
             </>
           );
         } else {
           return (
             <>
-              {stringCount(notif.noVotes, false, 'new vote')} on your comment in{' '}
+              {stringCount(notif.noVotes, false, t("notifications.data.vote"))} {t("notifications.data.on_your_comment_in")}{' '}
               <b>{`~${notif.post.title}`}</b>.
             </>
           );
@@ -87,10 +88,10 @@ const NotificationItem = ({ notification, ...rest }) => {
       case 'deleted_post': {
         return (
           <>
-            Your post <b>{notif.post.title}</b> has been removed by{' '}
+            {t("notifications.data.deleted_post.your_post") } <b>{notif.post.title}</b>{t("notifications.data.deleted_post.has_been_removed_by") }{' '}
             {notif.deletedAs === 'mods' ? (
               <>
-                moderators of <b>{notif.post.communityName}</b>
+                {t("notifications.data.deleted_post.moderators_of") } <b>{notif.post.communityName}</b>
               </>
             ) : (
               'the admins'
@@ -102,7 +103,7 @@ const NotificationItem = ({ notification, ...rest }) => {
       case 'mod_add': {
         return (
           <>
-            You are added as a moderator of <b>{notif.communityName}</b> by <b>@{notif.addedBy}.</b>
+            {t("notifications.data.mod_add_1") } <b>{notif.communityName}</b> { t("notifications.data.modd_add_2") } <b>@{notif.addedBy}.</b>
           </>
         );
       }

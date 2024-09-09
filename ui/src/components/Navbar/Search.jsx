@@ -3,8 +3,11 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { onKeyEnter } from '../../helper';
 import { ButtonClose, ButtonSearch } from '../Button';
 import Modal from '../Modal';
+import { useTranslation } from "react-i18next";
+
 
 const Search = ({ autoFocus = false }) => {
+  const [t, i18n] = useTranslation("global");
   const [searchQuery, setSearchQuery] = useState('');
 
   const inputRef = useRef(null);
@@ -70,7 +73,7 @@ const Search = ({ autoFocus = false }) => {
           autoFocus={autoFocus}
           ref={inputRef}
           type="text"
-          placeholder="Search"
+          placeholder={t("navbar.search")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={(e) => onKeyEnter(e, handleSearch)}

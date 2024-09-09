@@ -176,14 +176,14 @@ const Navbar = ({ offline = false }) => {
             >
               <div className="dropdown-list">
                 <Link className="link-reset dropdown-item" to="/settings">
-                  Settings
+                  {t("navbar.settings")}
                 </Link>
                 <Link className="link-reset dropdown-item" to={`/@${user.username}`}>
-                  Profile
+                  {t("navbar.profile")}
                 </Link>
                 {user.isAdmin && (
                   <Link className="link-reset dropdown-item" to={`/admin`}>
-                    {t("admin")}
+                    {t("navbar.admin")}
                   </Link>
                 )}
                 {/*<div className="dropdown-item">Darkmode</div>*/}
@@ -196,7 +196,7 @@ const Navbar = ({ offline = false }) => {
                       checked={theme === 'dark'}
                       onChange={handleDarkModeChange}
                     />
-                    <label htmlFor={'ch-nav-dark'}>Dark mode</label>
+                    <label htmlFor={'ch-nav-dark'}>{t("navbar.dark_mode")}</label>
                   </div>
                 </div>
                 <div className="dropdown-list-sep"></div>
@@ -207,7 +207,7 @@ const Navbar = ({ offline = false }) => {
                   onClick={handleLogout}
                   onKeyUp={(e) => onKeyEnter(e, handleLogout)}
                 >
-                  Logout
+                  {t("logout")}
                 </div>
               </div>
             </Dropdown>
