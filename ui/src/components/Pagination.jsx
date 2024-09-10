@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Pagination = ({ onClick, noPages, current }) => {
+  const [t, i18n] = useTranslation("global");
   const renderItems = () => {
     const items = [];
     const pushButton = (page) => {
@@ -48,14 +50,14 @@ const Pagination = ({ onClick, noPages, current }) => {
           onClick={() => onClick(current - 1)}
           disabled={current - 1 < 1}
         >
-          Previous
+          {t("pagination.previous")}
         </button>
         <button
           className="pagination-item"
           onClick={() => onClick(current + 1)}
           disabled={current + 1 > noPages}
         >
-          Next
+          {t("pagination.next")}
         </button>
       </div>
     </div>

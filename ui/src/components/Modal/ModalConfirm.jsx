@@ -2,17 +2,21 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from '.';
 import { ButtonClose } from '../Button';
+import { useTranslation } from 'react-i18next';
 
 const ModalConfirm = ({
   open,
   onClose,
   onConfirm,
   title,
-  yesText = 'Yes',
-  noText = 'No',
+  yesText = "Yes",
+  noText = "No",
   children,
   disableEnter = false,
 }) => {
+  const [t, i18n] = useTranslation("global");
+  yesText = t("yes");
+  noText = t("no");
   const handleKeyDown = (e) => {
     if (!disableEnter && e.key === 'Enter') {
       onConfirm();

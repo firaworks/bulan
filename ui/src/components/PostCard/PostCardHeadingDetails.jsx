@@ -10,6 +10,7 @@ import Dropdown from '../Dropdown';
 import TimeAgo from '../TimeAgo';
 import { UserLink } from '../UserProPic';
 import CommunityLink from './CommunityLink';
+import { useTranslation } from 'react-i18next';
 
 const PostCardHeadingDetails = ({
   post,
@@ -18,6 +19,7 @@ const PostCardHeadingDetails = ({
   showAuthorProPic = false,
   onRemoveFromList = null,
 }) => {
+  const [t, i18n] = useTranslation("global");
   // const userURL = `/@${post.username}`;
   userGroup = userGroup ?? post.userGroup;
   // Show if post was edited less than 5 mins ago.
@@ -63,7 +65,7 @@ const PostCardHeadingDetails = ({
       <div className="left">
         <CommunityLink name={post.communityName} proPic={post.communityProPic} />
         <div className="post-card-heading-by">
-          <span>Posted by </span>
+          <span>{t("post.heading.posted_by") }</span>
           <UserLink
             className={post.userDeleted && viewerAdmin ? 'is-red' : ''}
             username={isUsernameGhost ? 'Ghost' : post.username}
@@ -107,14 +109,14 @@ const PostCardHeadingDetails = ({
                 className="button-clear dropdown-item"
                 onClick={() => dispatch(saveToListModalOpened(post.id, 'post'))}
               >
-                Save to list
+                {t("post.heading.save_to_list")}
               </button>
               {onRemoveFromList && (
                 <button
                   className="button-clear dropdown-item"
                   onClick={() => onRemoveFromList(post.id)}
                 >
-                  Remove from list
+                  {t("post.heading.remove_from_list")}
                 </button>
               )}
             </div>

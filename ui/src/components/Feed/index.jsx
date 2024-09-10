@@ -5,6 +5,7 @@ import { useWindowWidth } from '../../hooks';
 import PostCardSkeleton from '../PostCard/PostCardSkeleton';
 import Spinner from '../Spinner';
 import FeedItem from './FeedItem';
+import { useTranslation } from 'react-i18next';
 
 const Feed = ({
   loading,
@@ -19,6 +20,7 @@ const Feed = ({
   banner,
   onRemoveFromList = null,
 }) => {
+  const [t, i18n] = useTranslation("global");
   const windowHeight = document.documentElement.clientHeight;
   const rootMargin = Math.round(Math.max(windowHeight * 0.35, 200));
   const [spinnerRef, inView] = useInView({
@@ -102,7 +104,7 @@ const Feed = ({
           <Spinner />
         </div>
       )}
-      {items.length > 0 && !hasMore && <div className="feed-no-more">No more posts</div>}
+      {items.length > 0 && !hasMore && <div className="feed-no-more">{t("feed_item.no_more_posts")}</div>}
       {items.length === 0 && <div className="card card-padding feed-none">{emptyItemsText}</div>}
     </div>
   );

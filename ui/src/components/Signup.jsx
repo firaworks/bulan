@@ -11,6 +11,7 @@ import { ButtonClose } from './Button';
 import { Form, FormField } from './Form';
 import Input, { InputPassword, InputWithCount } from './Input';
 import Modal from './Modal';
+import { useTranslation } from 'react-i18next';
 
 const errors = [
   'Username cannot be empty.',
@@ -24,7 +25,7 @@ const errors = [
 
 const Signup = ({ open, onClose }) => {
   const dispatch = useDispatch();
-
+  const [t, i18n] = useTranslation();
   const [username, handleUsernameChange] = useInputUsername(usernameMaxLength);
   const [usernameError, setUsernameError] = useState(null);
   const checkUsernameExists = useCallback(async () => {

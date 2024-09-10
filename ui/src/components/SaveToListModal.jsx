@@ -6,6 +6,7 @@ import { EditListForm } from '../pages/Lists/List';
 import { saveToListModalClosed, snackAlert, snackAlertError } from '../slices/mainSlice';
 import { ButtonClose } from './Button';
 import Modal from './Modal';
+import { useTranslation } from 'react-i18next';
 
 const SaveToListModal = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,7 @@ const SaveToListModal = () => {
 };
 
 const TheModal = ({ open, onClose, toSaveItemId, toSaveItemType }) => {
+  const [t, i18n] = useTranslation("global");
   const handleClose = onClose;
 
   const dispatch = useDispatch();
@@ -96,7 +98,7 @@ const TheModal = ({ open, onClose, toSaveItemId, toSaveItemType }) => {
           targetType: toSaveItemType,
         }),
       });
-      const alertText = checked ? `Saved to ${list.name}` : `Removed from ${list.name}`;
+      const alertText = checked ? t("save_to_list.saved_to") + ` ${list.name}` : t("save_to_list.remove_from") + ` ${list.name}`;
       dispatch(
         snackAlert(alertText, `${checked ? 'add' : 'remove'}_listitem_${list.name}_${toSaveItemId}`)
       );
@@ -153,7 +155,7 @@ const TheModal = ({ open, onClose, toSaveItemId, toSaveItemType }) => {
           <div className="save-modal-list is-custom-scrollbar is-v2">{renderList()}</div>
         </div>
         <div className="modal-card-actions">
-          <button onClick={() => setPage('new')}>Create new list</button>
+          <button onClick={() => setPage('new')}>{t("save_to_list.create_new_list")}</button>
         </div>
       </>
     );

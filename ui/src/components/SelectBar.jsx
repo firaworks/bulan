@@ -2,8 +2,10 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useIsMobile } from '../hooks';
 import Dropdown from './Dropdown';
+import { useTranslation } from 'react-i18next';
 
 const SelectBar = ({ name, options, value, onChange, ...rest }) => {
+  const [t, i18n] = useTranslation("global");
   const [id] = useState(`select-${name}-${Date.now().toString().substr(-5)}`);
   const isMobile = useIsMobile();
 
@@ -18,7 +20,7 @@ const SelectBar = ({ name, options, value, onChange, ...rest }) => {
     return (
       <nav className="select-bar-m">
         <div className="select-bar-name">{name}</div>
-        <Dropdown target={<button className="select-bar-dp-target">Sort: {text}</button>}>
+        <Dropdown target={<button className="select-bar-dp-target">{t("select_bar.sort") + " " + text}</button>}>
           <div className="dropdown-list">
             {options.map((option) => (
               <div className="dropdown-item" key={option.id} onClick={() => handleClick(option.id)}>

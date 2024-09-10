@@ -1,7 +1,10 @@
 import React from 'react';
 import Link from '../components/Link';
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
+  const [t, i18n] = useTranslation("global");
+
   return (
     <footer className="footer">
       <div className="wrap">
@@ -9,19 +12,19 @@ const Footer = () => {
           <Link to="/" className="footer-logo">
             {import.meta.env.VITE_SITENAME}
           </Link>
-          <div className="footer-description">Better discussions on the internet.</div>
+          <div className="footer-description">{t("footer.title")}</div>
         </div>
         <div className="footer-col">
-          <div className="footer-title">Organization</div>
+          <div className="footer-title">{t("footer.organization")}</div>
           <Link to="/about" className="footer-item">
-            About
+            {t("footer.about")}
           </Link>
           <a href={`mailto:${import.meta.env.VITE_EMAILCONTACT}`} className="footer-item">
-            Contact
+            {t("footer.contact")}
           </a>
         </div>
         <div className="footer-col">
-          <div className="footer-title">Social</div>
+          <div className="footer-title">{t("footer.social")}</div>
           {import.meta.env.VITE_TWITTERURL && (
             <a
               href={import.meta.env.VITE_TWITTERURL}
@@ -86,13 +89,13 @@ const Footer = () => {
         <div className="footer-col">
           <div className="footer-title">Policies</div>
           <Link className="footer-item" to="/terms">
-            Terms
+            {t("footer.terms")}
           </Link>
           <Link className="footer-item" to="/privacy-policy">
-            Privacy
+            {t("footer.privacy")}
           </Link>
           <Link className="footer-item" to="guidelines">
-            Guidelines
+            {t("footer.guidelines")}
           </Link>
           <a
             className="footer-item"
@@ -100,7 +103,7 @@ const Footer = () => {
             target="_blank"
             rel="noopener"
           >
-            Documentation
+            {t("footer.documentation")}
           </a>
         </div>
       </div>

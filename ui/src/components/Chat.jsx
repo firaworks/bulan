@@ -2,8 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { chatOpenToggled } from '../slices/mainSlice';
 import { ButtonClose } from './Button';
+import { useTranslation } from 'react-i18next';
 
 const Chat = () => {
+  const [t, i18n] = useTranslation("global");
   const msgsRef = useRef(null);
   useEffect(() => {
     msgsRef.current.scrollTo(0, msgsRef.current.scrollHeight);
@@ -66,7 +68,7 @@ const Chat = () => {
               rows="1"
               onInput={handleReplyInput}
             ></textarea>
-            <button className="button-main">Send</button>
+            <button className="button-main">{t("chat.send")}</button>
           </div>
         </div>
       </div>

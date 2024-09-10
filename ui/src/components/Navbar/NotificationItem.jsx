@@ -110,8 +110,7 @@ const NotificationItem = ({ notification, ...rest }) => {
       case 'new_badge': {
         return (
           <>
-            You are awarded the <b>supporter</b> badge for your contribution to Discuit and for
-            sheer awesomeness!
+            {t("notifications.data.new_badge_1") }<b>{t("notifications.data.new_badge_2")}</b>{t("notifications.data.new_badge_2") }
           </>
         );
       }
@@ -245,10 +244,10 @@ const NotificationItem = ({ notification, ...rest }) => {
         >
           <div className="dropdown-list">
             <button className="button-clear dropdown-item" onClick={handleMarkAsSeen}>
-              {`Mark as ${seen ? 'un' : ''}seen`}
+              {seen ? t("notifications.data.mark_seen") : t("notifications.data.mark_unseen")}
             </button>
             <button className="button-clear dropdown-item" onClick={handleDelete}>
-              Delete
+              {t("notifications.data.delete_button")}
             </button>
           </div>
         </Dropdown>

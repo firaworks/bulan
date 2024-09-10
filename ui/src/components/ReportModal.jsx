@@ -5,6 +5,7 @@ import { APIError, mfetch } from '../helper';
 import { snackAlert, snackAlertError } from '../slices/mainSlice';
 import { ButtonClose } from './Button';
 import Modal from './Modal';
+import { useTranslation } from 'react-i18next';
 
 const ReportModal = ({
   target,
@@ -15,6 +16,7 @@ const ReportModal = ({
   open: outerOpen = null,
   onClose,
 }) => {
+  const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
   const reasons = useSelector((state) => state.main.reportReasons);
   const [selected, setSelected] = useState(null);
@@ -44,7 +46,7 @@ const ReportModal = ({
         });
         if (!res.ok) {
           if (res.status === 409) {
-            dispatch(snackAlert('You have already reported this ' + targetType));
+            dispatch(snackAlert(t("report.alert_1") + " " + targetType));
             return;
           } else {
             throw new APIError(res.status, await res.json());
@@ -63,13 +65,13 @@ const ReportModal = ({
     <>
       {noButton ? null : (
         <button className={buttonClassName} onClick={() => setInnerOpen(true)} disabled={disabled}>
-          Report
+          {t("report.report")}
         </button>
       )}
       <Modal open={open} onClose={handleClose}>
         <div className="modal-card">
           <div className="modal-card-head">
-            <div className="modal-card-title">Report {targetType}</div>
+            <div className="modal-card-title">{t("report.report")} {targetType}</div>
             <ButtonClose onClick={handleClose} />
           </div>
           <div className="modal-card-content">
@@ -88,9 +90,9 @@ const ReportModal = ({
           </div>
           <div className="modal-card-actions">
             <button className="button-main" onClick={handleReport} disabled={selected === null}>
-              Report
+              {t("report.report")}
             </button>
-            <button onClick={handleClose}>Cancel</button>
+            <button onClick={handleClose}>{t("cancel")}</button>
           </div>
         </div>
       </Modal>

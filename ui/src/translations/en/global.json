@@ -5,7 +5,8 @@
         "settings": "Settings",
         "dark_mode": "Dark mode",
         "logout": "Logout",
-        "search": "Search"
+        "search": "Search",
+        "search_google": "Search on Google for now"
     },
     "notifications": {
         "title": "Notifications",
@@ -29,8 +30,99 @@
                 "moderators_of": "moderators of"
             },
             "mod_add_1": "You are added as a moderator of",
-            "mod_add_2": "by"
+            "mod_add_2": "by",
+            "new_badge_1": "You are awarded the",
+            "new_badge_2": "supporter",
+            "new_badge_3": "badge for your contribution to Discuit and for sheer awesomeness!",
+            "mark_seen": "Mark as seen",
+            "mark_unseen": "Mark as unseen",
+            "delete_button": "Delete"
         },
         "state": "No notifications"
+    },
+    "feed_item": {
+        "no_more_posts": "No more posts"
+    },
+    "yes": "Yes",
+    "no": "No",
+    "post": {
+        "heading": {
+            "posted_by": "Posted by",
+            "save_to_list": "Save to list",
+            "remove_from_list": "Remove from list"
+        }
+    },
+    "chat": {
+        "send": "Send"
+    },
+    "create_community": {
+        "alert_1": "Name has to be at least 3 characters.",
+        "alert_2": "A community by that name already exists.",
+        "alert_3": "You need at least",
+        "alert_4": "points to create a community.",
+        "alert_5": "You've reached your max limit of the number of communities you can moderate.",
+        "title": "Create community",
+        "name_label": "Community name",
+        "name_description": "Community name cannot be changed.",
+        "description_label": "Description",
+        "description_description": "A short description to let people know what the community is all about."
+    },
+    "create": "Create",
+    "footer": {
+        "title": "Better discussions on the internet.",
+        "organization": "Organization",
+        "about": "About",
+        "contact": "Contact",
+        "social": "Social",
+        "terms": "Terms",
+        "privacy": "Privacy",
+        "guidelines": "Guidelines",
+        "documentation": "Documentation"
+    },
+    "auth": {
+        "login": "Login",
+        "signup": "Signup",
+        "login_to_continue": "Login to continue"
+    },
+    "mini_footer": {
+        "about": "About",
+        "terms": "Terms",
+        "privacy": "Privacy",
+        "guidelines": "Guidelines",
+        "contact": "Contact",
+        "docs": "Docs"
+    },
+    "pagination": {
+        "previous": "Previous",
+        "next": "Next"
+    },
+    "report": {
+        "alert_1": "You have already reported this",
+        "report": "Report"
+    },
+    "cancel": "Cancel",
+    "save_to_list": {
+        "remove_from": "Removed from",
+        "saved_to": "Saved to",
+        "create_new_list": "Create new list"
+    },
+    "select_bar": {
+        "sort": "Sort :"
+    },
+    "show": {
+        "more": "Show more",
+        "less": "Show less",
+        "show": "Show",
+        "show_more": "more"
+    },
+    "sidebar": {
+        "home": "Home",
+        "communities": "Communities",
+        "guidelines": "Guidelines",
+        "terms": "Terms",
+        "privacy": "Privacy",
+        "contact": "Contact",
+        "about": "About",
+        "my_lists": "My Lists"
     }
 }

@@ -63,7 +63,7 @@ const Search = ({ autoFocus = false }) => {
               ref={linkRef}
               onClick={() => setSearchModalOpen(false)}
             >
-              Search on Google for now
+              {t("navbar.search_google")}
             </a>
           </div>
         </div>
