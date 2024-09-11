@@ -8,8 +8,10 @@ import { mfetchjson, timeAgo, userGroupSingular } from '../../helper';
 import { useLoading, usePagination } from '../../hooks';
 import { snackAlert, snackAlertError } from '../../slices/mainSlice';
 import ReportsView from './ReportsView';
+import { useTranslation } from 'react-i18next';
 
 const Reports = ({ community }) => {
+  const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
 
   const [page, setPage] = usePagination();
@@ -40,7 +42,7 @@ const Reports = ({ community }) => {
         method: 'DELETE',
       });
       setReports((reports) => reports.filter((r) => r.id !== report.id));
-      dispatch(snackAlert('Report ignored.'));
+      dispatch(snackAlert(t("mod.report.alert_1")));
     } catch (error) {
       dispatch(snackAlertError(error));
     }
@@ -58,7 +60,7 @@ const Reports = ({ community }) => {
 
   return (
     <ReportsView
-      title="Reports"
+      title={t("mod.report.title")}
       noPosts={details.noPostReports}
       noComments={details.noCommentReports}
       filter={filter}
@@ -94,12 +96,12 @@ const Reports = ({ community }) => {
                   <div className="left">Reason: {report.reason}.</div>
                   <div className="right">{timeAgo(report.createdAt)}</div>
                 </div>
-                {removed && <div className="card-report-removed">Removed by {removedUser}.</div>}
+                {removed && <div className="card-report-removed">{t("mod.report.removed_by")} {removedUser}.</div>}
                 <div className="card-report-item">{item}</div>
                 <div className="card-report-buttons">
-                  <button onClick={() => handleIgnore(report)}>Ignore</button>
+                  <button onClick={() => handleIgnore(report)}>{t("mod.report.ignore")}</button>
                   <Link className="button button-red" to={handleURL}>
-                    Handle
+                    {t("mod.report.handle")}
                   </Link>
                 </div>
               </div>

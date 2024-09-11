@@ -1,21 +1,23 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Dropdown from '../../components/Dropdown';
+import { useTranslation } from 'react-i18next';
 
 const ReportsView = ({ title, noPosts, noComments, filter, setFilter, children }) => {
+  const [t, i18n] = useTranslation("global");
   const noAll = typeof noPosts === 'number' ? noPosts + noComments : null;
   const filterButtons = [
     {
       filter: 'all',
-      text: `Posts & comments` + (noAll == null ? '' : ` (${noAll})`),
+      text: t("mod.report.all") + " " + (noAll == null ? '' : ` (${noAll})`),
     },
     {
       filter: 'posts',
-      text: `Posts` + (noAll == null ? '' : ` (${noPosts})`),
+      text: t("mod.report.posts") + " " +  (noAll == null ? '' : ` (${noPosts})`),
     },
     {
       filter: 'comments',
-      text: `Comments` + (noAll == null ? '' : ` (${noComments})`),
+      text: t("post.report.comments") + " " + (noAll == null ? '' : ` (${noComments})`),
     },
   ];
 

@@ -14,8 +14,10 @@ import { listsFilterChanged, listsOrderChanged } from '../../slices/listsSlice';
 import { snackAlert } from '../../slices/mainSlice';
 import NotFound from '../NotFound';
 import { EditListForm } from './List';
+import { useTranslation } from 'react-i18next';
 
 const Lists = () => {
+  const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
   const [isNewListOpen, setIsNewListOpen] = useState(false);
   const [lists, setLists] = useState([]);
@@ -63,7 +65,7 @@ const Lists = () => {
   if (userError !== null || listsError !== null) {
     return (
       <div className="page-content wrap">
-        <h1>Something went wrong!</h1>
+        <h1>{t("generic_error")}</h1>
       </div>
     );
   }
@@ -137,13 +139,13 @@ const Lists = () => {
             <div className="left">
               {renderOrderDropdown()}
               {authedUser && authedUser.username === username && renderFilterDropdown()}
-              <button onClick={toggleNewListForm}>New list</button>
+              <button onClick={toggleNewListForm}>{t("new_list")}</button>
             </div>
           </div>
           <Modal open={isNewListOpen} onClose={toggleNewListForm}>
             <div className="modal-card save-modal is-compact-mobile is-page-new">
               <div className="modal-card-head">
-                <div className="modal-card-title">Create list</div>
+                <div className="modal-card-title">{t("create_list")}</div>
                 <ButtonClose onClick={toggleNewListForm} />
               </div>
               <EditListForm onCancel={toggleNewListForm} onSuccess={handleSuccess} />

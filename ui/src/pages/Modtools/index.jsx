@@ -22,12 +22,14 @@ import Removed from './Removed';
 import Reports from './Reports';
 import Rules from './Rules';
 import Settings from './Settings';
+import { useTranslation } from 'react-i18next';
 
 function isActiveCls(className, isActive, activeClass = 'is-active') {
   return className + (isActive ? ` ${activeClass}` : '');
 }
 
 const Modtools = () => {
+  const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
   const { name: communityName } = useParams();
 
@@ -72,12 +74,12 @@ const Modtools = () => {
   return (
     <div className="page-content wrap modtools">
       <Helmet>
-        <title>Modtools</title>
+        <title>{t("mod.data.modtools")}</title>
       </Helmet>
       <Sidebar />
       <div className="modtools-head">
         <h1>
-          <Link to={`/${communityName}`}>{communityName} </Link>Modtools
+          <Link to={`/${communityName}`}>{communityName} </Link>{t("mod.data.modtools")}
         </h1>
       </div>
       <div className="modtools-dashboard">
@@ -86,46 +88,46 @@ const Modtools = () => {
             className={isActiveCls('sidebar-item', pathname === '/modtools/settings')}
             to={`/${communityName}/modtools/settings`}
           >
-            Community settings
+            {t("mod.data.community_settings")}
           </Link>
-          <div className="sidebar-topic">Content</div>
+          <div className="sidebar-topic">{t("mod.tools.content")}</div>
           <Link
             className={isActiveCls('sidebar-item', pathname === '/modtools/reports')}
             to={`/${communityName}/modtools/reports`}
           >
-            Reports
+            {t("mod.tools.reports")}
           </Link>
           <Link
             className={isActiveCls('sidebar-item', pathname === '/modtools/removed')}
             to={`/${communityName}/modtools/removed`}
           >
-            Removed
+            {t("mod.tools.removed")}
           </Link>
           <Link
             className={isActiveCls('sidebar-item', pathname === '/modtools/locked')}
             to={`/${communityName}/modtools/locked`}
           >
-            Locked
+            {t("mod.tools.locked")}
           </Link>
-          <div className="sidebar-topic">Users</div>
+          <div className="sidebar-topic">{t("mod.tools.users")}</div>
           <Link
             className={isActiveCls('sidebar-item', pathname === '/modtools/banned')}
             to={`/${communityName}/modtools/banned`}
           >
-            Banned
+            {t("mod.tools.banned")}
           </Link>
           <Link
             className={isActiveCls('sidebar-item', pathname === '/modtools/mods')}
             to={`/${communityName}/modtools/mods`}
           >
-            Moderators
+            {t("mod.tools.moderators")}
           </Link>
-          <div className="sidebar-topic">Rules</div>
+          <div className="sidebar-topic">{t("mod.tools.rules")}</div>
           <Link
             className={isActiveCls('sidebar-item', pathname === '/modtools/rules')}
             to={`/${communityName}/modtools/rules`}
           >
-            Rules
+            {t("mod.tools.rules")}
           </Link>
         </div>
         <Switch>
@@ -154,7 +156,7 @@ const Modtools = () => {
             <Rules community={community} />
           </Route>
           <Route path="*">
-            <div className="modtools-content flex flex-center">Not found.</div>
+            <div className="modtools-content flex flex-center">{t("not_found")}</div>
           </Route>
         </Switch>
       </div>

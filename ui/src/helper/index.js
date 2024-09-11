@@ -1,4 +1,8 @@
+import i18next from 'i18next';
+
 export function stringCount(num, onlyName = false, thingName = 'point', thingNameMultiple) {
+  const t = i18next.t;
+  thingName = t("helper.point")
   let s = onlyName ? '' : `${num} `;
   if (thingNameMultiple) {
     s += num === 1 ? thingName : thingNameMultiple;
@@ -23,6 +27,8 @@ export function kRound(num) {
 }
 
 export function timeAgo(date, suffix = ' ago', justNow = true, short = false) {
+  const t = i18next.t;
+  suffix = t("timeago.suffix");
   if (!(date instanceof Date)) {
     // eslint-disable-next-line no-param-reassign
     date = new Date(date);
@@ -31,26 +37,26 @@ export function timeAgo(date, suffix = ' ago', justNow = true, short = false) {
 
   if (ms < 60) {
     if (justNow) {
-      return short ? '0m' : 'just now';
+      return short ? '0m' : t("timeago.just_now");
     }
     const s = Math.round(ms);
-    return `${s}${short ? 's' : ' second'}${short || s === 1 ? '' : 's'}${suffix}`;
+    return `${s}${short ? t("timeago.s") : ' ' + t("timeago.second")}${short || s === 1 ? '' : 's'}${suffix}`;
   } else if (ms < 3600) {
     const m = Math.round(ms / 60);
-    return `${m}${short ? 'm' : ' minute'}${short || m === 1 ? '' : 's'}${suffix}`;
+    return `${m}${short ? t("timeage.m") : ' ' + t("timeago.minute")}${short || m === 1 ? '' : 's'}${suffix}`;
   } else if (ms < 24 * 3600) {
     const h = Math.round(ms / 3600);
-    return `${h}${short ? 'h' : ' hour'}${short || h === 1 ? '' : 's'}${suffix}`;
+    return `${h}${short ? t("timeago.h") : ' ' + t("timeago.hour")}${short || h === 1 ? '' : 's'}${suffix}`;
   } else if (ms < 7 * 24 * 3600) {
     const d = Math.round(ms / (24 * 3600));
-    return `${d}${short ? 'd' : ' day'}${short || d === 1 ? '' : 's'}${suffix}`;
+    return `${d}${short ? t("timeago.d") : ' ' + t("timeago.day")}${short || d === 1 ? '' : 's'}${suffix}`;
   } else if (ms < 365 * 24 * 3600) {
     const w = Math.round(ms / (24 * 3600) / 7);
-    return `${w}${short ? 'w' : ' week'}${short || w === 1 ? '' : 's'}${suffix}`;
+    return `${w}${short ? t("timeago.w") : ' ' + t("timeago.week")}${short || w === 1 ? '' : 's'}${suffix}`;
   }
 
   const y = Math.floor(ms / (365 * 24 * 3600));
-  return `${y}${short ? 'y' : ' year'}${short || y === 1 ? '' : 's'}${suffix}`;
+  return `${y}${short ? t("timeago.y") : ' ' + t("timeago.year")}${short || y === 1 ? '' : 's'}${suffix}`;
 }
 
 export function isScrollbarVisible() {
@@ -107,19 +113,20 @@ export function onEscapeKey(e, callback, stopPropagation = true) {
 
 // Returns date in the format of '21 February 2021'.
 export function dateString1(date) {
+  const t = i18next.t;
   const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    t("months.january"),
+    t("months.february"),
+    t("months.march"),
+    t("months.april"),
+    t("months.may"),
+    t("months.june"),
+    t("months.july"),
+    t("months.august"),
+    t("months.september"),
+    t("months.october"),
+    t("months.november"),
+    t("months.december"),
   ];
   if (!(date instanceof Date)) date = new Date(date);
   return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
@@ -224,15 +231,16 @@ export function publicURL(path) {
 }
 
 export function userGroupSingular(type, long = false) {
+  const t = i18next.t;
   switch (type) {
     case 'mods':
-      return long ? 'moderator' : 'mod';
+      return long ? t("user_group.long_mod") : t("user_group.short_mod");
     case 'admins':
-      return long ? 'admin' : 'admin';
+      return long ? t("user_group.admin") : t("user_group.admin");
     case 'normal':
-      return long ? 'user' : 'user';
+      return long ? t("user_group.user") : t("user_group.user");
   }
-  throw new Error(`Invalid userGroup: ${type}`);
+  throw new Error(`${t("user_group.invalid")}: ${type}`);
 }
 
 export function capitalizeFirstWord(str) {

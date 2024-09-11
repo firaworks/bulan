@@ -39,7 +39,7 @@ const Signup = ({ open, onClose }) => {
         }
         throw new APIError(res.status, await res.json());
       }
-      setUsernameError(`${username} is already taken.`);
+      setUsernameError(`${username} ` + t("signup.username_error"));
       return true;
     } catch (error) {
       dispatch(snackAlertError(error));
@@ -69,7 +69,7 @@ const Signup = ({ open, onClose }) => {
   const captchaRef = useRef();
   const handleCaptchaVerify = (token) => {
     if (!token) {
-      dispatch(snackAlert('Something went wrong. Try again.'));
+      dispatch(snackAlert(t("signup.generic_error")));
       return;
     }
     signInUser(username, email, password, token);
@@ -130,7 +130,7 @@ const Signup = ({ open, onClose }) => {
       return;
     }
     if (!captchaRef.current) {
-      dispatch(snackAlertError(new Error('captcha API not found')));
+      dispatch(snackAlertError(new Error(t("signup.captcha_error"))));
       return;
     }
     captchaRef.current.execute();
@@ -150,14 +150,14 @@ const Signup = ({ open, onClose }) => {
       <Modal open={open} onClose={onClose} noOuterClickClose={false}>
         <div className="modal-card modal-signup">
           <div className="modal-card-head">
-            <div className="modal-card-title">Signup</div>
+            <div className="modal-card-title">{t("signup.signup")}</div>
             <ButtonClose onClick={onClose} />
           </div>
           <Form className="modal-card-content" onSubmit={handleSubmit}>
             <FormField
               className="is-username"
-              label="Username"
-              description="The name you will use when interacting with the community."
+              label={t("signup.username_label")}
+              description={t("signup.username_description")}
               error={usernameError}
             >
               <InputWithCount
@@ -170,8 +170,8 @@ const Signup = ({ open, onClose }) => {
               />
             </FormField>
             <FormField
-              label="Email (optional)"
-              description="Without an email address, there's no way to recover your account if you lose your password."
+              label={t("signup.email_label")}
+              description={t("signup.email_description")}
               error={emailError}
             >
               <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -207,30 +207,30 @@ const Signup = ({ open, onClose }) => {
               <p className="modal-signup-terms">
                 {'By creating an account, you agree to our '}
                 <a target="_blank" href="/terms">
-                  Terms
+                  {t("signup.terms")}
                 </a>
-                {' and '}
+                {t("signup.and")}
                 <a target="_blank" href="/privacy-policy">
-                  {' Privacy Policy'}
+                  {t("signup.privacy_policy")}
                 </a>
                 .
               </p>
               <p className="modal-signup-terms is-captcha">
-                This site is protected by reCAPTCHA and the Google{' '}
+                {t("signup.captcha_text")}{' '}
                 <a href="https://policies.google.com/privacy-policy" target="_blank">
-                  Privacy Policy
+                  {t("signup.privacy_policy")}
                 </a>{' '}
-                and{' '}
+                {t("signup.and")}{' '}
                 <a href="https://policies.google.com/terms" target="_blank">
-                  Terms of Service
+                  {t("signup.terms_of_service")}
                 </a>{' '}
-                apply.
+                {t("signup.apply")}
               </p>
             </FormField>
             <FormField className="is-submit">
               <input type="submit" className="button button-main" value="Signup" />
               <button className="button-link" onClick={handleOnLogin}>
-                Already have an account? Login
+                {t("signup.login")}
               </button>
             </FormField>
           </Form>

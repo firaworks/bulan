@@ -12,8 +12,10 @@ import { createCommunityModalOpened, showAppInstallButton } from '../../slices/m
 import LoginForm from '../../views/LoginForm';
 import PostsFeed from '../../views/PostsFeed';
 import WelcomeBanner from '../../views/WelcomeBanner';
+import { useTranslation } from 'react-i18next';
 
 const Home = () => {
+  const [t, i18next] = useTranslation("global");
   const user = useSelector((state) => state.main.user);
   const loggedIn = user !== null;
   const canCreateForum = loggedIn && (user.isAdmin || !import.meta.env.VITE_DISABLEFORUMCREATION);
@@ -59,15 +61,15 @@ const Home = () => {
         {showInstallPrompt && (
           <div className="banner-install is-m">
             {/*<ButtonClose className="banner-button-close" />*/}
-            <div className="banner-install-text">Get the app for a better experience.</div>
+            <div className="banner-install-text">{t("homepage.text_1")}</div>
             <ButtonAppInstall className="banner-install-button" deferredPrompt={deferredPrompt}>
-              Install
+              {t('homepage.install')}
             </ButtonAppInstall>
           </div>
         )}
         {loggedIn && (
           <Link className="button button-main home-btn-new-post is-m" to="/new">
-            Create post
+            {t("post.actions.create")}
           </Link>
         )}
         {canCreateForum && (
@@ -76,7 +78,7 @@ const Home = () => {
               onClick={() => dispatch(createCommunityModalOpened())}
               className={'button button-main home-btn-new-post is-m'}
             >
-              Create community
+              {t("create_community.action")}
             </Link>
           </>
         )}
@@ -106,6 +108,7 @@ const Home = () => {
 export default Home;
 
 export const ButtonAppInstall = ({ deferredPrompt, children, ...props }) => {
+  const [t, i18next] = useTranslation("global");
   const [showIosModal, setShowIosModal] = useState(false);
   const handleIosModalClose = () => setShowIosModal(false);
 
@@ -126,21 +129,21 @@ export const ButtonAppInstall = ({ deferredPrompt, children, ...props }) => {
       <Modal open={showIosModal} onClose={handleIosModalClose}>
         <div className="modal-card is-compact-mobile modal-ios-install">
           <div className="modal-card-head">
-            <div className="modal-card-title">Steps to install</div>
+            <div className="modal-card-title">{t("homepage.text_2")}</div>
             <ButtonClose onClick={handleIosModalClose} />
           </div>
           <div className="modal-card-content">
             <div className="modal-ios-install-steps">
               <ol>
-                <li>1. Tap on the Safari share button.</li>
-                <li>{`2. Tap on "Add to Home Screen."`}</li>
-                <li>{`3. Tap on "Add."`}</li>
+                <li>{t("homepage.text_3")}</li>
+                <li>{t("homepage.text_5")}</li>
+                <li>{t("homepage.text_6")}</li>
               </ol>
-              <p>Note that web apps on iOS can only be installed using Safari.</p>
+              <p>{t("homepage.text_4")}</p>
             </div>
           </div>
           <div className="modal-card-actions">
-            <button onClick={handleIosModalClose}>Close</button>
+            <button onClick={handleIosModalClose}>{t("close_button")}</button>
           </div>
         </div>
       </Modal>

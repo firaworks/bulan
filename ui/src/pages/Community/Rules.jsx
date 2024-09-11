@@ -1,8 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import MarkdownBody from '../../components/MarkdownBody';
+import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
 export const RulesItems = ({ rules, unordered = false }) => {
+  const [t, i18next] = useTranslation("global");
   let orules = rules;
   if (unordered) {
     orules = [...rules];
@@ -40,7 +43,7 @@ const Rules = ({ rules, unordered = false }) => {
   return (
     <div className="card card-sub card-rules">
       <div className="card-head">
-        <div className="card-title">Community rules</div>
+        <div className="card-title">{t("community_rules")}</div>
       </div>
       <div className="card-content">
         <div className="card-rules-rules">

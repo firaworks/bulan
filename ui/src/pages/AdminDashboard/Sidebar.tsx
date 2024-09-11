@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { MouseEvent } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 function Sidebar({
   className,
@@ -9,6 +10,7 @@ function Sidebar({
   className?: string;
   onMenuItemClick?: () => void;
 }) {
+  const [t, i18next] = useTranslation("global");
   const { url } = useRouteMatch();
   const dashboardLink = (path: string) => {
     return `${url}/${path}`;
@@ -32,19 +34,19 @@ function Sidebar({
       <div className="sidebar-content">
         <div className="sidebar-list" onClick={handleListClick}>
           <Link className="sidebar-item" to={url}>
-            Home
+            {t("sidebar.home")}
           </Link>
           <Link className="sidebar-item" to={dashboardLink('users')}>
-            Users
+            {t("sidebar.users")}
           </Link>
           <Link className="sidebar-item" to={dashboardLink('comments')}>
-            Comments
+            {t("sidebar.comments")}
           </Link>
           <Link className="sidebar-item" to={dashboardLink('communities')}>
-            Communities
+            {t("sidebar.communities")}
           </Link>
           <Link className="sidebar-item" to={dashboardLink('ipbans')}>
-            IP bans
+            {t("ip_bans")}
           </Link>
         </div>
       </div>

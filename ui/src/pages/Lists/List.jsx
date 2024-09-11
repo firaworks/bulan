@@ -31,11 +31,13 @@ import { listsAdded, snackAlertError } from '../../slices/mainSlice';
 import { selectUser } from '../../slices/usersSlice';
 import NotFound from '../NotFound';
 import { MemorizedComment } from '../User/Comment';
+import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
 const List = () => {
   const dispatch = useDispatch();
   const { username, listName: listname } = useParams();
-
+  const [t, i18next] = useTranslation("global");
   const [editModalOpen, setEditModalOpen] = useState(false);
 
   const list = useSelector(selectList(username, listname));
@@ -92,7 +94,7 @@ const List = () => {
         const res = await mfetch(feedEndpoint);
         if (!res.ok) {
           if (res.status === 404) {
-            setFeedLoadingError(new Error('feed not found'));
+            setFeedLoadingError(new Error(t("feed_not_found")));
             return;
           }
         }
@@ -168,7 +170,7 @@ const List = () => {
   };
 
   const handleRemoveAllItems = async () => {
-    if (!confirm('Are you sure you want to remove all items from the list?')) {
+    if (!confirm(t("list_alert_1"))) {
       return;
     }
     try {
@@ -181,7 +183,7 @@ const List = () => {
 
   const history = useHistory();
   const handleDeleteList = async () => {
-    if (!confirm('Are you sure you want to delete the list?')) {
+    if (!confirm(t("list_alert_2"))) {
       return;
     }
     try {
@@ -213,7 +215,7 @@ const List = () => {
           <div className="list-head-main">
             <div className="list-head-top">
               <h1>{list.displayName}</h1>
-              {!list.public && <div>Private</div>}
+              {!list.public && <div>{t("list_text_1")}</div>}
             </div>
             <Link to={`/@${list.username}`} className="list-head-user">
               @{list.username}
@@ -222,14 +224,14 @@ const List = () => {
           </div>
           {viewerListOwner && (
             <div className="list-head-actions">
-              <button onClick={() => setEditModalOpen(true)}>Edit list</button>
+              <button onClick={() => setEditModalOpen(true)}>{t("list_text_2")}</button>
               <Dropdown target={<ButtonMore style={{ background: 'var(--color-button)' }} />}>
                 <div className="dropdown-list">
                   <div className="button-clear dropdown-item" onClick={handleRemoveAllItems}>
-                    Remove all items
+                    {t("list_text_3")}
                   </div>
                   <div className="button-clear dropdown-item" onClick={handleDeleteList}>
-                    Delete list
+                    {t("list_text_4")}
                   </div>
                 </div>
               </Dropdown>
@@ -255,7 +257,7 @@ const List = () => {
       <aside className="sidebar-right">
         <div className="card card-sub list-summary">
           <div className="card-head">
-            <div className="card-title">List summary</div>
+            <div className="card-title">{t("list_text_5")}</div>
           </div>
           <div className="card-content">
             <div className="card-list-item">
@@ -281,11 +283,12 @@ const List = () => {
 export default List;
 
 const EditListModal = ({ list, open, onClose }) => {
+  const [t, i18next] = useTranslation("global");
   return (
     <Modal open={open} onClose={onClose}>
       <div className="modal-card edit-list-modal is-compact-mobile">
         <div className="modal-card-head">
-          <div className="modal-card-title">Edit list</div>
+          <div className="modal-card-title">{t("list_text_2")}</div>
           <ButtonClose onClick={onClose} />
         </div>
         <EditListForm list={list} onCancel={onClose} onSuccess={onClose} />
@@ -417,7 +420,7 @@ export const EditListForm = ({ list, onCancel, onSuccess }) => {
         }
         throw new APIError(res.status, await res.json());
       }
-      setNameError(`List with name ${name} already exists.`);
+      setNameError(`${t("list_alert_3")} ${name} ${t("list_alert_4")}`);
     } catch (error) {
       dispatch(snackAlertError(error));
     }
@@ -465,7 +468,7 @@ export const EditListForm = ({ list, onCancel, onSuccess }) => {
       return;
     }
     if (name === '') {
-      setNameError('Name cannot be empty.');
+      setNameError(t("list_alert_5"));
       return;
     }
     setFormDisabled(true);
@@ -489,8 +492,8 @@ export const EditListForm = ({ list, onCancel, onSuccess }) => {
       <Form className="modal-card-content" onSubmit={handleSubmit}>
         <div className="edit-list-modal-form" onSubmit={handleSubmit}>
           <FormField
-            label="Name"
-            description="Name will be part of the URL of the list."
+            label={t("list_form_label_1")}
+            description={t("list_form_description_1")}
             error={nameError}
             style={{ marginBottom: '5px' }}
           >
@@ -503,7 +506,7 @@ export const EditListForm = ({ list, onCancel, onSuccess }) => {
               autoComplete="name"
             />
           </FormField>
-          <FormField label="Display name">
+          <FormField label={t("list_form_label_2")}>
             <Input value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
           </FormField>
           <FormField>
@@ -514,7 +517,7 @@ export const EditListForm = ({ list, onCancel, onSuccess }) => {
               onChange={(e) => setIsPublic(e.target.checked)}
             />
           </FormField>
-          <FormField label="Description">
+          <FormField label={t("list_form_label_3")}>
             <textarea
               rows="5"
               placeholder=""
@@ -528,7 +531,7 @@ export const EditListForm = ({ list, onCancel, onSuccess }) => {
         <button className="button-main" onClick={handleSubmit} disabled={formDisabled}>
           {list ? 'Save' : 'Create'}
         </button>
-        <button onClick={onCancel}>Cancel</button>
+        <button onClick={onCancel}>{"cancel_button"}</button>
       </div>
     </>
   );

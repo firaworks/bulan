@@ -50,6 +50,13 @@
             "posted_by": "Posted by",
             "save_to_list": "Save to list",
             "remove_from_list": "Remove from list"
+        },
+        "actions": {
+            "create": "Create post"
+        },
+        "data": {
+            "posts": "Posts",
+            "about": "About"
         }
     },
     "chat": {
@@ -65,7 +72,8 @@
         "name_label": "Community name",
         "name_description": "Community name cannot be changed.",
         "description_label": "Description",
-        "description_description": "A short description to let people know what the community is all about."
+        "description_description": "A short description to let people know what the community is all about.",
+        "action": "Create community"
     },
     "create": "Create",
     "footer": {
@@ -123,6 +131,172 @@
         "privacy": "Privacy",
         "contact": "Contact",
         "about": "About",
-        "my_lists": "My Lists"
-    }
+        "my_lists": "My Lists",
+        "users": "Users",
+        "comments": "Comments"
+    },
+    "signup": {
+        "username_error": "is already taken.",
+        "generic_error": "Something went wrong. Try again.",
+        "captcha_error": "captcha API not found",
+        "signup": "Signup",
+        "username_label": "Username",
+        "username_description": "The name you will use when interacting with the community.",
+        "email_label": "Email (optional)",
+        "email_description": "Without an email address, there's no way to recover your account if you lose your password.",
+        "creation_description_1": "By creating an account, you agree to our ",
+        "terms": "Terms",
+        "and": "and",
+        "privacy_policy": "Privacy Policy",
+        "captcha_text": "This site is protected by reCAPTCHA and the Google",
+        "terms_of_service": "Terms of Service",
+        "apply": "apply.",
+        "login": "Already have an account? Login"
+    },
+    "timeago": {
+        "suffix": " ago",
+        "just_now": "just now",
+        "s": "s",
+        "second": "second",
+        "m": "m",
+        "minute": "minute",
+        "h": "h",
+        "hour": "hour",
+        "d": "d",
+        "day": "day",
+        "w": "w",
+        "week": "week",
+        "y": "y",
+        "year": "year"
+    },
+    "helper": {
+        "point": "point"
+    },
+    "months": {
+        "january": "January",
+        "february": "February",
+        "march": "March",
+        "april": "April",
+        "may": "May",
+        "june": "June",
+        "july": "July",
+        "august": "August",
+        "september": "September",
+        "october": "October",
+        "november": "November",
+        "december": "December"
+    },
+    "user_group": {
+        "long_mod": "moderator",
+        "short_mod": "mod",
+        "admin": "admin",
+        "user": "user",
+        "invalid": "Invalid user group"
+    },
+    "more": "More",
+    "communities": "Communities",
+    "home": "Home",
+    "under_construction": "Under construction.",
+    "dashboard": "Admin Dashboard",
+    "not_found": "Not Found",
+    "ip_bans": "IP Bans",
+    "community_warning_1": "You will no longer be a moderator of",
+    "community_warning_2": "if you leave the community. Are you sure you want to leave?",
+    "community_rules": "Community rules",
+    "homepage": {
+        "text_1": "Get the app for a better experience.",
+        "install": "install",
+        "text_2": "Steps to install",
+        "text_3": "1. Tap on the Safari share button.",
+        "text_4": "Note that web apps on iOS can only be installed using Safari.",
+        "text_5": "2. Tap on \"Add to Home Screen.\"",
+        "text_6": "3. Tap on \"Add.\""
+    },
+    "close_button": "close",
+    "feed_not_found": "feed not found",
+    "list_alert_1": "Are you sure you want to remove all items from the list?",
+    "list_alert_2": "Are you sure you want to delete the list?",
+    "list_text_1": "Private",
+    "list_text_2": "Edit list",
+    "list_text_3": "Remove all items",
+    "list_text_4": "Delete list",
+    "list_text_5": "List summary",
+    "list_alert_3": "List with name",
+    "list_alert_4": "already exists.",
+    "list_alert_5": "Name cannot be empty.",
+    "list_form_label_1": "Name",
+    "list_form_description_1": "Name will be part of the URL of the list.",
+    "list_form_label_2": "Display name",
+    "list_form_label_3": "Description",
+    "cancel_button": "Cancel",
+    "generic_error": "Something went wrong!",
+    "new_list": "New list",
+    "create_list": "Create list",
+    "mod": {
+        "ban": {
+            "alert_1": "No user with username exists.",
+            "alert_2": "is already banned.",
+            "alert_3": "is banned.",
+            "title": "Ban",
+            "action": "Ban user",
+            "banned": "Banned",
+            "action_2": "Unban user"
+        },
+        "data": {
+            "modtools": "Modtools",
+            "community_settings": "Community settings",
+            "content": "Content",
+            "reports": "Reports",
+            "removed": "Removed",
+            "locked": "Locked",
+            "users": "Users",
+            "banned": "Banned",
+            "moderators": "Moderators",
+            "rules": "Rules",
+            "mods": "Mods"
+        },
+        "add": {
+            "user_not_found": "User not found",
+            "alert_1": "added as a mod of",
+            "alert_2": "Are you sure you want to remove",
+            "alert_3": "as a moderator of",
+            "alert_4": "removed from moderators",
+            "title": "Add new moderator",
+            "action_1": "Add mod",
+            "action_2": "Remove"
+        },
+        "report": {
+            "alert_1": "Report ignored.",
+            "title": "Reports",
+            "removed_by": "Removed by",
+            "ignore": "Ignore",
+            "handle": "Handle",
+            "all": "Posts & comments",
+            "posts": "Posts",
+            "comments": "Comments"
+        },
+        "rules": {
+            "alert_1": "Are you certain?",
+            "action_1": "Add rule",
+            "action_2": "Edit rule",
+            "label_1": "Rule",
+            "label_2": "Description"
+        },
+        "settings": {
+            "alert_1": "Settings saved.",
+            "alert_2": "Maximum file size exceeded.",
+            "alert_3": "Unsupported image.",
+            "label_1": "Profile picture",
+            "label_2": "Banner image",
+            "label_3": "Description",
+            "label_4": "Tick this box if the community may contain 18+ or material otherwise unsuitable for viewing in a professional environment.",
+            "description_1": "A short description to quickly let people know what it's all about.",
+            "default_1": "Remove as default community",
+            "default_2": "Set as default community"
+        }
+    },
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "change": "Change"
 }

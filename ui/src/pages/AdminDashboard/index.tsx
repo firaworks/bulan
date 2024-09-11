@@ -11,11 +11,12 @@ import Home from './Home';
 import IPBans from './IPBans';
 import Sidebar from './Sidebar';
 import Users from './Users';
+import { useTranslation } from 'react-i18next';
 
 function AdminDashboard() {
   const [menuVisible, setMenuVisible] = useState(true);
   const toggleMenuVisible = () => setMenuVisible((v) => !v);
-
+  const [t, i18next] = useTranslation("global");
   /*
 
   const pageRef = useRef<HTMLDivElement>(null);
@@ -58,7 +59,7 @@ function AdminDashboard() {
       <div className="navbar page-dashboard-head">
         <div className="wrap">
           <div className="left">
-            <h1>Admin dashboard</h1>
+            <h1>{t("dashboard")}</h1>
           </div>
           <div className="right is-t">
             <ButtonHamburger onClick={toggleMenuVisible} />
@@ -89,7 +90,7 @@ function AdminDashboard() {
             </Route>
             <Route path="*">
               <div className="dashboard-page-404">
-                <p>Not found</p>
+                <p>{t("not_found")}</p>
               </div>
             </Route>
           </Switch>

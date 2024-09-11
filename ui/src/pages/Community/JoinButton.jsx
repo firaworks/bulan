@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { mfetchjson } from '../../helper';
 import { communityAdded } from '../../slices/communitiesSlice';
 import { loginPromptToggled, snackAlertError } from '../../slices/mainSlice';
+import { useTranslation } from 'react-i18next';
 
 const JoinButton = ({ className, community, ...rest }) => {
+  const [t, i18next] = useTranslation("global");
   const loggedIn = useSelector((state) => state.main.user) !== null;
   const dispatch = useDispatch();
 
@@ -15,7 +17,7 @@ const JoinButton = ({ className, community, ...rest }) => {
       dispatch(loginPromptToggled());
       return;
     }
-    const message = `You will no longer be a moderator of '${community.name}' if you leave the community. Are you sure you want to leave?`;
+    const message = `${t("community_warning_1")} '${community.name}' ${t("community_warning_2")}`;
     if (community.userMod && !confirm(message)) {
       return;
     }

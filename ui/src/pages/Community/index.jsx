@@ -21,6 +21,8 @@ import NotFound from '../NotFound';
 import Banner from './Banner';
 import JoinButton from './JoinButton';
 import Rules from './Rules';
+import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
 const Community = () => {
   const { name } = useParams();
@@ -125,7 +127,7 @@ const Community = () => {
           href={url}
           onClick={handleClick}
         >
-          Create post
+          {t("post.actions.create")}
         </a>
         {(community.userMod || (user && user.isAdmin)) && (
           <Link className="button border-radius-0" to={`/${name}/modtools`}>
@@ -193,13 +195,13 @@ const Community = () => {
               className={'button-clear tab-item' + (tab === 'posts' ? ' is-active' : '')}
               onClick={() => setTab('posts')}
             >
-              Posts
+              {t("post.data.posts")}
             </button>
             <button
               className={'button-clear tab-item' + (tab === 'about' ? ' is-active' : '')}
               onClick={() => setTab('about')}
             >
-              About
+              {t("post.data.about")}
             </button>
           </div>
         </header>

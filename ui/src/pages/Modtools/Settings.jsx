@@ -8,10 +8,12 @@ import { mfetch, mfetchjson } from '../../helper';
 import { communityAdded } from '../../slices/communitiesSlice';
 import { snackAlert, snackAlertError } from '../../slices/mainSlice';
 import Banner from '../Community/Banner';
+import { useTranslation } from 'react-i18next';
 
 const descriptionMaxLength = 2000;
 
 const Settings = ({ community }) => {
+  const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.main.user);
@@ -36,7 +38,7 @@ const Settings = ({ community }) => {
         }),
       });
       dispatch(communityAdded(rcomm));
-      dispatch(snackAlert('Settings saved.'));
+      dispatch(snackAlert(t("mod.settings.alert_1")));
       setChanged(-1);
     } catch (error) {
       dispatch(snackAlertError(error));
@@ -65,10 +67,10 @@ const Settings = ({ community }) => {
         if (res.status === 400) {
           const error = await res.json();
           if (error.code === 'file_size_exceeded') {
-            dispatch(snackAlert('Maximum file size exceeded.'));
+            dispatch(snackAlert(t("mod.settings.alert_2")));
             return;
           } else if (error.code === 'unsupported_image') {
-            dispatch(snackAlert('Unsupported image.'));
+            dispatch(snackAlert(t("mod.settings.alert_3")));
             return;
           }
         }
@@ -144,15 +146,15 @@ const Settings = ({ community }) => {
         <FormField label="Community name">
           <Input value={community.name} disabled />
         </FormField>
-        <FormField label="Profile picture">
+        <FormField label={t("mod.settings.label_1")}>
           <div className=" modtools-change-propic">
             <div className="flex">
               <CommunityProPic name={community.name} proPic={community.proPic} size="standard" />
               <button onClick={() => proPicFileInputRef.current.click()} disabled={isUploading}>
-                Change
+                {t("change")}
               </button>
               <button onClick={handleDeleteProPic} disabled={isUploading}>
-                Delete
+                {t("delete")}
               </button>
               <input
                 ref={proPicFileInputRef}
@@ -165,15 +167,15 @@ const Settings = ({ community }) => {
           </div>
         </FormField>
         <div className="form-field modtools-change-banner">
-          <div className="label">Banner image</div>
+          <div className="label">{t("mod.settings.label_2")}</div>
           <div className="flex flex-column">
             <Banner className="modtools-banner" community={community} />
             <div className="flex modtools-change-banner-buttons">
               <button onClick={() => bannerFileInputRef.current.click()} disabled={isUploading}>
-                Change
+                {t("change")}
               </button>
               <button onClick={handleDeleteBannerImage} disabled={isUploading}>
-                Delete
+                {t("delete")}
               </button>
             </div>
             <input
@@ -186,8 +188,8 @@ const Settings = ({ community }) => {
           </div>
         </div>
         <FormField
-          label="Description"
-          description="A short description to quickly let people know what it's all about."
+          label={t("mod.settings.label_3")}
+          description={t("mod.settings.description_1")}
         >
           <InputWithCount
             textarea
@@ -200,7 +202,7 @@ const Settings = ({ community }) => {
         <FormField label="NSFW">
           <Checkbox
             variant="switch"
-            label=" Tick this box if the community may contain 18+ or material otherwise unsuitable for viewing in a professional environment."
+            label={t("mod.settings.label_4")}
             checked={nsfw}
             onChange={(e) => setNSFW(e.target.checked)}
             spaceBetween
@@ -209,7 +211,7 @@ const Settings = ({ community }) => {
         {user.isAdmin && (
           <FormField>
             <button onClick={handleChangeDefault}>
-              {community.isDefault ? 'Remove as default community' : 'Set as default community'}
+              {community.isDefault ? t("mod.settings.default_1") : t('mod.settings.default_2')}
             </button>
           </FormField>
         )}
@@ -220,7 +222,7 @@ const Settings = ({ community }) => {
             disabled={!changed}
             style={{ width: '100%' }}
           >
-            Save {changed}
+            {t("save")} {changed}
           </button>
         </FormField>
       </div>

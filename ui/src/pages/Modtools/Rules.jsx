@@ -8,8 +8,10 @@ import Modal from '../../components/Modal';
 import { mfetchjson } from '../../helper';
 import { useLoading } from '../../hooks';
 import { snackAlertError } from '../../slices/mainSlice';
+import { useTranslation } from 'react-i18next';
 
 const Rules = ({ community }) => {
+  const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
   const [rules, _setRules] = useState([]);
   const setRules = (rules) => {
@@ -84,7 +86,7 @@ const Rules = ({ community }) => {
   };
 
   const handleDeleteRule = async (rule) => {
-    if (confirm('Are you certain?')) {
+    if (confirm(t("mod.rules.alert_1"))) {
       try {
         await mfetchjson(`/api/communities/${community.id}/rules/${rule.id}`, {
           method: 'DELETE',
@@ -100,7 +102,7 @@ const Rules = ({ community }) => {
     return null;
   }
 
-  const modalTitle = isEditRule ? 'Edit rule' : 'Add rule';
+  const modalTitle = isEditRule ? t("mod.rules.action_2") : t("mod.rules.action_1");
   const modalDisabled = rule === '';
 
   return (
@@ -118,10 +120,10 @@ const Rules = ({ community }) => {
               if (!modalDisabled) handleSave();
             }}
           >
-            <FormField label="Rule">
+            <FormField label={t("mod.rules.label_1")}>
               <InputWithCount maxLength={ruleMaxLength} value={rule} onChange={setRule} autoFocus />
             </FormField>
-            <FormField label="Description">
+            <FormField label={t("mod.rules.label_2")}>
               <InputWithCount
                 textarea
                 rows="5"
@@ -134,16 +136,16 @@ const Rules = ({ community }) => {
           </form>
           <div className="modal-card-actions">
             <button className="button-main" disabled={modalDisabled} onClick={handleSave}>
-              Save
+              {t("save")}
             </button>
-            <button onClick={handleEditClose}>Cancel</button>
+            <button onClick={handleEditClose}>{t("cancel_button")}</button>
           </div>
         </div>
       </Modal>
       <div className="modtools-content-head">
-        <div className="modtools-title">Rules</div>
+        <div className="modtools-title">{t("mod.rules.label_1")}</div>
         <button className="button-main" onClick={handleAddRule}>
-          Add rule
+          {t("mod.rules.action_1")}
         </button>
       </div>
       <div className="modtools-rules-list">
@@ -155,11 +157,11 @@ const Rules = ({ community }) => {
               <div className="table-column">{rule.description}</div>
               <div className="table-column" style={{ display: 'flex', justifyContent: 'center' }}>
                 <button className="button-red" onClick={() => handleDeleteRule(rule)}>
-                  Delete
+                  {t("delete")}
                 </button>
               </div>
               <div className="table-column">
-                <button onClick={() => handleEditRule(rule)}>Edit</button>
+                <button onClick={() => handleEditRule(rule)}>{t("edit")}</button>
               </div>
             </div>
           ))}

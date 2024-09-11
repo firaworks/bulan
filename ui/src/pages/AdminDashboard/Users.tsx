@@ -9,6 +9,7 @@ import { mfetchjson } from '../../helper';
 import { useLoading } from '../../hooks';
 import { User } from '../../serverTypes';
 import { snackAlertError } from '../../slices/mainSlice';
+import { useTranslation } from 'react-i18next';
 
 interface UsersState {
   users: User[] | null;
@@ -16,6 +17,7 @@ interface UsersState {
 }
 
 export default function Users() {
+  const [t, i18next] = useTranslation("global");
   const [loading, setLoading] = useLoading('loading');
   const [usersState, setUsersState] = useState<UsersState>({ users: null, next: null });
 
@@ -77,7 +79,7 @@ export default function Users() {
       <div className="dashboard-page-content">
         <SimpleFeed items={feedItems} onRenderItem={handleRenderItem} />
         <Button className="is-more-button" loading={nextUsersLoading} onClick={fetchNextUsers}>
-          More
+          {t("more")}
         </Button>
       </div>
     </div>

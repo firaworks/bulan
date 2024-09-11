@@ -7,11 +7,12 @@ import Input from '../../components/Input';
 import Modal from '../../components/Modal';
 import { mfetch } from '../../helper';
 import { snackAlertError } from '../../slices/mainSlice';
+import { useTranslation } from 'react-i18next';
 
 const Mods = ({ community }) => {
   const user = useSelector((state) => state.main.user);
   const dispatch = useDispatch();
-
+  const [t, i18n] = useTranslation();
   const [addModOpen, setAddModOpen] = useState(false);
   const handleAddModClose = () => setAddModOpen(false);
   const [newModName, setNewModName] = useState('');
@@ -30,10 +31,10 @@ const Mods = ({ community }) => {
         }),
       });
       if (res.ok) {
-        alert(`${newModName} added as a mod of ${community.name}`);
+        alert(`${newModName} ${t("mod.add_alert_1")} ${community.name}`);
         window.location.reload();
       } else if (res.status === 404) {
-        alert('User not found');
+        alert(t("mod.add.user_not_found"));
       } else {
         throw new Error(await res.text());
       }
@@ -44,7 +45,7 @@ const Mods = ({ community }) => {
 
   const handleRemoveMod = async (username) => {
     if (
-      !confirm(`Are you sure you want to remove ${username} as a moderator of ${community.name}?`)
+      !confirm(`${t("mod.add.alert_2")} ${username} ${t("mod.add.alert_3")} ${community.name}?`)
     ) {
       return;
     }
@@ -53,7 +54,7 @@ const Mods = ({ community }) => {
         method: 'DELETE',
       });
       if (res.ok) {
-        alert(`${username} removed from moderators`);
+        alert(`${username} ${t("mod.add.alert_3")}`);
         window.location.reload();
       } else {
         throw new Error(await res.text());
@@ -76,7 +77,7 @@ const Mods = ({ community }) => {
       <Modal open={addModOpen} onClose={handleAddModClose}>
         <div className="modal-card">
           <div className="modal-card-head">
-            <div className="modal-card-title">Add new moderator</div>
+            <div className="modal-card-title">{t("mod.add.title")}</div>
             <ButtonClose onClick={handleAddModClose} />
           </div>
           <form className="modal-card-content" onSubmit={handleAddMod}>
@@ -86,16 +87,16 @@ const Mods = ({ community }) => {
           </form>
           <div className="modal-card-actions">
             <button className="button-main" disabled={newModName === ''} onClick={handleAddMod}>
-              Add mod
+              {t("mod.add.action_1")}
             </button>
-            <button onClick={handleAddModClose}>Cancel</button>
+            <button onClick={handleAddModClose}>{t("cancel_button")}</button>
           </div>
         </div>
       </Modal>
       <div className="modtools-content-head">
-        <div className="modtools-title">Mods</div>
+        <div className="modtools-title">{t("mod.data.mods")}</div>
         <button className="button-main" onClick={() => setAddModOpen(true)}>
-          Add mod
+          {t("mod.add.action_1")}
         </button>
       </div>
       <div className="modtools-mods-list">
@@ -107,7 +108,7 @@ const Mods = ({ community }) => {
               <div className="table-column">
                 {(myPos <= index || user.isAdmin) && (
                   <button className="button-red" onClick={() => handleRemoveMod(mod.username)}>
-                    Remove
+                    {t("mod.add.action_2")}
                   </button>
                 )}
               </div>

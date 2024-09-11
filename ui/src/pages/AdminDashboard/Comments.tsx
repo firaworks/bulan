@@ -8,6 +8,7 @@ import { useLoading } from '../../hooks';
 import { Comment } from '../../serverTypes';
 import { snackAlertError } from '../../slices/mainSlice';
 import { MemorizedComment } from '../User/Comment';
+import { useTranslation } from 'react-i18next';
 
 interface SiteCommentsState {
   comments: Comment[] | null;
@@ -15,6 +16,7 @@ interface SiteCommentsState {
 }
 
 export default function Comments() {
+  const [t, i18next] = useTranslation("global");
   const [commentsState, setCommentsState] = useState<SiteCommentsState>({
     comments: null,
     next: null,
@@ -74,7 +76,7 @@ export default function Comments() {
       <div className="dashboard-page-content">
         <SimpleFeed items={feedItems} onRenderItem={handleRenderItem} />
         <Button className="is-more-button" loading={feedReloading} onClick={fetchNextItems}>
-          More
+          {t("more")}
         </Button>
       </div>
     </div>

@@ -1,7 +1,10 @@
+import { useTranslation } from "react-i18next";
+
 export default function IPBans() {
+  const [t, i18next] = useTranslation("global");
   return (
     <div className="dashboard-page-ip-bans document">
-      <h1>IP Bans</h1>
+      <h1>{t("ip_bans")}</h1>
       <p>
         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iure provident beatae tenetur
         ducimus ullam mollitia quod labore, quisquam voluptas neque.

@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { timeAgo } from '../helper';
+import { useTranslation } from 'react-i18next';
 
 const TimeAgo = ({ time, inline = true, prefix = '', suffix = ' ago', short = false, ...rest }) => {
+  const [tr, i18n] = useTranslation("global");
   const t = time instanceof Date ? time : new Date(time);
-
+  suffix = tr("timeago.suffix")
   const [, setCounter] = useState(0);
   useEffect(() => {
     const timer = setInterval(() => {
