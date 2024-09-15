@@ -29,6 +29,7 @@ import NotFound from '../NotFound';
 import BadgesList from './BadgesList';
 import BanUserButton from './BanUserButton';
 import { MemorizedComment } from './Comment';
+import { useTranslation } from 'react-i18next';
 
 function formatFilterText(filter = '') {
   filter.toLowerCase();
@@ -40,7 +41,7 @@ function formatFilterText(filter = '') {
 
 const User = () => {
   const { username } = useParams();
-
+  const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -52,9 +53,9 @@ const User = () => {
   const queryParams = new URLSearchParams(location.search);
   const feedFilter = formatFilterText(queryParams.get('filter') ?? '');
   const selectBarOptions = [
-    { text: 'Overview', id: 'overview', queryParam: '' },
-    { text: 'Posts', id: 'posts', queryParam: 'posts' },
-    { text: 'Comments', id: 'comments', queryParam: 'comments' },
+    { text: t("user.index.text_1"), id: 'overview', queryParam: '' },
+    { text: t("user.index.text_2"), id: 'posts', queryParam: 'posts' },
+    { text: t("user.index.text_3"), id: 'comments', queryParam: 'comments' },
   ];
   for (let i = 0; i < selectBarOptions.length; i++) {
     const param = selectBarOptions[i].queryParam;
@@ -217,8 +218,8 @@ const User = () => {
         <Helmet>
           <title>{`@${user.username}`}</title>
         </Helmet>
-        <h1>Account deleted.</h1>
-        <Link to="/">Go home</Link>
+        <h1>{t('user.index.text_4')}</h1>
+        <Link to="/">{t("user.index.text_5")}</Link>
       </div>
     );
   }
@@ -231,8 +232,8 @@ const User = () => {
         <Helmet>
           <title>{`@${user.username}`}</title>
         </Helmet>
-        <h1>Account suspended.</h1>
-        <Link to="/">Go home</Link>
+        <h1>{t("user.index.text_6")}</h1>
+        <Link to="/">{t("user.index.text_5")}</Link>
       </div>
     );
   }
@@ -250,7 +251,7 @@ const User = () => {
     return (
       <div className="card card-sub page-user-summary">
         <div className="card-head">
-          <div className="card-title">Summary</div>
+          <div className="card-title">{t("user.index.text_7")}</div>
         </div>
         <div className="card-content">
           <div className="card-list-item user-summary-item">
@@ -331,7 +332,7 @@ const User = () => {
     return (
       <div className="card card-sub page-user-modlist">
         <div className="card-head">
-          <div className="card-title">Moderator of</div>
+          <div className="card-title">{t("user.index.text_8")}</div>
         </div>
         <div className="card-content">
           <div className="card-list">
@@ -365,7 +366,7 @@ const User = () => {
     return (
       <div className={'card card-sub page-user-modlist' + (hideInMobile ? ' is-no-m' : '')}>
         <div className="card-head">
-          <div className="card-title">Badges</div>
+          <div className="card-title">{t("user.index.text_9")}</div>
         </div>
         <div className="card-content">{renderBadgesList()}</div>
       </div>
@@ -377,11 +378,11 @@ const User = () => {
       return (
         <div className="card card-sub page-user-lists">
           <div className="card-head">
-            <div className="card-title">Lists</div>
+            <div className="card-title">{t("user.index.text_10")}</div>
           </div>
           <div className="card-content">
             <div className="card-list-item user-list-item">
-              <span>Error loading lists</span>
+              <span>{t("user.index.text_11")}</span>
             </div>
           </div>
         </div>
@@ -393,9 +394,9 @@ const User = () => {
     return (
       <div className="card card-sub page-user-modlist">
         <div className="card-head">
-          <div className="card-title">Lists</div>
+          <div className="card-title">{t("user.index.text_10")}</div>
           <div className="card-link">
-            <Link to={`/@${username}/lists`}>View all</Link>
+            <Link to={`/@${username}/lists`}>{t("view_all")}</Link>
           </div>
         </div>
         <div className="card-content">
@@ -464,7 +465,7 @@ const User = () => {
                 }
               >
                 @{username}
-                {user.isAdmin && <span className="user-card-is-admin">Admin</span>}
+                {user.isAdmin && <span className="user-card-is-admin">{t("admin")}</span>}
               </h1>
             </div>
             <div className="user-card-points">{`${user.points.toLocaleString()} ${stringCount(
@@ -481,26 +482,26 @@ const User = () => {
             </div>
           )}
           <div className="user-card-badges is-m">{renderBadgesList()}</div>
-          <div className="user-card-joined">Joined on {dateString1(user.createdAt)}.</div>
+          <div className="user-card-joined">{t("user.index.text_12")} {dateString1(user.createdAt)}.</div>
           {user.deleted && (
-            <div className="user-card-joined">Account deleted on {dateString1(user.deletedAt)}</div>
+            <div className="user-card-joined">{t("user.index.text_13")} {dateString1(user.deletedAt)}</div>
           )}
           {loggedIn && !user.deleted && (
             <div className="user-card-buttons">
               {viewer.id !== user.id && (
-                <button onClick={toggleMute}>{isMuted ? 'Unmute user' : 'Mute user'}</button>
+                <button onClick={toggleMute}>{isMuted ? t("user.index.unmute") :  t("user.index.mute")}</button>
               )}
               {viewerAdmin && (
                 <>
                   {viewer.id !== user.id && <BanUserButton user={user} />}
                   <button className="button-green" onClick={handleGiveSupporterBadge}>
-                    {hasSupporterBadge ? 'Remove supporter badge' : 'Give supporter badge'}
+                    {hasSupporterBadge ? t("user.index.text_14") : t("user.index.text_15")}
                   </button>
                 </>
               )}
               {viewerAdmin && user.isBanned && (
                 <div style={{ marginTop: '1rem' }}>
-                  User banned on: {new Date(user.bannedAt).toLocaleString()}
+                  {t("user.index.text_16")} {new Date(user.bannedAt).toLocaleString()}
                 </div>
               )}
             </div>
@@ -510,13 +511,13 @@ const User = () => {
               className={'button-clear tab-item' + (tab === 'content' ? ' is-active' : '')}
               onClick={() => setTab('content')}
             >
-              Posts
+              {t("user.index.posts")}
             </button>
             <button
               className={'button-clear tab-item' + (tab === 'about' ? ' is-active' : '')}
               onClick={() => setTab('about')}
             >
-              About
+              {t("user.index.about")}
             </button>
           </div>
         </header>

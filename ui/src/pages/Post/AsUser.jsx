@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 const AsUser = ({ isMod, disabled = false, onChange }) => {
+  const [t, i18n] = useTranslation("global");
   const user = useSelector((state) => state.main.user);
   const isAdmin = user !== null ? user.isAdmin : false;
 
@@ -31,7 +33,7 @@ const AsUser = ({ isMod, disabled = false, onChange }) => {
             onChange={(e) => handleChange('mods', e.target.checked)}
             disabled={disabled}
           />
-          <label htmlFor="c1">Speaking as moderator.</label>
+          <label htmlFor="c1">{t("speaking.as_mod")}</label>
         </div>
       )}
       {isAdmin && (
@@ -43,7 +45,7 @@ const AsUser = ({ isMod, disabled = false, onChange }) => {
             onChange={(e) => handleChange('admins', e.target.checked)}
             disabled={disabled}
           />
-          <label htmlFor="c2">Speaking as admin.</label>
+          <label htmlFor="c2">{t("speaking.as_admin")}</label>
         </div>
       )}
     </>

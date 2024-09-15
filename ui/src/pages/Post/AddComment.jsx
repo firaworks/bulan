@@ -10,6 +10,7 @@ import {
   snackAlertError,
 } from '../../slices/mainSlice';
 import AsUser from './AsUser';
+import { useTranslation } from 'react-i18next';
 
 const AddComment = ({
   isMod = false,
@@ -25,7 +26,7 @@ const AddComment = ({
   disabled = false,
 }) => {
   const dispatch = useDispatch();
-
+  const [t, i18n] = useTranslation("global");
   const [body, setBody] = useState(commentBody);
   const empty = body.length === 0;
 
@@ -51,7 +52,7 @@ const AddComment = ({
 
   const handleSubmit = async () => {
     if (empty) {
-      dispatch(snackAlert('Message body cannot be empty.'));
+      dispatch(snackAlert(t("new_comment.alert_1")));
       return;
     }
     setSendingRequest(true);
@@ -75,7 +76,7 @@ const AddComment = ({
         if (res.status === 403) {
           const json = await res.json();
           if (json.code === 'banned_from_community') {
-            alert('You are banned from this community.');
+            alert(t("new_comment.alert_2"));
             dispatch(bannedFromAdded(post.communityId));
             return;
           }
@@ -134,7 +135,7 @@ const AddComment = ({
         name=""
         id=""
         rows="3"
-        placeholder="Add a new comment"
+        placeholder={t("new_comment.add")}
         value={body}
         onKeyDown={handleKeyDown}
         onClick={handleTextareaClick}
@@ -152,7 +153,7 @@ const AddComment = ({
           </Link>
           <AsUser isMod={isMod} disabled={sendingRequest} onChange={(g) => setUserGroup(g)} />
           <div className="post-comments-new-buttons-buttons">
-            <button onClick={handleCancel}>Cancel</button>
+            <button onClick={handleCancel}>{t("cancel")}</button>
             <button
               className="button-main"
               onClick={handleSubmit}

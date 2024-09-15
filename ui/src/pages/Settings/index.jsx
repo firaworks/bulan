@@ -26,12 +26,13 @@ import {
 import ChangePassword from './ChangePassword';
 import DeleteAccount from './DeleteAccount';
 import { getDevicePreference, setDevicePreference } from './devicePrefs';
+import { useTranslation } from 'react-i18next';
 
 const Settings = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.main.user);
   const loggedIn = user !== null;
-
+  const [t, i18n] = useTranslation("global");
   const mutes = useSelector((state) => state.main.mutes);
   const [aboutMe, setAboutMe] = useState(user.aboutMe || '');
   const [email, setEmail] = useState(user.email || '');
@@ -121,7 +122,7 @@ const Settings = () => {
 
   const handleSave = async () => {
     if (email !== '' && !validEmail(email)) {
-      dispatch(snackAlert('Please enter a valid email'));
+      dispatch(snackAlert(t("settings.index.alert_1")));
       return;
     }
     // Save device preferences first:
@@ -141,7 +142,7 @@ const Settings = () => {
         }),
       });
       dispatch(userLoggedIn(ruser));
-      dispatch(snackAlert('Settings saved.', 'settings_saved'));
+      dispatch(snackAlert(t("settings.index.alert_2"), 'settings_saved'));
       resetChanged();
       dispatch(settingsChanged());
     } catch (error) {
@@ -167,10 +168,10 @@ const Settings = () => {
         if (res.status === 400) {
           const error = await res.json();
           if (error.code === 'file_size_exceeded') {
-            dispatch(snackAlert('Maximum file size exceeded.'));
+            dispatch(snackAlert(t("settings.index.alert_3")));
             return;
           } else if (error.code === 'unsupported_image') {
-            dispatch(snackAlert('Unsupported image.'));
+            dispatch(snackAlert(t("settings.index.alert_4")));
             return;
           }
           throw new APIError(res.status, await res.json());
@@ -277,32 +278,32 @@ const Settings = () => {
   return (
     <div className="page-content wrap page-settings">
       <Helmet>
-        <title>Settings</title>
+        <title>{t('settings.settings')}</title>
       </Helmet>
       <div className="form account-settings card">
-        <h1>Account settings</h1>
+        <h1>{t("settings.account_settings")}</h1>
         <FormSection>
           <FormSection>
             <div className="settings-propic">
               <CommunityProPic name={user.username} proPic={user.proPic} size="standard" />
               <ButtonUpload onChange={handleProPicUpload} disabled={isProPicUploading}>
-                Change
+                {t('change')}
               </ButtonUpload>
               <button onClick={handleProPicDelete} disabled={isProPicUploading}>
-                Delete
+                {t("delete")}
               </button>
             </div>
           </FormSection>
-          <FormField label="Username" description="Username cannot be changed.">
+          <FormField label={t("settings.username")} description={t("settings.description_1")}>
             <Input value={user.username || ''} disabled />
           </FormField>
-          <FormField label="Email">
+          <FormField label={t("settings.label_2")}>
             <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
           </FormField>
-          <FormField label="About me">
+          <FormField label={t("settings.label_3")}>
             <textarea
               rows="5"
-              placeholder="Write something about yourself..."
+              placeholder={t("settings.placeholder_1")}
               value={aboutMe}
               onChange={(e) => setAboutMe(e.target.value)}
             />
@@ -314,7 +315,7 @@ const Settings = () => {
             <DeleteAccount user={user} />
           </FormField>
         </FormSection>
-        <FormSection heading="Preferences">
+        <FormSection heading={t("settings.label_4")}>
           <FormField className="is-preference" label="Home feed">
             <Dropdown
               aligned="right"
@@ -334,14 +335,14 @@ const Settings = () => {
           <FormField className="is-preference is-switch">
             <Checkbox
               variant="switch"
-              label="Remember last feed sort"
+              label={t("settings.placeholder_2")}
               checked={rememberFeedSort}
               onChange={(e) => setRememberFeedSort(e.target.checked)}
             />
           </FormField>
           <FormField className="is-preference is-switch">
             <Checkbox
-              label="Enable embeds"
+              label={t("settings.label_5")}
               variant="switch"
               checked={enableEmbeds}
               onChange={(e) => setEnableEmbeds(e.target.checked)}
@@ -350,13 +351,13 @@ const Settings = () => {
           <FormField className="is-preference is-switch">
             <Checkbox
               variant="switch"
-              label="Show user profile pictures"
+              label={t("settings.label_6")}
               checked={showUserProfilePictures}
               onChange={(e) => setShowUserProfilePictures(e.target.checked)}
             />
           </FormField>
         </FormSection>
-        <FormSection heading="Device preferences">
+        <FormSection heading={t("settings.heading_1")}>
           <FormField className="is-preference" label="Font">
             <Dropdown
               aligned="right"
@@ -372,11 +373,11 @@ const Settings = () => {
             </Dropdown>
           </FormField>
         </FormSection>
-        <FormSection heading="Notifications">
+        <FormSection heading={t("settings.heading_2")}>
           <FormField className="is-preference is-switch">
             <Checkbox
               variant="switch"
-              label="Enable upvote notifications"
+              label={t("settings.label_7")}
               checked={notifsSettings.upvoteNotifs}
               onChange={(e) => setNotifsSettings('upvoteNotifs', e.target.checked)}
             />
@@ -384,7 +385,7 @@ const Settings = () => {
           <FormField className="is-preference is-switch">
             <Checkbox
               variant="switch"
-              label="Enable reply notifications"
+              label={t("settings.label_8")}
               checked={notifsSettings.replyNotifs}
               onChange={(e) => setNotifsSettings('replyNotifs', e.target.checked)}
             />
@@ -392,32 +393,32 @@ const Settings = () => {
           {canEnableWebPushNotifications && (
             <FormField>
               <button onClick={handleEnablePushNotifications} style={{ alignSelf: 'flex-start' }}>
-                Enable push notifications
+                {t("settings.text_1")}
               </button>
             </FormField>
           )}
         </FormSection>
-        <FormSection heading="Muted communities">
+        <FormSection heading={t("settings.heading_3")}>
           <div className="mutes-list">
-            {mutes.communityMutes.length === 0 && <div>None</div>}
+            {mutes.communityMutes.length === 0 && <div>{t("none")}</div>}
             {mutes.communityMutes.map((mute) => renderMute(mute))}
             {mutes.communityMutes.length > 0 && (
               <button
                 style={{ alignSelf: 'flex-end' }}
                 onClick={() => handleUnmuteAll('community')}
               >
-                Unmute all
+                {t("unmute_all")}
               </button>
             )}
           </div>
         </FormSection>
-        <FormSection heading="Muted users">
+        <FormSection heading={t("settings.heading_4")}>
           <div className="mutes-list">
-            {mutes.userMutes.length === 0 && <div>None</div>}
+            {mutes.userMutes.length === 0 && <div>{t("none")}</div>}
             {mutes.userMutes.map((mute) => renderMute(mute))}
             {mutes.userMutes.length > 0 && (
               <button style={{ alignSelf: 'flex-end' }} onClick={() => handleUnmuteAll('user')}>
-                Unmute all
+                {t("unmute_all")}
               </button>
             )}
           </div>
@@ -429,7 +430,7 @@ const Settings = () => {
             onClick={handleSave}
             style={{ width: '100%' }}
           >
-            Save
+            {t("save")}
           </button>
         </FormField>
       </div>

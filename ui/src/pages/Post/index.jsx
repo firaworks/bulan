@@ -36,10 +36,11 @@ import { postAdded } from '../../slices/postsSlice';
 import CommunityCard from './CommunityCard';
 import PostImage from './PostImage';
 import PostVotesBar from './PostVotesBar';
+import { useTranslation } from 'react-i18next';
 
 const Post = () => {
   const { id, commentId, communityName } = useParams(); // id is post.publicId
-
+  const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -221,7 +222,7 @@ const Post = () => {
           if (res.status === 400) {
             const error = await res.json();
             if (error.code === 'max_pinned_count_reached') {
-              dispatch(snackAlert('Max pinned posts count reached.'));
+              dispatch(snackAlert(t("new_comment.alert_6")));
               set(checkedBefore);
               handledError = true;
             }
@@ -268,20 +269,20 @@ const Post = () => {
   const getDeletedBannerText = (post) => {
     if (post.deletedContent) {
       if (post.deletedAs === post.deletedContentAs) {
-        return `This post and its ${
+        return `${t("new_comment.alert_7")} ${
           post.type === 'image' ? 'image(s)' : post.type
-        } have been removed by ${userGroupSingular(post.deletedAs, true)}.`;
+        } ${t("new_comment.alert_8")} ${userGroupSingular(post.deletedAs, true)}.`;
       } else {
-        return `This post has been removed by ${userGroupSingular(post.deletedAs, true)} and its ${
+        return `${t("new_comment.alert_9")} ${userGroupSingular(post.deletedAs, true)} and its ${
           post.type
-        } has been removed
+        } ${t("new_comment.alert_10")}
         by ${userGroupSingular(post.deletedContentAs, true)}.`;
       }
     }
-    return `This post has been removed by ${userGroupSingular(post.deletedAs, true)}.`;
+    return `${t("new_comment.alert_11")} ${userGroupSingular(post.deletedAs, true)}.`;
   };
 
-  const deletePostContentButtonText = `Delete ${
+  const deletePostContentButtonText = `${t("new_comment.delete_button")} ${
     post.type === 'image' ? (post.images.length > 1 ? 'images' : 'image') : post.type
   }`;
 
@@ -381,7 +382,7 @@ const Post = () => {
                       className="post-card-banner is-locked"
                       style={{ color: 'var(--color-red)' }}
                     >
-                      This post has been locked by {userGroupSingular(post.lockedByGroup)}.
+                      {t("new_comment.text_1")} {userGroupSingular(post.lockedByGroup)}.
                     </div>
                   )}
                   {post.deleted && (
@@ -401,7 +402,7 @@ const Post = () => {
               </div>
               <div className="right">
                 {votesCount > 0 && (
-                  <div className="post-card-vote-percent">{upvotedPercent}% Upvoted</div>
+                  <div className="post-card-vote-percent">{upvotedPercent}{t("new_comment.upvoted")}</div>
                 )}
               </div>
             </div>
@@ -413,7 +414,7 @@ const Post = () => {
                     className="button-text"
                     onClick={() => dispatch(saveToListModalOpened(post.id, 'post'))}
                   >
-                    Save
+                    {t('save')}
                   </button>
                 )}
                 {postOwner && (
@@ -423,12 +424,12 @@ const Post = () => {
                       history.push(`/new?edit=${post.publicId}`, { fromPostPage: true })
                     }
                   >
-                    Edit
+                    {t('edit')}
                   </button>
                 )}
                 {postOwner && !post.deleted && (
                   <button className="button-red" onClick={() => setDeleteModalOpen(true)}>
-                    Delete
+                    {t("delete")}
                   </button>
                 )}
                 {postOwner && post.deleted && !post.deletedContent && post.type !== 'text' && (
@@ -444,7 +445,7 @@ const Post = () => {
                   </>
                 )*/}
                 {loggedIn && isMod && (
-                  <Dropdown target={<button className="button-red">Mod actions</button>}>
+                  <Dropdown target={<button className="button-red">{t("actions.mod")}</button>}>
                     <div className="dropdown-list">
                       <button
                         className="button-clear dropdown-item"
@@ -457,7 +458,7 @@ const Post = () => {
                         onClick={() => setDeleteModalOpen(true, 'mods')}
                         disabled={post.deleted}
                       >
-                        Delete
+                        {t("delete")}
                       </button>
                       <div className="dropdown-item is-non-reactive">
                         <div className="checkbox">
@@ -468,7 +469,7 @@ const Post = () => {
                             onChange={(e) => setUserGroup(e.target.checked ? 'mods' : 'normal')}
                             disabled={!postOwner}
                           />
-                          <label htmlFor={'ch-user-group-m'}>Speaking officially</label>
+                          <label htmlFor={'ch-user-group-m'}>{t("speaking.officially")}</label>
                         </div>
                       </div>
                       <div className="dropdown-item is-non-reactive">
@@ -480,14 +481,14 @@ const Post = () => {
                             onChange={(e) => handlePinChange(e, false)}
                             disabled={post.deleted && !isPinned}
                           />
-                          <label htmlFor={'ch-pin-m'}>Pinned</label>
+                          <label htmlFor={'ch-pin-m'}>{t("pinned")}</label>
                         </div>
                       </div>
                     </div>
                   </Dropdown>
                 )}
                 {isAdmin && (
-                  <Dropdown target={<button className="button-red">Admin actions</button>}>
+                  <Dropdown target={<button className="button-red">{t("actions.admin")}</button>}>
                     <div className="dropdown-list">
                       <button
                         className="button-clear dropdown-item"
@@ -506,7 +507,7 @@ const Post = () => {
                         onClick={() => setDeleteModalOpen(true, 'admins')}
                         disabled={post.deleted}
                       >
-                        Delete
+                        {t("delete")}
                       </button>
                       <button
                         className="button-clear dropdown-item"
@@ -524,7 +525,7 @@ const Post = () => {
                             onChange={(e) => setUserGroup(e.target.checked ? 'admins' : 'normal')}
                             disabled={!postOwner}
                           />
-                          <label htmlFor={'ch-user-group-a'}>Speaking officially</label>
+                          <label htmlFor={'ch-user-group-a'}>{t("speaking.officially")}</label>
                         </div>
                       </div>
                       <div className="dropdown-item is-non-reactive">
@@ -536,7 +537,7 @@ const Post = () => {
                             onChange={(e) => handlePinChange(e, true)}
                             disabled={post.deleted && !isPinnedSite}
                           />
-                          <label htmlFor={'ch-pin-a'}>Pinned</label>
+                          <label htmlFor={'ch-pin-a'}>{t("pinned")}</label>
                         </div>
                       </div>
                     </div>
@@ -579,7 +580,7 @@ const Post = () => {
                     canComment={canComment}
                   />
                   {post.noComments === 0 && (
-                    <div className="post-comments-none is-no-m">No comments yet.</div>
+                    <div className="post-comments-none is-no-m">{t('new_comment.no_comment')}</div>
                   )}
                 </>
               ) : (

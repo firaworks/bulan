@@ -4,10 +4,11 @@ import { useDispatch } from 'react-redux';
 import { kRound, mfetchjson, selectImageCopyURL } from '../../helper';
 import { useDelayedEffect, useQuery } from '../../hooks';
 import { snackAlertError } from '../../slices/mainSlice';
+import { useTranslation } from 'react-i18next';
 
 const SelectCommunity = ({ initial = '', onFocus, onChange, disabled = false }) => {
   const dispatch = useDispatch();
-
+  const [t, i18n] = useTranslation("global");
   const [suggestions, setSuggestions] = useState([]);
   useEffect(() => {
     (async function () {
@@ -125,7 +126,7 @@ const SelectCommunity = ({ initial = '', onFocus, onChange, disabled = false }) 
           ref={inputRef}
           className={'card' + (isActive ? ' is-active' : '')}
           type="text"
-          placeholder="Select a community"
+          placeholder={t("new_post.select_community")}
           onFocus={handleFocus}
           onChange={handleChange}
           value={value}

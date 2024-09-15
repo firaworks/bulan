@@ -24,16 +24,16 @@ import {
 } from '../slices/mainSlice';
 import LoginForm from '../views/LoginForm';
 import JoinButton from './Community/JoinButton';
+import { useTranslation } from 'react-i18next';
 
 const prepareText = (isMobile = false) => {
-  const x = isMobile ? 'by filling out the form below' : 'by clicking on the button below';
-  return `Communities are currently available only on a per request
-    basis. You can request one ${x}, and if you seem
-    reasonable and trustworthy, the requested community will be created and you will
-    be added as a moderator of that community.`;
+  const [t, i18n] = useTranslation("global");
+  const x = isMobile ? t("all_communities.is_mobile_1") : t("all_communities.is_mobile_2");
+  return `${t("all_communities.text_1")} ${x}, ${t("all_communities.text_2")}`;
 };
 
 const AllCommunities = () => {
+  const [t, i18n] = useTranslation("global");
   const user = useSelector((state) => state.main.user);
   const loggedIn = user !== null;
 
@@ -70,9 +70,9 @@ const AllCommunities = () => {
       <Sidebar />
       <main>
         <div className="page-comms-header card card-padding">
-          <h1>All communities</h1>
+          <h1>{t('all_communities.title')}</h1>
           <RequestCommunityButton className="button-main is-m" isMobile>
-            New
+            {t("all_communities.text_3")}
           </RequestCommunityButton>
         </div>
         <div className="comms-list">
@@ -145,18 +145,20 @@ AllCommunities.propTypes = {};
 export default AllCommunities;
 
 const CommunityCreationCard = () => {
+  const [t, i18n] = useTranslation("global");
   return (
     <div className="card card-sub card-padding home-welcome">
-      <div className="home-welcome-join">New communities</div>
+      <div className="home-welcome-join">{t("all_communities.text_4")}</div>
       <div className="home-welcome-subtext">{prepareText()}</div>
       <div className="home-welcome-buttons">
-        <RequestCommunityButton className="button-main">Request a community</RequestCommunityButton>
+        <RequestCommunityButton className="button-main">{t('all_communities.text_5')}</RequestCommunityButton>
       </div>
     </div>
   );
 };
 
 const RequestCommunityButton = ({ children, isMobile = false, ...props }) => {
+  const [t, i18n] = useTranslation("global")
   const loggedIn = useSelector((state) => state.main.user) !== null;
   const dispatch = useDispatch();
 
@@ -178,7 +180,7 @@ const RequestCommunityButton = ({ children, isMobile = false, ...props }) => {
 
   const handleSubmit = async () => {
     if (name.length < 3) {
-      alert('Community name has to have at least 3 characters.');
+      alert(t("all_communities.alert_1"));
       return;
     }
     try {
@@ -190,7 +192,7 @@ const RequestCommunityButton = ({ children, isMobile = false, ...props }) => {
         }),
       });
       if (res.ok) {
-        dispatch(snackAlert('Requested!'));
+        dispatch(snackAlert(t("all_communities.alert_2")));
         handleClose();
       } else {
         throw new Error(await res.text());
@@ -205,7 +207,7 @@ const RequestCommunityButton = ({ children, isMobile = false, ...props }) => {
       <Modal open={open} onClose={handleClose}>
         <div className="modal-card modal-form modal-request-comm">
           <div className="modal-card-head">
-            <div className="modal-card-title">Request community</div>
+            <div className="modal-card-title">{t("all_communities.text_5")}</div>
             <ButtonClose onClick={handleClose} />
           </div>
           <div className="form modal-card-content flex-column inner-gap-1">
@@ -230,7 +232,7 @@ const RequestCommunityButton = ({ children, isMobile = false, ...props }) => {
             </FormField>
             <FormField>
               <button className="button-main" onClick={handleSubmit} style={{ width: '100%' }}>
-                Request community
+              {t("all_communities.text_5")}
               </button>
             </FormField>
           </div>

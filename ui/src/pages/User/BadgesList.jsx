@@ -3,10 +3,11 @@ import React, { useState } from 'react';
 import { ButtonClose } from '../../components/Button';
 import Modal from '../../components/Modal';
 import Badge from './Badge';
+import { useTranslation } from 'react-i18next';
 
 function BadgesList({ user }) {
   const { badges } = user;
-
+  const [t, i18n] = useTranslation("global");
   const [selectedBadge, setSelectedBadge] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const handleModalClose = () => setModalOpen(false);
@@ -20,8 +21,8 @@ function BadgesList({ user }) {
   if (selectedBadge) {
     switch (selectedBadge.type) {
       case 'supporter':
-        modalTitle = 'Supporter';
-        modalDesc = 'This user is a Patreon supporter, helping to keep Discuit always free of ads.';
+        modalTitle = t("user.modal.title");
+        modalDesc = t("user.modal.description");
         break;
       default:
         throw new Error(`unkown badge type '${selectedBadge.type}'`);

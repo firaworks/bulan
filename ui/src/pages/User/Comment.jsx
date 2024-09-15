@@ -5,22 +5,24 @@ import MarkdownBody from '../../components/MarkdownBody';
 import ShowMoreBox from '../../components/ShowMoreBox';
 import TimeAgo from '../../components/TimeAgo';
 import { kRound, stringCount } from '../../helper';
+import { useTranslation } from 'react-i18next';
 
 const Comment = ({ comment, onRemoveFromList = null }) => {
+  const [t, i18n] = useTranslation("global");
   return (
     <div className="comment">
       <div className="comment-head">
         <Link className="comment-username" to={`/@${comment.username}`}>
           {`@${comment.username}`}
         </Link>
-        <span>commented on</span>
+        <span>{t("user.comment.text_1")}</span>
         <Link
           className="comment-post-title"
           to={`/${comment.communityName}/post/${comment.postPublicId}`}
         >
           {comment.postTitle}
         </Link>
-        <span>in</span>
+        <span>{t('in')}</span>
         {/*<CommunityLink name={comment.communityName} />*/}
         <Link to={`/${comment.communityName}`} style={{ color: 'inherit', fontWeight: '600' }}>
           {comment.communityName}
@@ -46,7 +48,7 @@ const Comment = ({ comment, onRemoveFromList = null }) => {
         <div className="comment-remove">
           {onRemoveFromList && (
             <button className="button-clear" onClick={() => onRemoveFromList(comment.id)}>
-              Remove
+              {t("remove")}
             </button>
           )}
         </div>

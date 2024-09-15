@@ -18,8 +18,10 @@ import AsUser from '../Post/AsUser';
 import CommunityCard from '../Post/CommunityCard';
 import Image from './Image';
 import SelectCommunity from './SelectCommunity';
+import { useTranslation } from 'react-i18next';
 
 const NewPost = () => {
+  const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
@@ -46,7 +48,7 @@ const NewPost = () => {
     if (community !== null) {
       const _isBanned = bannedFrom.find((id) => id === community.id) !== undefined;
       if (_isBanned) {
-        alert(`You are banned from ${community.name}`);
+        alert(`${t("new_post.alert_1")} ${community.name}`);
       }
       setIsBanned(_isBanned);
     } else {
@@ -119,7 +121,7 @@ const NewPost = () => {
     // Check to see if uploading these images would reach the max image limit.
     if (images.length + files.length > maxNumOfImages) {
       alert(
-        `Image posts cannot contain more than ${maxNumOfImages} images. Please select fewer images and continue.`
+        `${t("new_post.alert_2")} ${maxNumOfImages} ${t("new_post.alert_3")}`
       );
       return;
     }
@@ -137,10 +139,10 @@ const NewPost = () => {
           if (res.status === 400) {
             const error = await res.json();
             if (error.code === 'file_size_exceeded') {
-              dispatch(snackAlert('Maximum file size exceeded.'));
+              dispatch(snackAlert(t("new_post.alert_4")));
               return;
             } else if (error.code === 'unsupported_image') {
-              dispatch(snackAlert('Unsupported image.'));
+              dispatch(snackAlert(t("new_post.alert_5")));
               return;
             }
           }
@@ -180,30 +182,30 @@ const NewPost = () => {
   const handleSubmit = async () => {
     if (isSubmitDisabled) return;
     if (isBanned) {
-      alert('You are banned from community');
+      alert(t("new_post.alert_6"));
       return;
     }
     if (community === null) {
-      alert('Select a community first');
+      alert(t("new_post.alert_7"));
       return;
     }
     if (title.length < 3) {
       if (title.length === 0) {
-        alert('Your post needs a title');
+        alert(t("new_post.alert_8"));
         return;
       }
-      alert('Title is too short');
+      alert(t("new_post.alert_9"));
       return;
     }
     if (postType === 'image') {
       if (images.length === 0) {
-        alert("You haven't uploaded an image");
+        alert(t("new_post.alert_10"));
         return;
       }
     }
     if (postType === 'link') {
       if (link === '') {
-        alert('Please submit a valid URL');
+        alert(t("new_post.alert_11"));
         return;
       }
     }
@@ -240,7 +242,7 @@ const NewPost = () => {
           if (res.status === 400) {
             const error = await res.json();
             if (error.code === 'invalid_url') {
-              dispatch(snackAlert('The URL you provided is not a valid URL.'));
+              dispatch(snackAlert(t("new_post.alert_12")));
               return;
             }
           }
@@ -266,7 +268,7 @@ const NewPost = () => {
     return () => window.removeEventListener('keydown', listner);
   }, [handleSubmit]);
   const handleCancel = () => {
-    if (((changed || isUploading) && confirm('Are you sure you want to leave?')) || !changed) {
+    if (((changed || isUploading) && confirm(t("new_post.alert_13"))) || !changed) {
       if (isUploading) abortController.current.abort();
       if (window.appData.historyLength > 1) {
         history.goBack();
@@ -332,10 +334,10 @@ const NewPost = () => {
   return (
     <div className="page-new">
       <Helmet>
-        <title>{isEditPost ? 'Edit Post' : 'New Post'}</title>
+        <title>{isEditPost ? t("new_post.edit_post") : t("new_post.new_post")}</title>
       </Helmet>
       <div className="page-new-topbar">
-        <div className="page-new-topbar-title">{isEditPost ? 'Edit post' : 'Create a post'}</div>
+        <div className="page-new-topbar-title">{isEditPost ?  t("new_post.edit_post") : t("new_post.create_post")}</div>
         <ButtonClose onClick={handleCancel} />
       </div>
       <div className="page-new-content">
@@ -366,7 +368,7 @@ const NewPost = () => {
                   <path d="M0 0h24v24H0z" fill="none" />
                   <path d="M2.5 4v3h5v12h3V7h5V4h-13zm19 5h-9v3h3v7h3v-7h3V9z" />
                 </svg>
-                <span>Text</span>
+                <span>{t("text")}</span>
               </button>
               {!isImagePostsDisabled && (
                 <button
@@ -388,7 +390,7 @@ const NewPost = () => {
                     <path d="M0 0h24v24H0V0z" fill="none" />
                     <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z" />
                   </svg>
-                  <span>Image</span>
+                  <span>{t("image")}</span>
                 </button>
               )}
               <button
@@ -410,12 +412,12 @@ const NewPost = () => {
                   <path d="M0 0h24v24H0V0z" fill="none" />
                   <path d="M17 7h-4v2h4c1.65 0 3 1.35 3 3s-1.35 3-3 3h-4v2h4c2.76 0 5-2.24 5-5s-2.24-5-5-5zm-6 8H7c-1.65 0-3-1.35-3-3s1.35-3 3-3h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-2zm-3-4h8v2H8z" />
                 </svg>
-                <span>Link</span>
+                <span>{t("link")}</span>
               </button>
             </div>
             <Textarea
               className="page-new-post-title"
-              placeholder="Post title goes here..."
+              placeholder={t("new_post.instruction_1")}
               value={title}
               onChange={handleTitleChange}
               rows="1"
@@ -461,7 +463,7 @@ const NewPost = () => {
                       <path d="M0 0h24v24H0V0z" fill="none" />
                       <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z" />
                     </svg>
-                    <p>Deleted image</p>
+                    <p>{t("deleted_image")}</p>
                   </div>
                 )}
               </div>
@@ -486,15 +488,15 @@ const NewPost = () => {
           <div className="new-page-help">
             {'Use '}
             <Link to="/markdown_guide" target="_blank">
-              Markdown
+              {t("new_post.markdown")}
             </Link>
             {' to format posts.'}
           </div>
           <div className="page-new-buttons is-no-m">
             <button className="button-main" onClick={handleSubmit} disabled={isSubmitDisabled}>
-              Submit
+              {t("submit")}
             </button>
-            <button onClick={handleCancel}>Cancel</button>
+            <button onClick={handleCancel}>{t("cancel")}</button>
           </div>
         </div>
         <div className="new-page-sidebar">
@@ -507,9 +509,9 @@ const NewPost = () => {
         </div>
         <div className="page-new-buttons is-m">
           <button className="button-main" onClick={handleSubmit} disabled={isSubmitDisabled}>
-            Submit
+            {t("submit")}
           </button>
-          <button onClick={handleCancel}>Cancel</button>
+          <button onClick={handleCancel}>{t("cancel")}</button>
         </div>
       </div>
     </div>
@@ -519,6 +521,7 @@ const NewPost = () => {
 export default NewPost;
 
 const ImageUploadArea = ({ isUploading, onImagesUpload, disabled = false }) => {
+  const [t, i18n] = useTranslation("global");
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const dropzoneRef = useRef();
   const handleOnDrop = (e) => {
@@ -590,14 +593,14 @@ const ImageUploadArea = ({ isUploading, onImagesUpload, disabled = false }) => {
               onChange={handleFileChange}
               disabled={disabled}
             />
-            <div>Add photo</div>
-            <div>Or drag and drop</div>
+            <div>{t("new_post.add_photo")}</div>
+            <div>{t("new_photo.drag")}</div>
           </>
         )}
-        {disabled && <div>Maximum number of images reached.</div>}
+        {disabled && <div>{t('new_post.max')}</div>}
         {isUploading && (
           <div className="flex flex-center page-new-image-uploading">
-            <div className="page-new-uploading-text">Uploading image</div>
+            <div className="page-new-uploading-text">{t("new_post.uploading_image")}</div>
             <Spinner style={{ marginLeft: 5 }} size={25} />
           </div>
         )}

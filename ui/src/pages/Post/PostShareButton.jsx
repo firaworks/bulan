@@ -4,8 +4,10 @@ import { useDispatch } from 'react-redux';
 import Dropdown from '../../components/Dropdown';
 import { copyToClipboard } from '../../helper';
 import { snackAlert } from '../../slices/mainSlice';
+import { useTranslation } from 'react-i18next';
 
 const Target = ({ ...props }) => {
+  const [t, i18n] = useTranslation("global");
   return (
     <div className="button button-with-icon button-text" {...props}>
       <svg
@@ -24,12 +26,13 @@ const Target = ({ ...props }) => {
           fill="currentColor"
         />
       </svg>
-      <span>Share</span>
+      <span>{t("share")}</span>
     </div>
   );
 };
 
 const PostShareButton = ({ post }) => {
+  const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
 
   const url = `${window.location.origin}/${post.communityName}/post/${post.publicId}`;
@@ -57,7 +60,7 @@ const PostShareButton = ({ post }) => {
     if (post.images.length === 0) {
       return (
         <div className="button-clear dropdown-item" style={{ opacity: 'var(--disabled-opacity)' }}>
-          Download image
+          {t("download_image")}
         </div>
       );
     }
@@ -69,7 +72,7 @@ const PostShareButton = ({ post }) => {
     }.${image.format}`;
     return (
       <a href={url} className="button-clear dropdown-item" download={filename}>
-        Download image
+        {t("download_image")}
       </a>
     );
   };
@@ -85,7 +88,7 @@ const PostShareButton = ({ post }) => {
           href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}`}
           rel="noreferrer"
         >
-          To Twitter / X
+          {t("to_x")}
         </a>
         <a
           className="button-clear dropdown-item"
@@ -93,15 +96,15 @@ const PostShareButton = ({ post }) => {
           href={`https://www.facebook.com/sharer.php?u=${url}`}
           rel="noreferrer"
         >
-          To Facebook
+          {t("to_fb")}
         </a>
         <button className="button-clear dropdown-item" onClick={handleCopyURL}>
-          Copy URL
+          {t("copy_url")}
         </button>
         {post.type === 'image' && renderImageDownloadButton()}
         {hasMoreShareableOptions && (
           <button className="button-clear dropdown-item" onClick={handleMoreButtonClick}>
-            More
+            {t("more")}
           </button>
         )}
       </div>

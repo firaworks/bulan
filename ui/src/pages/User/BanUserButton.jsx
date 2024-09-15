@@ -7,10 +7,11 @@ import Input, { Checkbox } from '../../components/Input';
 import Modal from '../../components/Modal';
 import { mfetch } from '../../helper';
 import { snackAlertError } from '../../slices/mainSlice';
+import { useTranslation } from 'react-i18next';
 
 const BanUserButton = ({ user }) => {
   const [open, setOpen] = useState();
-
+  const [t, i18n] = useTranslation("global");
   const [deleteContentChecked, setDeleteContentChecked] = useState(false);
   const [page, setPage] = useState(1);
   const [banInProgress, setBanInProgress] = useState(false);
@@ -34,11 +35,11 @@ const BanUserButton = ({ user }) => {
         return;
       }
       if (confirmText.toLowerCase() !== user.username.toLowerCase()) {
-        alert('Usernames do not match!');
+        alert(t("user.ban.alert_1"));
         return;
       }
     } else {
-      if (!window.confirm('Are you sure?')) return;
+      if (!window.confirm(t("user.ban.confirm_1"))) return;
     }
     try {
       setBanInProgress(true);
@@ -54,10 +55,10 @@ const BanUserButton = ({ user }) => {
         body: JSON.stringify(body),
       });
       if (res.status === 200) {
-        alert(`User ${user.isBanned ? 'un' : ''}banned successfully.`);
+        alert(`${t("user.ban.alert_2")} ${user.isBanned ? 'un' : ''}${t("user.ban.alert_3")}`);
         window.location.reload();
       } else {
-        alert('Failed to ban user: ' + (await res.text()));
+        alert(t("user.ban.alert_4") + (await res.text()));
       }
     } catch (error) {
       dispatch(snackAlertError(error));
@@ -80,7 +81,7 @@ const BanUserButton = ({ user }) => {
         <div className="form modal-card-content">
           <FormField>
             <Checkbox
-              label="Delete all of the user's posts and comments"
+              label={t("user.ban.label_1")}
               checked={deleteContentChecked}
               onChange={(e) => setDeleteContentChecked(e.target.checked)}
             />
@@ -91,7 +92,7 @@ const BanUserButton = ({ user }) => {
       return (
         <div className="form modal-card-content">
           <div className="form-field">
-            <p>Enter the username of the user to be banned: </p>
+            <p>{t("user.ban.input_1")} </p>
           </div>
           <FormField>
             <Input
@@ -105,7 +106,7 @@ const BanUserButton = ({ user }) => {
     }
   };
 
-  const modalTitle = user.isBanned ? `Unban user` : 'Ban user';
+  const modalTitle = user.isBanned ? t('user.ban.title_1') : t("user.ban.title_2");
 
   return (
     <>
@@ -123,7 +124,7 @@ const BanUserButton = ({ user }) => {
             <button className="button-red" onClick={handleBanUser} disabled={banInProgress}>
               {modalTitle}
             </button>
-            <button onClick={handleClose}>Cancel</button>
+            <button onClick={handleClose}>{t("cancel")}</button>
           </div>
         </div>
       </Modal>

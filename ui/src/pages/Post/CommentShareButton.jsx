@@ -4,8 +4,10 @@ import { useDispatch } from 'react-redux';
 import Dropdown from '../../components/Dropdown';
 import { copyToClipboard, publicURL } from '../../helper';
 import { snackAlert } from '../../slices/mainSlice';
+import { useTranslation } from 'react-i18next';
 
 export const CommentShareDropdownItems = ({ prefix = '', url }) => {
+  const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
   const handleCopyURL = () => {
     let text = 'Failed to copy link to clipboard.';
@@ -22,7 +24,7 @@ export const CommentShareDropdownItems = ({ prefix = '', url }) => {
       {/* <div className="dropdown-item">{to}Facebook</div>
       <div className="dropdown-item">{to}Twitter</div> */}
       <div className="dropdown-item" onClick={handleCopyURL}>
-        Copy URL
+        {t("copy_url")}
       </div>
     </>
   );
@@ -34,8 +36,9 @@ CommentShareDropdownItems.propTypes = {
 };
 
 const CommentShareButton = ({ url }) => {
+  const [t, i18n] = useTranslation("global");
   return (
-    <Dropdown target={<button className="button-text post-comment-button">Share</button>}>
+    <Dropdown target={<button className="button-text post-comment-button">{t('share')}</button>}>
       <div className="dropdown-list">
         <CommentShareDropdownItems url={url} />
       </div>

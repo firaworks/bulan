@@ -23,6 +23,7 @@ import {
 import { userHasSupporterBadge } from '../User';
 import AddComment from './AddComment';
 import CommentShareButton, { CommentShareDropdownItems } from './CommentShareButton';
+import { useTranslation } from 'react-i18next';
 
 const Diagnostics = false; // import.meta.env.MODE !== 'production';
 const MaxCommentDepth = 15;
@@ -41,7 +42,7 @@ const Comment = ({
   canComment,
 }) => {
   const dispatch = useDispatch();
-
+  const [t, i18n] = useTranslation("global");
   const postId = post.publicId;
   const loggedIn = user !== null;
 
@@ -132,7 +133,7 @@ const Comment = ({
       return;
     }
     if (deleted) {
-      dispatch(snackAlert("Can't vote on a deleted comment!", 'novotedeleted'));
+      dispatch(snackAlert(t("new_comment.alert_3"), 'novotedeleted'));
       return;
     }
     doVote(
@@ -223,7 +224,7 @@ const Comment = ({
   const [reportModalOpen, setReportModalOpen] = useState(false); // for mobile
 
   const [mutedUserHidden, setMutedUserHidden] = useState(comment.isAuthorMuted);
-  const mutedText = "You've muted this user. Click here to see this comment.";
+  const mutedText = t("new_post.muted_text");
   const handleCommentTextClick = () => {
     if (mutedUserHidden) {
       setMutedUserHidden(false);
@@ -362,7 +363,7 @@ const Comment = ({
   const userMod = community ? community.userMod : false;
 
   let deletedText = '';
-  if (deleted) deletedText = `Deleted by ${userGroupSingular(comment.deletedAs, true)}`;
+  if (deleted) deletedText = `${t("new_comment.deleted_by")} ${userGroupSingular(comment.deletedAs, true)}`;
   const disabled = !(canVote && !comment.deletedAt);
   const noRepliesRenderedDirect = children ? children.length : 0;
   const noChildrenReplies = countChildrenReplies(node);
@@ -379,7 +380,7 @@ const Comment = ({
     return (
       <>
         <div className={cls()} onClick={() => !disabled && setConfirmDeleteOpen(true, 'mods')}>
-          Delete
+          {t("delete")}
         </div>
         {user.id === comment.userId && (
           <div className={cls('is-non-reactive')}>
@@ -391,7 +392,7 @@ const Comment = ({
                 onChange={(e) => !disabled && setUserGroup(e.target.checked ? 'mods' : 'normal')}
                 disabled={disabled}
               />
-              <label htmlFor={checkboxId}>Speaking officially</label>
+              <label htmlFor={checkboxId}>{t("speaking.officially")}</label>
             </div>
           </div>
         )}
@@ -404,7 +405,7 @@ const Comment = ({
     return (
       <>
         <div className="dropdown-item" onClick={() => setConfirmDeleteOpen(true, 'admins')}>
-          Delete
+          {t("delete")}
         </div>
         {user.id === comment.userId && (
           <div className="dropdown-item is-non-reactive">
@@ -415,12 +416,12 @@ const Comment = ({
                 checked={comment.userGroup === 'admins' ? true : false}
                 onChange={(e) => setUserGroup(e.target.checked ? 'admins' : 'normal')}
               />
-              <label htmlFor={checkboxId}>Speaking officially</label>
+              <label htmlFor={checkboxId}>{t("speaking.officially")}</label>
             </div>
           </div>
         )}
         <div className="dropdown-item" onClick={() => alert(`ID: ${comment.id}`)}>
-          Comment ID
+          {t("new_comment.comment_id")}
         </div>
       </>
     );
@@ -451,12 +452,12 @@ const Comment = ({
       ref={div}
     >
       <ModalConfirm
-        title="Delete comment?"
+        title={t("new_comment.alert_5")}
         open={confirmDeleteOpen}
         onClose={() => setConfirmDeleteOpen(false)}
         onConfirm={handleOnDelete}
       >
-        Are you sure you want to delete the comment?
+        {t("new_comment.alert_4")}
       </ModalConfirm>
       <div className="post-comment-left">
         <div className="post-comment-collapse" onClick={handleLineClick}>
@@ -483,7 +484,7 @@ const Comment = ({
             <TimeAgo
               className="post-comment-head-item"
               time={comment.editedAt}
-              prefix="Edited "
+              prefix={t("new_comment.edited_time_ago")}
               suffix=""
               short
             />
@@ -607,38 +608,38 @@ const Comment = ({
                   noButton
                 />
               )}
-              <Dropdown target={<button className="button-text">More</button>}>
+              <Dropdown target={<button className="button-text">{t("more")}</button>}>
                 <div className="dropdown-list">
                   <CommentShareDropdownItems url={commentShareURL} />
                   {showEditDelete && (
                     <>
                       <div className="dropdown-item" onClick={handleOnEdit}>
-                        Edit
+                        {t("edit")}
                       </div>
                       <div className="dropdown-item" onClick={() => setConfirmDeleteOpen(true)}>
-                        Delete
+                        {t("delete")}
                       </div>
                     </>
                   )}
                   {showReport && (
                     <div className="dropdown-item" onClick={() => setReportModalOpen(true)}>
-                      Report
+                      {t("report.report")}
                     </div>
                   )}
                   {loggedIn && (
                     <div className="dropdown-item" onClick={handleSave}>
-                      Save to list
+                      {t("save_to_list.save_to_list")}
                     </div>
                   )}
                   {isAdmin && (
                     <>
-                      <div className="dropdown-item is-topic">Admin actions</div>
+                      <div className="dropdown-item is-topic">{t("actions.admin")}</div>
                       {getAdminActionsItems()}
                     </>
                   )}
                   {(isAdmin || userMod) && (
                     <>
-                      <div className="dropdown-item is-topic">Mod actions</div>
+                      <div className="dropdown-item is-topic">{t("actions.mod")}</div>
                       {getModActionsItems(!userMod)}
                     </>
                   )}
@@ -652,10 +653,10 @@ const Comment = ({
               {showEditDelete && (
                 <>
                   <button className="button-text" onClick={handleOnEdit}>
-                    Edit
+                    {t("edit")}
                   </button>
                   <button className="button-text" onClick={() => setConfirmDeleteOpen(true)}>
-                    Delete
+                    {t("delete")}
                   </button>
                 </>
               )}
@@ -664,14 +665,14 @@ const Comment = ({
               )}
               {loggedIn && (
                 <button className="button-text" onClick={handleSave}>
-                  Save
+                  {t("save")}
                 </button>
               )}
               {isAdmin && (
                 <Dropdown
                   target={
                     <button className="button-text" style={{ color: 'var(--color-red)' }}>
-                      Admin actions
+                      {t("actions.admin")}
                     </button>
                   }
                 >
@@ -680,14 +681,14 @@ const Comment = ({
               )}
               {isAdmin && !userMod && (
                 <button className="button-text" style={{ color: 'rgb(var(--base-6))' }}>
-                  Mod actions
+                  {t("actions.mod")}
                 </button>
               )}
               {userMod && (
                 <Dropdown
                   target={
                     <button className="button-text" style={{ color: 'var(--color-red)' }}>
-                      Mod actions
+                      {t("actions.mod")}
                     </button>
                   }
                 >
