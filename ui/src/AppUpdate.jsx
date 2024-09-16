@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ButtonClose } from './components/Button';
 import Modal from './components/Modal';
 import { useIsMobile } from './hooks';
+import { useTranslation } from 'react-i18next';
 
 export const forceSwUpdate = async () => {
   if ('serviceWorker' in navigator) {
@@ -12,6 +13,7 @@ export const forceSwUpdate = async () => {
 };
 
 const AppUpdate = () => {
+  const [t, i18n] = useTranslation("global");
   const [swWaiting, setSwWaiting] = useState(false);
 
   useEffect(() => {
@@ -73,20 +75,19 @@ const AppUpdate = () => {
       <Modal open={modalOpen} onClose={handleClose} noOuterClickClose>
         <div className="modal-card is-compact-mobile is-center" style={{ minWidth: '300px' }}>
           <div className="modal-card-head">
-            <div className="modal-card-title">Update available!</div>
+            <div className="modal-card-title">{t("update.title")}</div>
             <ButtonClose onClick={handleClose} />
           </div>
           <div className="modal-card-content">
             <p>
-              A new version of this app is available. Reload the page to update. It won't take more
-              than a second.
+              {t("update.text_1")}
             </p>
           </div>
           <div className="modal-card-actions">
             <button className="button-main" onClick={handleReload}>
-              Reload
+              {t("update.text_2")}
             </button>
-            <button onClick={handleClose}>Not now</button>
+            <button onClick={handleClose}>{t("update.text_3")}</button>
           </div>
         </div>
       </Modal>

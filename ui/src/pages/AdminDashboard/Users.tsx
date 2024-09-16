@@ -17,7 +17,8 @@ interface UsersState {
 }
 
 export default function Users() {
-  const [t, i18next] = useTranslation("global");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [t] = useTranslation("global");
   const [loading, setLoading] = useLoading('loading');
   const [usersState, setUsersState] = useState<UsersState>({ users: null, next: null });
 

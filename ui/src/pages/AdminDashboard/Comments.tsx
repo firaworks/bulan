@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Button from '../../components/Button';
@@ -16,7 +17,7 @@ interface SiteCommentsState {
 }
 
 export default function Comments() {
-  const [t, i18next] = useTranslation("global");
+  const [t] = useTranslation("global");
   const [commentsState, setCommentsState] = useState<SiteCommentsState>({
     comments: null,
     next: null,

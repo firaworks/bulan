@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 
 export default function Home() {
-  const [t, i18next] = useTranslation("global");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [t] = useTranslation("global");
   return (
     <div className="dashboard-page-home document">
       <div className="dashboard-page-title">{t("home")}</div>

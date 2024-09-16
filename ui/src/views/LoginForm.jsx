@@ -6,10 +6,12 @@ import { Form, FormField } from '../components/Form';
 import Input, { InputPassword } from '../components/Input';
 import { APIError, mfetch } from '../helper';
 import { loginModalOpened, signupModalOpened, snackAlertError } from '../slices/mainSlice';
+import { useTranslation } from 'react-i18next'; 
+
 
 const LoginForm = ({ isModal = false }) => {
   const dispatch = useDispatch();
-
+  const [t, i18n] = useTranslation("global");
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(null);
@@ -19,13 +21,13 @@ const LoginForm = ({ isModal = false }) => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     if (username === '' && password === '') {
-      setLoginError('Username and password empty.');
+      setLoginError(t("login_view.alert_1"));
       return;
     } else if (username === '') {
-      setLoginError('Username empty.');
+      setLoginError(t("login_view.alert_2"));
       return;
     } else if (password === '') {
-      setLoginError('Password empty.');
+      setLoginError(t("login_view.alert_3"));
       return;
     }
     try {
@@ -40,11 +42,11 @@ const LoginForm = ({ isModal = false }) => {
         window.location.reload();
       } else {
         if (res.status === 401) {
-          setLoginError('Username and password do not match.');
+          setLoginError(t("login_view.alert_4"));
         } else if (res.status === 403) {
           const json = await res.json();
           if (json.code === 'account_suspended') {
-            setLoginError(`@${username} is suspended.`);
+            setLoginError(`@${username} ${t("login_view.alert_5")}`);
           } else {
             throw new APIError(res.status, json);
           }
@@ -73,7 +75,7 @@ const LoginForm = ({ isModal = false }) => {
 
   return (
     <Form className="login-box modal-card-content" onSubmit={handleLoginSubmit}>
-      <FormField label="Username">
+      <FormField label={t("login_view.label_1")}>
         <Input
           ref={usernameRef}
           value={username}
@@ -82,7 +84,7 @@ const LoginForm = ({ isModal = false }) => {
           autoComplete="username"
         />
       </FormField>
-      <FormField label="Password">
+      <FormField label={t("login_view.label_2")}>
         <InputPassword
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -97,7 +99,7 @@ const LoginForm = ({ isModal = false }) => {
       <FormField className="is-submit">
         <input type="submit" className="button button-main" value="Login" />
         <button className="button-link" onClick={handleOnSignup}>
-          {"Don't have an account? Signup"}
+          {t("login_view.text_1")}
         </button>
       </FormField>
     </Form>

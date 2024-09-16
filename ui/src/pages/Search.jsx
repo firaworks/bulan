@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 const Search = () => {
+  const [t, i18n] = useTranslation("global");
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const query = params.get('q') || '';
@@ -32,9 +34,9 @@ const Search = () => {
           alt="Guy furiously smashes computer."
           onLoad={handleImageLoad}
         />
-        <div className="coming-to-town">Coming soon...!</div>
+        <div className="coming-to-town">{t("search.coming_soon")}</div>
         <a className="button button-main" href={googleHref} target="_blank" rel="noreferrer">
-          Search on Google for now
+          {t("search.google")}
         </a>
       </div>
     </div>

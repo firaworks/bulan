@@ -19,17 +19,18 @@ import {
 } from '../slices/feedsSlice';
 import { snackAlertError } from '../slices/mainSlice';
 import WelcomeBanner from '../views/WelcomeBanner';
+import { useTranslation } from 'react-i18next';
 
-const sortOptions = [
-  { text: 'Hot', id: 'hot' },
-  { text: 'Activity', id: 'activity' },
-  { text: 'New', id: 'latest' },
-  { text: 'Day', id: 'day' },
-  { text: 'Week', id: 'week' },
-  { text: 'Month', id: 'month' },
-  { text: 'Year', id: 'year' },
-  // { text: 'All', id: 'all' },
-];
+// const sortOptions = [
+//   { text: 'Hot', id: 'hot' },
+//   { text: 'Activity', id: 'activity' },
+//   { text: 'New', id: 'latest' },
+//   { text: 'Day', id: 'day' },
+//   { text: 'Week', id: 'week' },
+//   { text: 'Month', id: 'month' },
+//   { text: 'Year', id: 'year' },
+//   // { text: 'All', id: 'all' },
+// ];
 const sortDefault = import.meta.env.VITE_DEFAULTFEEDSORT;
 const baseURL = '/api/posts';
 
@@ -45,8 +46,18 @@ export const homeReloaded = (homeFeed = 'all', rememberFeedSort = false) => {
 };
 
 function useFeedSort(rememberLastSort = false) {
+  const [t, i18n] = useTranslation('global');
   const location = useLocation();
-
+  const sortOptions = [
+    { text: t("sort_options.hot"), id: 'hot' },
+    { text: t("sort_options.activity"), id: 'activity' },
+    { text: t("sort_options.new"), id: 'latest' },
+    { text: t("sort_options.day"), id: 'day' },
+    { text: t("sort_options.week"), id: 'week' },
+    { text: t("sort_options.month"), id: 'month' },
+    { text: t("sort_options.year"), id: 'year' },
+    // { text: 'All', id: 'all' },
+  ];
   let sortSaved;
   if (rememberLastSort) {
     sortSaved = window.localStorage.getItem('feedSort');
@@ -94,9 +105,19 @@ function useFeedSort(rememberLastSort = false) {
 }
 
 const PostsFeed = ({ feedType = 'all', communityId = null }) => {
+  const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
   // const history = useHistory();
-
+  const sortOptions = [
+    { text: t("sort_options.hot"), id: 'hot' },
+    { text: t("sort_options.activity"), id: 'activity' },
+    { text: t("sort_options.new"), id: 'latest' },
+    { text: t("sort_options.day"), id: 'day' },
+    { text: t("sort_options.week"), id: 'week' },
+    { text: t("sort_options.month"), id: 'month' },
+    { text: t("sort_options.year"), id: 'year' },
+    // { text: 'All', id: 'all' },
+  ];
   const user = useSelector((state) => state.main.user);
   const loggedIn = user !== null;
 
@@ -220,6 +241,17 @@ PostsFeed.propTypes = {
 export default PostsFeed;
 
 const PostsFilterBar = ({ name, sort = 'latest', onChange, rememberLastSort = false }) => {
+  const [t, i18n] = useTranslation("global");
+  const sortOptions = [
+    { text: t("sort_options.hot"), id: 'hot' },
+    { text: t("sort_options.activity"), id: 'activity' },
+    { text: t("sort_options.new"), id: 'latest' },
+    { text: t("sort_options.day"), id: 'day' },
+    { text: t("sort_options.week"), id: 'week' },
+    { text: t("sort_options.month"), id: 'month' },
+    { text: t("sort_options.year"), id: 'year' },
+    // { text: 'All', id: 'all' },
+  ];
   const location = useLocation();
 
   return <SelectBar name={name} options={sortOptions} value={sort} onChange={onChange} />;

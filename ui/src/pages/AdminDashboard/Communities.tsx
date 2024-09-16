@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 
 export default function Communities() {
-  const [t, i18next] = useTranslation("global");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [t] = useTranslation("global");
   return (
     <div className="dashboard-page-communities document">
       <h1>{t("communities")}</h1>

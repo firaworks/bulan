@@ -10,7 +10,8 @@ function Sidebar({
   className?: string;
   onMenuItemClick?: () => void;
 }) {
-  const [t, i18next] = useTranslation("global");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [t] = useTranslation("global");
   const { url } = useRouteMatch();
   const dashboardLink = (path: string) => {
     return `${url}/${path}`;

@@ -536,5 +536,63 @@
     "login": "Login to continue",
     "offline": "You're offline",
     "connection": "Check your internet connection.",
-    "retry": "Retry"
+    "retry": "Retry",
+    "search": {
+        "coming_soon": "Coming soon...!",
+        "google": "Search on Google for now"
+    },
+    "login_view": {
+        "alert_1": "Username and password empty.",
+        "alert_2": "Username empty.",
+        "alert_3": "Password empty.",
+        "alert_4": "Username and password do not match.",
+        "alert_5": "is suspended.",
+        "label_1": "Username",
+        "label_2": "Password",
+        "text_1": "Don't have an account? Signup"
+    },
+    "sort_options": {
+        "hot": "Hot",
+        "activity": "Activity",
+        "new": "New",
+        "day": "Day",
+        "week": "Week",
+        "month": "Month",
+        "year": "Year"
+    },
+    "welcome": {
+        "join": "Join the discussion",
+        "create_community": "Create community",
+        "create_post": "Create post",
+        "description_1": "Discuit is a place where",
+        "description_2": "people get together to find cool stuff and discuss things.",
+        "create_account": "Create new account"
+    },
+    "update": {
+        "title": "Update available!",
+        "text_1": "A new version of this app is available. Reload the page to update. It won't take more than a second.",
+        "text_2": "Reload",
+        "text_3": "Not now"
+    },
+    "notification_settings": {
+        "title": "Turn on notifications",
+        "text_1": "To receive notifications when someone comments on your post or likes it, turn on push notifications.",
+        "text_2": "Turn on",
+        "text_3": "Not now"
+    },
+    "service_worker": {
+        "text_1": "commented on your post",
+        "text_2": "new comments on your post",
+        "text_3": "replied to your comment on post",
+        "text_4": "new replies to your comment on post",
+        "vote_on": "on your post",
+        "vote_on_comment": "on your comment in",
+        "deleted_by_1": "moderators of",
+        "deleted_by_2": "'admins",
+        "deleted_text_1": "Your post",
+        "deleted_text_2": "has been removed by the",
+        "mod_add_1": "You are added as a moderator of",
+        "mod_add_2": "by",
+        "new_badge": "You are awarded the 'supporter' badge for your contribution to Discuit and for sheer awesomeness!"
+    }
 }

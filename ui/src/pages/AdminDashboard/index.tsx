@@ -16,7 +16,8 @@ import { useTranslation } from 'react-i18next';
 function AdminDashboard() {
   const [menuVisible, setMenuVisible] = useState(true);
   const toggleMenuVisible = () => setMenuVisible((v) => !v);
-  const [t, i18next] = useTranslation("global");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [t] = useTranslation("global");
   /*
 
   const pageRef = useRef<HTMLDivElement>(null);

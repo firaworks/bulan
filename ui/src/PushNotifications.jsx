@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { ButtonClose } from './components/Button';
 import Modal from './components/Modal';
 import { mfetchjson, urlBase64ToUint8Array } from './helper';
+import { useTranslation } from 'react-i18next';
 import { useIsMobile } from './hooks';
 
 function askDeviceNotificationsPermissions() {
@@ -100,6 +101,7 @@ export const getNotificationsPermissions = async (loggedIn, applicationServerKey
 };
 
 const PushNotifications = () => {
+  const [t, i18n] = useTranslation("global");
   const user = useSelector((state) => state.main.user);
   const loggedIn = user !== null;
 
@@ -134,18 +136,17 @@ const PushNotifications = () => {
     <Modal open={askModalOpen} onClose={handleAskModalClose} noOuterClickClose>
       <div className="modal-card is-compact-mobile is-center">
         <div className="modal-card-head">
-          <div className="modal-card-title">Turn on notifications</div>
+          <div className="modal-card-title">{t("notification_settings.title")}</div>
           <ButtonClose onClick={handleAskModalClose} />
         </div>
         <div className="modal-card-content">
-          To receive notifications when someone comments on your post or likes it, turn on push
-          notifications.
+          {t("notification_settings.text_1")}
         </div>
         <div className="modal-card-actions">
           <button className="button-main" onClick={handlePermissionsAsk}>
-            Turn on
+            {t("notification_settings.text_2")}
           </button>
-          <button onClick={handleAskModalClose}>Not now</button>
+          <button onClick={handleAskModalClose}>{t("notification_settings.text_3")}</button>
         </div>
       </div>
     </Modal>
