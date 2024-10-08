@@ -1,3 +1,598 @@
 {
-    "admin": "Админ хуудас"
+    "navbar": {
+        "admin": "Админ",
+        "profile": "Профайл",
+        "settings": "Тохиргоо",
+        "dark_mode": "Дарклах",
+        "logout": "Гарах",
+        "search": "Хайлт",
+        "search_google": "Гүүглэдэж хайх"
+    },
+    "notifications": {
+        "title": "Нотификейшн",
+        "actions": {
+            "delete_all": "Бүгдийг устгах",
+            "mark_all_as_seen": "Үзсэнээр тэмдэглэх",
+            "mark_all_upvotes_as_seen": "Дээшээ саналуудыг үзсэнээр тэмдэглэх"
+        },
+        "data": {
+            "comment": "Таны пост дээр коммент хийв",
+            "comments": "Таны пост дээр шинэ комментүүд нэмэгдлээ",
+            "reply": "Таны постонд хариулав",
+            "replies": "Таны постонд шинэ хариу ирлээ",
+            "upvote": "шинэ дээшээ санал",
+            "vote": "шинэ санал",
+            "on_your_post": "постон дээр чинь ирлээ",
+            "on_your_comment_in": "доторх коммент дээр чинь ирлээ",
+            "deleted_post": {
+                "your_post": "Таны пост",
+                "has_been_removed_by": "устгагдлаа.",
+                "moderators_of": "булангийн мод"
+            },
+            "mod_add_1": "Таныг МОД болгож нэмлээ",
+            "mod_add_2": "Мод болгож нэмсэн",
+            "new_badge_1": "Таньд олгосон медал",
+            "new_badge_2": "дэмжигч",
+            "new_badge_3": "Чи гоё сда шүү!!!",
+            "mark_seen": "Үзсэнээр тэмдэглэх",
+            "mark_unseen": "Үзээгүйгээр тэмдэглэх",
+            "delete_button": "Устгах"
+        },
+        "state": "Нотификейшн алгоо"
+    },
+    "feed_item": {
+        "no_more_posts": "Өөр пост алга"
+    },
+    "yes": "Тийм",
+    "no": "Үгүй",
+    "post": {
+        "heading": {
+            "posted_by": "Пост хийсэн",
+            "save_to_list": "Жагсаалт руу нэмэх",
+            "remove_from_list": "Жагсаалтаас хасах"
+        },
+        "actions": {
+            "create": "Пост оруулах"
+        },
+        "data": {
+            "posts": "Постууд",
+            "about": "Чухамаа"
+        }
+    },
+    "chat": {
+        "send": "Илгээх"
+    },
+    "create_community": {
+        "alert_1": "3 үсэгнээс урт юм бич",
+        "alert_2": "Ийм нэртэй Булан аль хэдийнэ байна аа хөө",
+        "alert_3": "Хамгийн багадаа",
+        "alert_4": "оноотой байж Булан үүсгэнэ",
+        "alert_5": "Мод хийж болох Булангийн тоо гүйцсэн байна",
+        "title": "Булан үүсгэх",
+        "name_label": "Булангийн нэр",
+        "name_description": "Булангийн нэр солигддогүйнмаа",
+        "description_label": "Тухай",
+        "description_description": "Энэ Буланд ямар гарууд байгаа тухай товч тайлбар",
+        "action": "Булан үүсгэх"
+    },
+    "create": "Create",
+    "footer": {
+        "title": "Монголчуудын онлайн хуралдай",
+        "organization": "Байгууллага",
+        "about": "Тухай",
+        "contact": "Холбоо барих",
+        "social": "Сошиал",
+        "terms": "Үйлчилгээний Нөхцөл",
+        "privacy": "Нууцлал",
+        "guidelines": "Контентын зөвлөгөө",
+        "documentation": "Documentation"
+    },
+    "auth": {
+        "login": "Нэвтрэх",
+        "signup": "Бүртгүүлэх",
+        "login_to_continue": "Эхлээд нэвтрүүл яасын?"
+    },
+    "mini_footer": {
+        "about": "Тухай",
+        "terms": "Үйлчилгээний Нөхцөл",
+        "privacy": "Нууцлал",
+        "guidelines": "Контентын зөвлөгөө",
+        "contact": "Холбоо барих",
+        "docs": "Docs"
+    },
+    "pagination": {
+        "previous": "Өмнөх",
+        "next": "Удаах"
+    },
+    "report": {
+        "alert_1": "Та аль хэдийн ховлосон байна",
+        "report": "Ховлох"
+    },
+    "cancel": "Cancel",
+    "save_to_list": {
+        "remove_from": "Хасагдав",
+        "saved_to": "Нэмэв",
+        "create_new_list": "Шинэ жагсаалт үүсгэх",
+        "save_to_list": "Жагсаалт руу нэмэх"
+    },
+    "select_bar": {
+        "sort": "Ялгах :"
+    },
+    "show": {
+        "more": "Өшөө ихийг харуул",
+        "less": "Багыг харуул",
+        "show": "Харуул",
+        "show_more": "Өшөөөө"
+    },
+    "sidebar": {
+        "home": "Нүүр",
+        "communities": "Булангууд",
+        "guidelines": "Guidelines",
+        "terms": "Үйлчилгээний нөхцөл",
+        "privacy": "Нууцлал",
+        "contact": "Холбоо барих",
+        "about": "Тухай",
+        "my_lists": "Миний жагсаалт",
+        "users": "Гишүүд",
+        "comments": "Коммент"
+    },
+    "signup": {
+        "username_error": " аль хэдийн эзэнтэй болсон байна",
+        "generic_error": "Байдал биш болсоон.",
+        "captcha_error": "АPI байкүү",
+        "signup": "Бүргүүлэх",
+        "username_label": "Нэр",
+        "username_description": "Булан доторх таны нэр",
+        "email_label": "Мейл (заавал оруулах албагүй л дээ)",
+        "email_description": "Гэхдээ мейл оруулку бол тэгээд нууц үгээ мартаал таны аккаунт дуусааштээ",
+        "creation_description_1": "Аккаунт нээснээр хүлээнэ зөвшөөрч буй гэрээнүүд гэхүү дээ.",
+        "terms": "Үйлчилгээний нөхцөл",
+        "and": "болон",
+        "privacy_policy": "Нууцлал",
+        "captcha_text": "Энэ сайтыг Google Captcha хамгаалж байгаа шүү!",
+        "terms_of_service": "Үйлчилгээний нөхцөл",
+        "apply": "Хэрэгжүүлэх",
+        "login": "Бүртгэл нэгэнт байгаа, намайг оруул!"
+    },
+    "timeago": {
+        "suffix": " өмнө",
+        "just_now": "Яг одоо",
+        "s": "s",
+        "second": "секунд",
+        "m": "m",
+        "minute": "Минут",
+        "h": "h",
+        "hour": "Цаг",
+        "d": "d",
+        "day": "Өдөр",
+        "w": "w",
+        "week": "Долоо Хоног",
+        "y": "y",
+        "year": "Жил"
+    },
+    "helper": {
+        "point": "Оноо"
+    },
+    "months": {
+        "january": "1 сар",
+        "february": "2 сар",
+        "march": "3 сар",
+        "april": "4 сар",
+        "may": "5 сар",
+        "june": "6 сар",
+        "july": "7 сар",
+        "august": "8 сар",
+        "september": "9 сар",
+        "october": "10 сар",
+        "november": "11 сар",
+        "december": "12 сар"
+    },
+    "user_group": {
+        "long_mod": "Мод",
+        "short_mod": "Мод",
+        "admin": "Админ",
+        "user": "Гишүүн",
+        "invalid": "Тохиромжгүй"
+    },
+    "more": "Өшөө",
+    "communities": "Булангууд",
+    "home": "Нүүр",
+    "under_construction": "Газар шорооны ажилтай байна",
+    "dashboard": "Админ удирдлага",
+    "not_found": "Олдоогүй",
+    "ip_bans": "IP бандах",
+    "community_warning_1": "Хөөе",
+    "community_warning_2": "Булангаас гаруул Мод нь байхаа болино штээ. Итгэлтэй байна уу?",
+    "community_rules": "Булангий дүрмүүд",
+    "homepage": {
+        "text_1": "Гар утсан дээр Булангаа суулгаарай",
+        "install": "Суулгах",
+        "text_2": "Суулгах дараалал",
+        "text_3": "1. Эхлээд Safari Share товчуур дээр дар",
+        "text_4": "IOS дээрх вэб аппууд зөвхөн Safari дээр л сууж болохыг анхаарна уу",
+        "text_5": "2. \"Add to Home Screen. дээр дар\"",
+        "text_6": "3. \"Add. дээр дар\""
+    },
+    "close_button": "Хаах",
+    "feed_not_found": "Олдсонгүйэ",
+    "list_alert_1": "Жагсаалтнаас бүгдийг нь хасахдаа итгэлтэй байна уу",
+    "list_alert_2": "Жагсаалтыг устгахдаа итгэлтэй байна уу",
+    "list_text_1": "Хувийн",
+    "list_text_2": "Жагсаалтыг өөрчлөх",
+    "list_text_3": "Бүгдийг хасах",
+    "list_text_4": "Жагсаалтыг устгах",
+    "list_text_5": "Жагсаалтын дүн",
+    "list_alert_3": "",
+    "list_alert_4": "аль хэдийн үүссэн байна.",
+    "list_alert_5": "Нэр хоосон байж болохгүй",
+    "list_form_label_1": "Нэр",
+    "list_form_description_1": "нэр",
+    "list_form_label_2": "Нэр",
+    "list_form_label_3": "Тайлбар",
+    "cancel_button": "Цуцлах",
+    "generic_error": "Нэг юм бишдсээн",
+    "new_list": "Шинэ жагсаалт",
+    "create_list": "Жагсаалт үүсгэх",
+    "mod": {
+        "ban": {
+            "alert_1": "Ийм нэртэй гишүүн алга.",
+            "alert_2": "бандуулсан байна",
+            "alert_3": "бандсан байна.",
+            "title": "Бандах",
+            "action": "Гишүүнийг бандах",
+            "banned": "Бандав",
+            "action_2": "Бан болиулах"
+        },
+        "data": {
+            "modtools": "Модны багаж",
+            "community_settings": "Булангийн тохиргоо",
+            "content": "Контент",
+            "reports": "Зөөсөн ховууд",
+            "removed": "Устгав",
+            "locked": "Түгжив",
+            "users": "Гишүүд",
+            "banned": "Бандуулсан",
+            "moderators": "Модууд",
+            "rules": "Дүрэм",
+            "mods": "Модууд"
+        },
+        "add": {
+            "user_not_found": "Гишүүн олдсонгүй",
+            "alert_1": "Дараах бүлгийн мод болгож нэмэв:",
+            "alert_2": "Хасах гэж байгаадаа итгэлтэй байна уу",
+            "alert_3": "Мод хийдэг бүлэг:",
+            "alert_4": "Модуудаас хасав",
+            "title": "Шинэ Мод нэмэх",
+            "action_1": "Мод нэмэх",
+            "action_2": "Хасах"
+        },
+        "report": {
+            "alert_1": "Ховыг тоосонгүй",
+            "title": "Ховууд",
+            "removed_by": "Хассан",
+            "ignore": "Үл тоомсорлох",
+            "handle": "Учрыг нь олох",
+            "all": "Пост болон комментүүд",
+            "posts": "Постууд",
+            "comments": "Комментүүд"
+        },
+        "rules": {
+            "alert_1": "Яг уу?",
+            "action_1": "Дүрэм нэмэх",
+            "action_2": "Дүрэм өөрчлөх",
+            "label_1": "Дүрэм",
+            "label_2": "Тайлбар"
+        },
+        "settings": {
+            "alert_1": "Тохиргоог хадгаллаа.",
+            "alert_2": "Файлын хэмжээ томдоод байна.",
+            "alert_3": "Ийм зураг болохгүйээ.",
+            "label_1": "Профайл зураг",
+            "label_2": "Баннер зураг",
+            "label_3": "Тайлбар",
+            "label_4": "Энэ Буланд +18 бүхий утга агуулгатай зүйлс байх бол үүнийг тэмдэглэ.",
+            "description_1": "Юуны тухай вэ гэдэг товч тайлбар.",
+            "default_1": "Үндсэн Булан байхыг болиулах",
+            "default_2": "Үндсэн Булан болгох"
+        }
+    },
+    "save": "Хадгалах",
+    "delete": "Устгах",
+    "edit": "Өөрчлөх",
+    "change": "Өөрчлөх",
+    "new_post": {
+        "select_community": "Булан сонгох",
+        "community_question": "Аль Буланд постыг оруулах вэ?",
+        "content_instruct": "Контентыг Маркдаун төрлөөр бичих",
+        "char_limit": "255 тэмдэгт хэтрүүлж болохгүй.",
+        "alert_1": "Та бандуулжээ - ",
+        "alert_2": "Зурагт постны хязгаар",
+        "alert_3": "бөгөөд зургийн тоог багасгана уу",
+        "alert_4": "Файл хэмжээ хэтэрсэн.",
+        "alert_5": "Ийм зураг болохгүйээ.",
+        "alert_6": "Таныг энэ Булангаас бандсан.",
+        "alert_7": "Эхлээд Булан сонго",
+        "alert_8": "Постондоо гарчиг оруул",
+        "alert_9": "Гарчиг богинодоод байна",
+        "alert_10": "Зураг оруулагүй байна штээ",
+        "alert_11": "Ажилладаг линк оруулаа",
+        "alert_12": "Оруулсан линк тань болкү байна",
+        "edit_post": "Постыг өөрчлөх",
+        "new_post": "Шинэ пост",
+        "create_post": "Пост үүсгэх",
+        "instruction_1": "Постны гарчиг энд...",
+        "markdown": "Маркдаун",
+        "add_photo": "Зураг нэмэх",
+        "drag": "Татаж зөөгөөд хаяа",
+        "max": "Зургийн тоо тулсан.",
+        "uploading_image": "Зургийг дамжуулж байна"
+    },
+    "text": "Текст",
+    "image": "Зураг",
+    "link": "Линк",
+    "deleted_image": "Устгасан зураг",
+    "submit": "Илгээх",
+    "new_comment": {
+        "alert_1": "Хоосон байж болохгүйээ.",
+        "alert_2": "Та энэ Булангаас бандуулжээ.",
+        "add": "Шинэ коммент нэмэх.",
+        "alert_3": "Устгасан коммент дээр санал өгөхгүйээ.",
+        "muted_text": "Энэ гишүүнийн мюүт хийсэн байна. Комментыг харахын тулд дарна уу.",
+        "deleted_by": "Устгасан",
+        "comment_id": "Коммент ID",
+        "alert_4": "Комментыг устгахдаа итгэлтэй байна уу?",
+        "alert_5": "Комментыг устгах уу?",
+        "edited_time_ago": "Өөрчилсөн",
+        "alert_6": "Зоосон постны тоо тулсан.",
+        "alert_7": "Энэ пост болон түүний",
+        "alert_8": "усгагдсан.",
+        "alert_9": "Энэ постыг устгасан",
+        "alert_10": "устгасан байна",
+        "alert_11": "Энэхүү постыг устгасан",
+        "delete_button": "Устгах:",
+        "text_1": "Энэхүү постыг түгжсэн",
+        "upvoted": "% Дээшээ",
+        "no_comment": "Коммент алга."
+    },
+    "speaking": {
+        "as_mod": "Мод ярьж байна.",
+        "as_admin": "Админ ярьж байна.",
+        "officially": "Албан яриа ярьж байна."
+    },
+    "actions": {
+        "mod": "Модны үйлдлүүд",
+        "admin": "Админ үйлдлүүд"
+    },
+    "share": "Сэвэх",
+    "copy_url": "Линк хуулах",
+    "pinned": "Зоосон",
+    "post_modal": {
+        "delete_post": "Пост устгах",
+        "alert_1": "Энэ постыг нээрээ устгах юм уу?",
+        "alert_2": "Энэ постыг нээрэнгээсээ бүр устгах юм уу?"
+    },
+    "download_image": "Зургийг татах",
+    "to_x": "Twitter",
+    "to_fb": "Facebook",
+    "settings": {
+        "change_password": {
+            "alert_1": "2 нууц үг зөрөөд байна",
+            "alert_2": "Нууц үг богинодоод байна",
+            "alert_3": "Өмнө нууц үг буруу байна",
+            "alert_4": "Нууц үг амжилттай солигдлоо",
+            "change_password": "Нууц үг солих"
+        },
+        "delete_account": {
+            "alert_1": "Өөрийнхөө гишүүнчлэлийг амжиллтай устгалаа!",
+            "delete_account": "Гишүүнчлэлээ устгах",
+            "alert_2": "АНХААР! Устгасан гишүүнчлэл буцааж сэргээх боломжгүй.",
+            "invalid_pass": "Нууц үг буруу",
+            "password": "Нууц үг:",
+            "type_to_continue": "Үргэлжүүлэхийн тулд YES гэж бич:"
+        },
+        "index": {
+            "alert_1": "Ажиллагаатай имейл оруулалдаа",
+            "alert_2": "Тохиргоог хадгаллаа.",
+            "alert_3": "Файлын хэмжээ хэтрэв.",
+            "alert_4": "Ийм зураг дэмжихгүйээ."
+        },
+        "settings": "Тохиргоо",
+        "account_settings": "Гишүүнчлэл тохиргоо",
+        "label_1": "Нэр",
+        "description_1": "Нэрийг өөрчлөх боломжгүй",
+        "label_2": "Имейл",
+        "label_3": "Миний тухай",
+        "placeholder_1": "Өөрийнхөө тухай нэг юм бичээд үздээ...",
+        "label_4": "Хувийн сонголтууд",
+        "placeholder_2": "Хамгийн сүүлийн фийд тохиргоо санах",
+        "label_5": "embed нээх",
+        "label_6": "Гишүүний про зургийг харуулах",
+        "heading_1": "Төхөөрөмжний тохиргоо",
+        "heading_2": "Нотификейшн",
+        "label_7": "Дээшээ санал дээр нотификейшн",
+        "label_8": "Хариу бичилтэнд нотификейшн",
+        "text_1": "Хүчилдэг нотификейшн",
+        "heading_3": "Амыг нь хамхисан Булангууд",
+        "heading_4": "Амыг нь хамхисан гишүүд"
+    },
+    "none": "Хоосон",
+    "unmute_all": "Бүгдийн дуу хоолойг сэргээх",
+    "user": {
+        "modal": {
+            "title": "Дэмжигч",
+            "description": "Энэ хэрэгчлэгч нь манайхыг санхүүгээр дэмждэг"
+        },
+        "ban": {
+            "alert_1": "Гишүүний нэр зөрөөд байна",
+            "confirm_1": "Яг уу?",
+            "alert_2": "Гишүүн",
+            "alert_3": "Амжилттай бандлаа.",
+            "alert_4": "Гишүүнийг бандаж чадсангүйээ:",
+            "label_1": "Гишүүний бүх пост болон комментыг устгах",
+            "input_1": "Бандах гишүүний нэрийг оруул:",
+            "title_1": "Баныг болиулах",
+            "title_2": "Гишүүнийг бандах"
+        },
+        "comment": {
+            "text_1": "комментлов"
+        },
+        "index": {
+            "text_1": "Ерөнхий",
+            "text_2": "Постууд",
+            "text_3": "Комментүүд",
+            "text_4": "Гишүүнчлэлийг устгах.",
+            "text_5": "Нүүр",
+            "text_6": "Гишүүнчлэлийг түр түдгэлзүүлсэн.",
+            "text_7": "Дүгнэлт",
+            "text_8": "Модлодог Булан:",
+            "text_9": "Медалууд",
+            "text_10": "Жагсаалтууд",
+            "text_11": "Жагсаалтууд харуулахдаа фейлдэв",
+            "text_12": "Элссэн огноо",
+            "text_13": "Гишүүнчлэлийг устгасан огноо",
+            "unmute": "Амыг нь нээх",
+            "mute": "Амыг нь хамхих",
+            "text_14": "Дэмжигч медалыг хураах",
+            "text_15": "Дэмжигч медал олгох",
+            "text_16": "Гишүүнийг бандсан:",
+            "posts": "Постууд",
+            "about": "Тухай"
+        }
+    },
+    "in": "Дотор",
+    "remove": "Хасах",
+    "view_all": "Бүгдийг харах",
+    "admin": "Админ",
+    "about_page": {
+        "faq": {
+            "question_1": "How does Discuit make money?",
+            "answer_1": "We don’t. Discuit is funded entirely through donations from our users via our",
+            "answer_1.2": "Patreon",
+            "question_2": "Would a non-profit social platform work at scale?",
+            "answer_2": "We do not know if all types of social platforms can have their non-profit alternatives—a non-profit alternative to Youtube probably won’t work, as hosting video is highly expensive—but we’re quite confident that Discuit can scale into millions of users just fine as a non-profit.  Hosting text is extremely cheap; images are not too costly either; it’s video that is expensive, and Discuit does not, nor do we plan to, have native video uploads.",
+            "question_3": "Is Discuit a federated platform?",
+            "answer_3": "Discuit is not a federated social platform, and we do not plan to support federation in the future either. This is because we do not believe that federated platforms, for a few specific reasons, have a chance of becoming mainstream social platforms one day.",
+            "question_4": "Does Discuit have a mobile app?",
+            "answer_4": "At the moment, Discuit does not have an official iOS or Android app. But we do have an official Progressive Web App (PWA) that can be installed on both iOS and Android devices (with support for device notifications). We also have two actively maintained third party apps developed by two of our users:",
+            "question_5": "How can I contact someone at Discuit?",
+            "answer_5": "You can send an email to",
+            "question_6": "I have feedback, bug reports, or questions. What should I do?",
+            "answer_6": "If you have a question about Discuit that’s not addressed here, feel free to ask it in the"
+        },
+        "content": {
+            "text_1": "A social platform by the users, for the users.",
+            "text_2": "Discuit is a non-profit, open-source community discussion platform. It’s an alternative to Reddit.",
+            "text_3": "Our mission is to build the first large-scale social media platform where the interests of the platform are aligned with the interests of the user—a platform, in other words, that’s built on principles of ethical design. At the heart of these principles is the idea of giving users the freedom to choose their online social experience as they would prefer.",
+            "text_4": "Social media platforms have hitherto done the opposite and taken away what little control the users had, as it served those companies’ own self-interest, which was and still remains, to make as much money as possible, without any regard for, indeed to the utter detriment of, the well-being of the user.",
+            "text_5": "No ads. No tracking.",
+            "text_6": "There are no ads, no forms of affiliate marketing, and no tracking anywhere on Discuit. And neither your attention, nor your data, is monetized in any way, shape or form.",
+            "text_7": "Enshitification-proof.",
+            "text_8": "Discuit is a non-profit that's funded entirely by its users through donations. The lack of a profit motive—and the lack of any shareholders or investors to answer to—is essential in keeping this platform completely aligned with the interests and the well-being of its users.",
+            "text_9": "Giving agency to users.",
+            "text_10": "Choice over what appears on your feed. Multiple feeds. A plethora of ways to filter content. In short, you have complete control over what you see on Discuit. (Please note that Discuit is a work in progress and that many of these features are yet to be built.)",
+            "text_11": "No dark patterns.",
+            "text_12": "On Discuit, there are no nagging popups asking you to sign up. You don’t need an account to simply view a page. Images, in their highest quality, can be freely downloaded. We don’t manipulate you into using our platform more than you desire to.",
+            "text_13": "Frequently asked questions"
+        }
+    },
+    "all_communities": {
+        "is_mobile_1": "by filling out the form below",
+        "is_mobile_2": "by clicking on the button below",
+        "text_1": "Communities are currently available only on a per request basis. You can request one",
+        "text_2": "and if you seem reasonable and trustworthy, the requested community will be created and you will be added as a moderator of that community.",
+        "title": "All communities",
+        "text_3": "New",
+        "text_4": "New communities",
+        "text_5": "Request a community",
+        "alert_2": "Requested!",
+        "alert_1": "Community name has to have at least 3 characters."
+    },
+    "forbidden": "Forbidden!",
+    "go_home": "Go home",
+    "guidelines": {
+        "title_1": "Community guidelines",
+        "text_1": "For the purpose of keeping this place civil and friendly, Discuit will have certain restrictions on what is and isn't allowed on this platform. But these restrictions will still allow a wide rage of opinions and different communities to exist. We have no desire to moderate people's opinions or censor dissenting views. We enjoy good-faith, respectful discussions on (sometimes controversial) subjects with people whose opinions differ. After all, no one learns anything if they only talk to people that always agree with them.",
+        "title_2": "Site-wide rules:",
+        "text_2": "Discuit, being a forum of forums, will naturally have two levels of moderation: site-wide and community-wide. Community-wide rules are for each community to make and they can be as strict or as lax as they please, so long as they adhere to the site-wide rules.",
+        "text_3": "No spam.",
+        "text_4": "Sharing anything you've created or done on Discuit is completely fine but please don't repeatedly share the same link or submit to irrelevant communities. And don't use Discuit solely for self-promotion.",
+        "text_5": "No porn.",
+        "text_6": "Please don't post anything with sexually explicit material, including nudity and depictions of sexual acts.",
+        "text_7": "No racism or hate.",
+        "text_8": "Don't post anything that promotes violence or discrimination against a group of people based on race, ethnicity, sex, gender, religion, nationality, or sexual orientation.",
+        "text_9": "Respectfully talking about, for example, racial or national differences, is okay. Joking about, say, different cultural idiosyncrasies is also okay, provided that it's not coming from a place of hatred.",
+        "text_10": "The use of racial slurs, on the other hand, is not okay; nor is promoting the idea that a particular race is superior or inferior to all others. Criticism is okay, hatred is not.",
+        "text_11": "No harassment of other users.",
+        "text_12": "Disagreements are normal and expected, but attempts to shutdown discourse, name calling, repetitive comments, threatening people, and organizing campaigns of harassment are not allowed.",
+        "text_13": "No doxing.",
+        "text_14": "Don't share someone else's private information (such as their phone number or address) without their explicit consent. And don't threaten to do so either.",
+        "text_15": "No encouraging harmful behavior.",
+        "text_16": "Don't post anything that encourages harmful behavior, like suicide or self-harm.",
+        "text_17": "No brigading.",
+        "text_18": " Don't organize campaigns to 1) downvote posts and comments of a community you don't like or 2) to leave hostile posts and comments in a community you don't like. If you don't like the rules of a particular community or how it moderates content, you can create a new community as <i>you</i> like.",
+        "text_19": " Breaking these rules may result in the offending material being removed and/or temporary or permanent suspension of the user accounts involved.",
+        "text_20": "Discuit is a work in progress, and these rules are not set in stone. They may change in the future as we gain more experience."
+    },
+    "login": "Эхлээд нэвтэрнэ үү",
+    "offline": "Холболт салсан байна",
+    "connection": "Нет байганму хө?",
+    "retry": "Дахиад оролдох",
+    "search": {
+        "coming_soon": "Тун удахгүй...!",
+        "google": "хайлтандаа Гүүглэ ашиглах"
+    },
+    "login_view": {
+        "alert_1": "Нэр болон нууц үг хоосон.",
+        "alert_2": "Нэр хоосон.",
+        "alert_3": "Нууц үг хоосон.",
+        "alert_4": "Нэр нууц үг таарахгүй байна.",
+        "alert_5": "түр түдгэлзүүлсэн.",
+        "label_1": "Нэр",
+        "label_2": "Нууц үг",
+        "text_1": "Гишүүн биш үү? Гишүүн болооч."
+    },
+    "sort_options": {
+        "hot": "Халуун",
+        "activity": "Үйл явдал",
+        "new": "Шинэ",
+        "day": "Өдрөөр",
+        "week": "7 хоногоор",
+        "month": "Сараар",
+        "year": "Жилээр"
+    },
+    "welcome": {
+        "join": "Хошуу нэмэрлэх",
+        "create_community": "Булан үүсгэх",
+        "create_post": "Пост үүсгэх",
+        "description_1": "Булан нь",
+        "description_2": "Монголчуудын хуралдай хийдэг газар юм.",
+        "create_account": "Шинэ гишүүнчлэл үүсгэх"
+    },
+    "update": {
+        "title": "Шинэ хувилбар гаржээ.",
+        "text_1": "Шинэчлэгдсэн, APP унтраагаад асаа.",
+        "text_2": "Дахин ачааллах.",
+        "text_3": "Яг одоо л биш"
+    },
+    "notification_settings": {
+        "title": "Нотификейшн асаах",
+        "text_1": "Хүн таны постыг тамшаалах болон хариу бичихэд мэдмээр байгаа бол нотификейшныг асаа",
+        "text_2": "Асаах",
+        "text_3": "Яг одоо л биш"
+    },
+    "service_worker": {
+        "text_1": "Пост дээр тань комментлов",
+        "text_2": "Пост дээр тань шинэ коммент",
+        "text_3": "Пост дээрх комментанд тань хариулав",
+        "text_4": "комментны хариул",
+        "vote_on": "пост дээр",
+        "vote_on_comment": "коммент дээр. Агуулсан пост:",
+        "deleted_by_1": "Мод хийж буй Булан:",
+        "deleted_by_2": "'Админууд",
+        "deleted_text_1": "Таны пост",
+        "deleted_text_2": "устгасан",
+        "mod_add_1": "Та дараах Булангийн Мод боллоо:",
+        "mod_add_2": "Мод болгосон",
+        "new_badge": "Санхүүгийн дэмжлэг үзүүлсний тань төлөө таньд алдарт Дэмжигч медал олголлоо."
+    }
 }
