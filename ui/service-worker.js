@@ -99,7 +99,7 @@ const cacheFirst = async ({ request, preloadResponsePromise }) => {
       }
       return preloadResponse;
     }
-  } catch (_) {}
+  } catch (_) { }
 
   try {
     const networkRes = await fetch(request);
@@ -139,7 +139,7 @@ const getNotificationInfo = (notification, csrfToken) => {
     options: {
       body: '',
       icon: '',
-      badge: '/discuit-logo-pwa-badge.png',
+      badge: '/logo-pwa-badge.png',
       tag: notification.id,
       data: {
         notificationId: notification.id,
@@ -194,14 +194,12 @@ const getNotificationInfo = (notification, csrfToken) => {
       break;
     case 'new_votes':
       if (notif.targetType === 'post') {
-        ret.title = `${stringCount(notif.noVotes, false, 'new upvote')} ${t("service_worker.vote_on")} '${
-          notif.post.title
-        }'`;
+        ret.title = `${stringCount(notif.noVotes, false, 'new upvote')} ${t("service_worker.vote_on")} '${notif.post.title
+          }'`;
         setToURL(`/${notif.post.communityName}/post/${notif.post.publicId}`);
       } else {
-        ret.title = `${stringCount(notif.noVotes, false, 'new vote')} ${t("service_worker.vote_on_comment")} '${
-          notif.post.title
-        }'`;
+        ret.title = `${stringCount(notif.noVotes, false, 'new vote')} ${t("service_worker.vote_on_comment")} '${notif.post.title
+          }'`;
         setToURL(
           `/${notif.comment.communityName}/post/${notif.comment.postPublicId}/${notif.comment.id}`
         );
