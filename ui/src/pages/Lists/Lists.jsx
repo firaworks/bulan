@@ -171,11 +171,6 @@ const ListThumbnail = ({ list }) => {
     <Link className="list-thumb" to={`/@${username}/lists/${name}`}>
       <div className="list-thumb-top">
         <div className="list-thumb-image is-default">
-          {/*
-          <img
-            src="https://discuit.net/images/17cad58e3fb9872ece91fc87.jpeg?sig=hgUa8EBH96UoIW4YsR5qASk36arQsP_iELgJmV18QBw"
-            alt="Cutest little doggie"
-          />*/}
           <svg
             width="24"
             height="24"

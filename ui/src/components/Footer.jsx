@@ -97,14 +97,6 @@ const Footer = () => {
           <Link className="footer-item" to="guidelines">
             {t("footer.guidelines")}
           </Link>
-          <a
-            className="footer-item"
-            href="https://docs.discuit.net/"
-            target="_blank"
-            rel="noopener"
-          >
-            {t("footer.documentation")}
-          </a>
         </div>
       </div>
     </footer>

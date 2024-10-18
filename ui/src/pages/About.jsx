@@ -11,7 +11,7 @@ const About = () => {
       answer: (
         <>
           {t("about.faq.answer_1")}
-          <a href="https://www.patreon.com/discuit" target="_blank" rel="noreferrer">
+          <a href="https://www.patreon.com/" target="_blank" rel="noreferrer">
             {t("about.faq.answer_1.2")}
           </a>
           .
@@ -50,20 +50,6 @@ const About = () => {
           </a>
           , or join our <a href={import.meta.env.VITE_DISCORDURL}>Discord server </a>
           (after you join, create a ticket to contact an admin).
-        </>
-      ),
-    },
-    {
-      question: t("about.faq.question_6"),
-      answer: (
-        <>
-          {t("about.faq.answer_6")}
-          <Link to="/DiscuitMeta">DiscuitMeta</Link>
-          {` community. If you have feedback or would like to report a bug, you can create a post in the `}
-          <Link to="/DiscuitSuggestions">DiscuitSuggestions</Link>
-          {` community (if you have a GitHub account, however, the best place to report a bug would be on `}
-          <a href={`${import.meta.env.VITE_GITHUBURL}/issues`}>GitHub</a>
-          {`)`}.
         </>
       ),
     },
@@ -123,12 +109,6 @@ const About = () => {
             <p>
               {t("about.conent.text_4")}
             </p>
-            {/*<p>
-              {`For more information, see the article: `}
-              <a href="https://discuit.substack.com" target="_blank" rel="noreferrer">
-                {`Why we're building an alternative to Reddit.`}
-              </a>
-            </p>*/}
           </div>
           <div className="about-section about-highlights">
             <div className="about-highlight">

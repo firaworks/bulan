@@ -1,8 +1,8 @@
 {
-  "name": "Discuit",
-  "short_name": "Discuit",
+  "name": "Bulan",
+  "short_name": "Bulan",
   "description": "",
-  "id": "discuit_pwa_v1",
+  "id": "bulan_pwa_v1",
   "icons": [
     {
       "src": "/logo-manifest-512.png",
@@ -20,5 +20,8 @@
   "display": "standalone",
   "theme_color": "#202020",
   "background_color": "#202020",
-  "categories": ["social", "news"]
+  "categories": [
+    "social",
+    "news"
+  ]
 }
