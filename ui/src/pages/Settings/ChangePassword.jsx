@@ -72,17 +72,17 @@ const ChangePassword = () => {
             onKeyDown={(e) => e.key === 'Enter' && changePassword()}
             role="none"
           >
-            <FormField label="Previous password">
+            <FormField label={t("auth.previous_password")}>
               <InputPassword
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoFocus
               />
             </FormField>
-            <FormField label="New password">
+            <FormField label={t("auth.new_password")}>
               <InputPassword value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
             </FormField>
-            <FormField label="Repeat password">
+            <FormField label={t("login_view.repeat_password")}>
               <InputPassword
                 value={repeatPassword}
                 onChange={(e) => setRepeatPassword(e.target.value)}

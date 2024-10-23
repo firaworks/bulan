@@ -22,7 +22,6 @@ import Banner from './Banner';
 import JoinButton from './JoinButton';
 import Rules from './Rules';
 import { useTranslation } from 'react-i18next';
-import { t } from 'i18next';
 
 const Community = () => {
   const { name } = useParams();
@@ -34,6 +33,7 @@ const Community = () => {
   const community = useSelector(selectCommunity(name));
   const loading = !(community && Array.isArray(community.mods) && Array.isArray(community.rules));
   const [error, setError] = useState(null);
+  const [t, i18n] = useTranslation("global");
   useEffect(() => {
     if (!loading) return;
     setError(null);

@@ -2,6 +2,7 @@ import i18next from 'i18next';
 
 export function stringCount(num, onlyName = false, thingName = 'point', thingNameMultiple) {
   const t = i18next.t;
+  console.log(t);
   thingName = t("helper.point")
   let s = onlyName ? '' : `${num} `;
   if (thingNameMultiple) {

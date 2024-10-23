@@ -138,14 +138,14 @@ const Navbar = ({ offline = false }) => {
                 onClick={() => dispatch(loginModalOpened())}
                 disabled={offline}
               >
-                Login
+                {t("auth.login")}
               </button>
               <button
                 className="button-main"
                 onClick={() => dispatch(signupModalOpened())}
                 disabled={offline}
               >
-                Create account
+                {t("auth.signup")}
               </button>
             </>
           )}

@@ -13,19 +13,20 @@ import Input, { InputPassword, InputWithCount } from './Input';
 import Modal from './Modal';
 import { useTranslation } from 'react-i18next';
 
-const errors = [
-  'Username cannot be empty.',
-  'Password cannot be empty.',
-  'Username too short.',
-  'Enter a valid email address.',
-  'Password too weak.',
-  'Repeat password cannot be empty.',
-  'Passwords do not match.',
-];
+
 
 const Signup = ({ open, onClose }) => {
   const dispatch = useDispatch();
-  const [t, i18n] = useTranslation();
+  const [t, i18n] = useTranslation("global");
+  const errors = [
+    t("list_alert_5"),
+    t("login_view.alert_3"),
+    t("auth.alert_1"),
+    t("settings.index.alert_1"),
+    t("auth.alert_2"),
+    t("auth.alert_3"),
+    t("login_view.alert_4"),
+  ];
   const [username, handleUsernameChange] = useInputUsername(usernameMaxLength);
   const [usernameError, setUsernameError] = useState(null);
   const checkUsernameExists = useCallback(async () => {
@@ -176,14 +177,14 @@ const Signup = ({ open, onClose }) => {
             >
               <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </FormField>
-            <FormField label="Password" error={passwordError}>
+            <FormField label={t("login_view.label_2")} error={passwordError}>
               <InputPassword
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
               />
             </FormField>
-            <FormField label="Repeat password" error={repeatPasswordError}>
+            <FormField label={t("login_view.repeat_password")} error={repeatPasswordError}>
               <InputPassword
                 value={repeatPassword}
                 onChange={(e) => {
@@ -205,13 +206,13 @@ const Signup = ({ open, onClose }) => {
             )}
             <FormField>
               <p className="modal-signup-terms">
-                {'By creating an account, you agree to our '}
+                {t("signup.creation_description_1")}
                 <a target="_blank" href="/terms">
-                  {t("signup.terms")}
+                  {" " + t("signup.terms")}
                 </a>
-                {t("signup.and")}
+                {" " + t("signup.and")}
                 <a target="_blank" href="/privacy-policy">
-                  {t("signup.privacy_policy")}
+                  {" " + t("signup.privacy_policy")}
                 </a>
                 .
               </p>
@@ -228,7 +229,7 @@ const Signup = ({ open, onClose }) => {
               </p>
             </FormField>
             <FormField className="is-submit">
-              <input type="submit" className="button button-main" value="Signup" />
+              <input type="submit" className="button button-main" value={t("auth.signup")} />
               <button className="button-link" onClick={handleOnLogin}>
                 {t("signup.login")}
               </button>

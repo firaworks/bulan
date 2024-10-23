@@ -90,7 +90,12 @@
     "auth": {
         "login": "Login",
         "signup": "Signup",
-        "login_to_continue": "Login to continue"
+        "login_to_continue": "Login to continue",
+        "previous_password": "Previous password",
+        "new_password": "New password",
+        "alert_1":"Username too short.",
+        "alert_2": "Password too weak.",
+        "alert_3": "'Repeat password cannot be empty.'"
     },
     "mini_footer": {
         "about": "About",

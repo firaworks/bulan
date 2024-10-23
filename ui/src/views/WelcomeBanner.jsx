@@ -53,7 +53,7 @@ const WelcomeBanner = ({ className, children, hideIfMember = false, ...props }) 
         )}
         <>{children}</>
         {!loggedIn && (
-          <button onClick={() => dispatch(signupModalOpened())}>{t("welcome_create_account")}</button>
+          <button onClick={() => dispatch(signupModalOpened())}>{t("welcome.create_account")}</button>
         )}
       </div>
     </div>

@@ -97,7 +97,7 @@ const LoginForm = ({ isModal = false }) => {
         </FormField>
       )}
       <FormField className="is-submit">
-        <input type="submit" className="button button-main" value="Login" />
+        <input type="submit" className="button button-main" value={t("auth.login")} />
         <button className="button-link" onClick={handleOnSignup}>
           {t("login_view.text_1")}
         </button>
