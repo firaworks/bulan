@@ -160,7 +160,7 @@ const Sidebar = ({ isMobile = false }) => {
                   fill="currentColor"
                 />
               </svg>
-              <span>{homeFeed === 'all' ? 'Subscriptions' : 'All'}</span>
+              <span>{homeFeed === 'all' ? t("sidebar.subscriptions") : 'All'}</span>
             </Link>
           )}
           <Link to="/communities" className="sidebar-item with-image" onClick={handleClose}>
@@ -295,7 +295,7 @@ const Sidebar = ({ isMobile = false }) => {
               ))}
             </>
           )}
-          <div className="sidebar-topic">{loggedIn ? 'My communities' : 'Communities'}</div>
+          <div className="sidebar-topic">{loggedIn ? t('sidebar.my_communities') : t('sidebar.communities')}</div>
           {renderCommunitiesList()}
           {/*
           <div className="sidebar-topic">Social</div>

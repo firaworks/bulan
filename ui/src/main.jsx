@@ -25,7 +25,8 @@ i18next.init({
     mn: {
       global: global_mn
     }
-  }
+  },
+  defaultNS: 'global'
 });
 
 const Fallback = ({ error, resetErrorBoundary }) => {

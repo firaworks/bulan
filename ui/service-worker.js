@@ -1,12 +1,9 @@
 import { selectImageCopyURL, stringCount } from './src/helper';
 import { badgeImage } from './src/pages/User/badgeImage';
-import i18next from 'i18next';
 
 const SW_BUILD_ID = import.meta.env.VITE_SW_BUILD_ID;
 
 console.log(`Service worker version: ${SW_BUILD_ID}`);
-
-const t = i18next.t;
 
 const cacheEndpoints = async (urls = []) => {
   const cache = await caches.open(SW_BUILD_ID);

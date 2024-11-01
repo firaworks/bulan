@@ -1,9 +1,7 @@
 import i18next from 'i18next';
 
 export function stringCount(num, onlyName = false, thingName = 'point', thingNameMultiple) {
-  const t = i18next.t;
-  console.log(t);
-  thingName = t("helper.point")
+  thingName = i18next.t("helper.point")
   let s = onlyName ? '' : `${num} `;
   if (thingNameMultiple) {
     s += num === 1 ? thingName : thingNameMultiple;
@@ -27,7 +25,7 @@ export function kRound(num) {
   return num;
 }
 
-export function timeAgo(date, suffix = ' ago', justNow = true, short = false) {
+export function timeAgo(date, suffix = ' ago', justNow = true, short = false, lang = 'en') {
   const t = i18next.t;
   suffix = t("timeago.suffix");
   if (!(date instanceof Date)) {
@@ -35,29 +33,34 @@ export function timeAgo(date, suffix = ' ago', justNow = true, short = false) {
     date = new Date(date);
   }
   const ms = (Date.now() - date) / 1000;
-
+  let mnPlural = lang == 'mn' ? '-н' : 's'
   if (ms < 60) {
     if (justNow) {
-      return short ? '0m' : t("timeago.just_now");
+      return short ? '0м' : t("timeago.just_now");
     }
     const s = Math.round(ms);
-    return `${s}${short ? t("timeago.s") : ' ' + t("timeago.second")}${short || s === 1 ? '' : 's'}${suffix}`;
+    mnPlural = 'ийн '
+    return `${s}${short ? t("timeago.s") : ' ' + t("timeago.second")}${short || mnPlural}${suffix}`;
   } else if (ms < 3600) {
+    mnPlural = 'ын '
     const m = Math.round(ms / 60);
-    return `${m}${short ? t("timeage.m") : ' ' + t("timeago.minute")}${short || m === 1 ? '' : 's'}${suffix}`;
+    return `${m}${short ? t("timeage.m") : ' ' + t("timeago.minute")}${short || mnPlural}${suffix}`;
   } else if (ms < 24 * 3600) {
+    mnPlural = 'ийн '
     const h = Math.round(ms / 3600);
-    return `${h}${short ? t("timeago.h") : ' ' + t("timeago.hour")}${short || h === 1 ? '' : 's'}${suffix}`;
+    return `${h}${short ? t("timeago.h") : ' ' + t("timeago.hour")}${short || mnPlural}${suffix}`;
   } else if (ms < 7 * 24 * 3600) {
+    mnPlural = 'ийн '
     const d = Math.round(ms / (24 * 3600));
-    return `${d}${short ? t("timeago.d") : ' ' + t("timeago.day")}${short || d === 1 ? '' : 's'}${suffix}`;
+    return `${d}${short ? t("timeago.d") : ' ' + t("timeago.day")}${short || mnPlural}${suffix}`;
   } else if (ms < 365 * 24 * 3600) {
+    mnPlural = 'ийн '
     const w = Math.round(ms / (24 * 3600) / 7);
-    return `${w}${short ? t("timeago.w") : ' ' + t("timeago.week")}${short || w === 1 ? '' : 's'}${suffix}`;
+    return `${w}${short ? t("timeago.w") : ' ' + t("timeago.week")}${short || mnPlural}${suffix}`;
   }
 
   const y = Math.floor(ms / (365 * 24 * 3600));
-  return `${y}${short ? t("timeago.y") : ' ' + t("timeago.year")}${short || y === 1 ? '' : 's'}${suffix}`;
+  return `${y}${short ? t("timeago.y") : ' ' + t("timeago.year")}${short || mnPlural}${suffix}`;
 }
 
 export function isScrollbarVisible() {
@@ -115,6 +118,7 @@ export function onEscapeKey(e, callback, stopPropagation = true) {
 // Returns date in the format of '21 February 2021'.
 export function dateString1(date) {
   const t = i18next.t;
+  // const [t, i18n] = useTranslation("global");
   const months = [
     t("months.january"),
     t("months.february"),
@@ -233,6 +237,7 @@ export function publicURL(path) {
 
 export function userGroupSingular(type, long = false) {
   const t = i18next.t;
+  // const [t, i18n] = useTranslation("global");
   switch (type) {
     case 'mods':
       return long ? t("user_group.long_mod") : t("user_group.short_mod");
