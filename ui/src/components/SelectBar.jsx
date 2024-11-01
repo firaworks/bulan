@@ -8,7 +8,7 @@ const SelectBar = ({ name, options, value, onChange, ...rest }) => {
   const [t, i18n] = useTranslation("global");
   const [id] = useState(`select-${name}-${Date.now().toString().substr(-5)}`);
   const isMobile = useIsMobile();
-
+  console.log('NAME INCOMING', name)
   const handleClick = (value) => {
     if (onChange) {
       onChange(value);
@@ -19,7 +19,7 @@ const SelectBar = ({ name, options, value, onChange, ...rest }) => {
     const text = options.filter((opt) => opt.id === value)[0].text;
     return (
       <nav className="select-bar-m">
-        <div className="select-bar-name">{name}</div>
+        <div className="select-bar-name">{t(`${name}`.toLowerCase())}</div>
         <Dropdown target={<button className="select-bar-dp-target">{t("select_bar.sort") + " " + text}</button>}>
           <div className="dropdown-list">
             {options.map((option) => (
@@ -51,7 +51,7 @@ const SelectBar = ({ name, options, value, onChange, ...rest }) => {
 
   return (
     <nav className="select-bar" {...rest}>
-      <div className="select-bar-name">{name}</div>
+      <div className="select-bar-name">{t(`${name}`.toLowerCase())}</div>
       <div className="select-bar-options">{options.map((option) => renderItem(option))}</div>
     </nav>
   );

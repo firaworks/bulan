@@ -295,7 +295,7 @@ const User = () => {
                 strokeLinejoin="round"
               />
             </svg>
-            <div>{stringCount(user.noPosts, false, 'post')}</div>
+            <div>{stringCount(user.noPosts, false, t('posts'))}</div>
           </div>
           <div className="user-summary-item">
             <svg
@@ -318,7 +318,7 @@ const User = () => {
                 fill="currentColor"
               ></path>
             </svg>
-            <div>{stringCount(user.noComments, false, 'comment')}</div>
+            <div>{stringCount(user.noComments, false, t('comments'))}</div>
           </div>
         </div>
       </div>
@@ -471,7 +471,7 @@ const User = () => {
             <div className="user-card-points">{`${user.points.toLocaleString()} ${stringCount(
               user.points,
               true,
-              'point'
+              t('helper.point')
             )}`}</div>
           </div>
           {user.aboutMe && (
@@ -489,7 +489,7 @@ const User = () => {
           {loggedIn && !user.deleted && (
             <div className="user-card-buttons">
               {viewer.id !== user.id && (
-                <button onClick={toggleMute}>{isMuted ? t("user.index.unmute") :  t("user.index.mute")}</button>
+                <button onClick={toggleMute}>{isMuted ? t("user.index.unmute") : t("user.index.mute")}</button>
               )}
               {viewerAdmin && (
                 <>

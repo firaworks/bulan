@@ -1,5 +1,6 @@
 import { selectImageCopyURL, stringCount } from './src/helper';
 import { badgeImage } from './src/pages/User/badgeImage';
+import i18next from 'i18next';
 
 const SW_BUILD_ID = import.meta.env.VITE_SW_BUILD_ID;
 
@@ -191,12 +192,11 @@ const getNotificationInfo = (notification, csrfToken) => {
       break;
     case 'new_votes':
       if (notif.targetType === 'post') {
-        ret.title = `${stringCount(notif.noVotes, false, 'new upvote')} ${t("service_worker.vote_on")} '${notif.post.title
-          }'`;
+        // i18next.t("helper.point")
+        ret.title = `${stringCount(notif.noVotes, false, t("service_worker.new_upvote"))} ${t("service_worker.vote_on")} '${notif.post.title}'`;
         setToURL(`/${notif.post.communityName}/post/${notif.post.publicId}`);
       } else {
-        ret.title = `${stringCount(notif.noVotes, false, 'new vote')} ${t("service_worker.vote_on_comment")} '${notif.post.title
-          }'`;
+        ret.title = `${stringCount(notif.noVotes, false, t("service_worker.new_vote"))} ${t("service_worker.vote_on_comment")} '${notif.post.title}'`;
         setToURL(
           `/${notif.comment.communityName}/post/${notif.comment.postPublicId}/${notif.comment.id}`
         );

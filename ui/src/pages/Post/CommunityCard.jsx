@@ -6,6 +6,7 @@ import MarkdownBody from '../../components/MarkdownBody';
 import ShowMoreBox from '../../components/ShowMoreBox';
 import { stringCount } from '../../helper';
 import JoinButton from '../Community/JoinButton';
+import i18next from 'i18next';
 
 const CommunityCard = ({ community }) => {
   const { name } = community;
@@ -21,7 +22,7 @@ const CommunityCard = ({ community }) => {
           <div className="about-comm-head-right">
             <div className="about-comm-name">{name}</div>
             <div className="about-comm-no-members">
-              {stringCount(community.noMembers, false, 'member')}
+              {stringCount(community.noMembers, false, i18next.t('members'))}
             </div>
           </div>
         </Link>

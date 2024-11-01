@@ -41,13 +41,13 @@ const NotificationItem = ({ notification, ...rest }) => {
         if (notif.noComments === 1) {
           return (
             <>
-              <b>@{notif.commentAuthor}</b>{ t("notifications.data.comment") }<b>{notif.post.title}</b>.
+              <b>@{notif.commentAuthor}</b>{t("notifications.data.comment")}<b>{notif.post.title}</b>.
             </>
           );
         } else {
           return (
             <>
-              {notif.noComments} { t("notifications.data.comments") } <b>{notif.post.title}</b>.
+              {notif.noComments} {t("notifications.data.comments")} <b>{notif.post.title}</b>.
             </>
           );
         }
@@ -56,14 +56,14 @@ const NotificationItem = ({ notification, ...rest }) => {
         if (notif.noComments === 1) {
           return (
             <>
-              <b>@{notif.commentAuthor}</b>{ t("notifications.data.reply")}{' '}
+              <b>@{notif.commentAuthor}</b>{t("notifications.data.reply")}{' '}
               <b>{notif.post.title}</b>.
             </>
           );
         } else {
           return (
             <>
-              {notif.noComments} { t("notifications.data.replies")} <b>{notif.post.title}</b>.
+              {notif.noComments} {t("notifications.data.replies")} <b>{notif.post.title}</b>.
             </>
           );
         }
@@ -88,10 +88,10 @@ const NotificationItem = ({ notification, ...rest }) => {
       case 'deleted_post': {
         return (
           <>
-            {t("notifications.data.deleted_post.your_post") } <b>{notif.post.title}</b>{t("notifications.data.deleted_post.has_been_removed_by") }{' '}
+            {t("notifications.data.deleted_post.your_post")} <b>{notif.post.title}</b>{t("notifications.data.deleted_post.has_been_removed_by")}{' '}
             {notif.deletedAs === 'mods' ? (
               <>
-                {t("notifications.data.deleted_post.moderators_of") } <b>{notif.post.communityName}</b>
+                {t("notifications.data.deleted_post.moderators_of")} <b>{notif.post.communityName}</b>
               </>
             ) : (
               'the admins'
@@ -103,14 +103,14 @@ const NotificationItem = ({ notification, ...rest }) => {
       case 'mod_add': {
         return (
           <>
-            {t("notifications.data.mod_add_1") } <b>{notif.communityName}</b> { t("notifications.data.modd_add_2") } <b>@{notif.addedBy}.</b>
+            {t("notifications.data.mod_add_1")} <b>{notif.communityName}</b> {t("notifications.data.modd_add_2")} <b>@{notif.addedBy}.</b>
           </>
         );
       }
       case 'new_badge': {
         return (
           <>
-            {t("notifications.data.new_badge_1") }<b>{t("notifications.data.new_badge_2")}</b>{t("notifications.data.new_badge_2") }
+            {t("notifications.data.new_badge_1")}<b>{t("notifications.data.new_badge_2")}</b>{t("notifications.data.new_badge_2")}
           </>
         );
       }

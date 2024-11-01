@@ -1,13 +1,14 @@
 import i18next from 'i18next';
 
-export function stringCount(num, onlyName = false, thingName = 'point', thingNameMultiple) {
-  thingName = i18next.t("helper.point")
+export function stringCount(num, onlyName = false, thingName = 'оноо', thingNameMultiple) {
+  let plural = i18next.language == 'mn' ? '' : 's'
+  // thingName = i18next.t("helper.point")
   let s = onlyName ? '' : `${num} `;
   if (thingNameMultiple) {
     s += num === 1 ? thingName : thingNameMultiple;
   } else {
     s += thingName;
-    if (num !== 1) s += 's';
+    if (num !== 1) s += plural;
   }
   return s;
 }

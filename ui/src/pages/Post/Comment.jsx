@@ -329,7 +329,7 @@ const Comment = ({
               'point'
             )}`}</div>*/}
             <div className="post-comment-head-item">
-              {stringCount(comment.noReplies, false, 'reply', 'replies')}
+              {stringCount(comment.noReplies, false, t('post.reply'), t('post.replies'))}
             </div>
             {/*{!deleted && comment.userGroup !== 'normal' && (
               <div className="post-comment-head-item post-comment-user-group">

@@ -12,6 +12,7 @@ import Image from './Image';
 import LinkImage from './LinkImage';
 import PostCardHeadingDetails from './PostCardHeadingDetails';
 import PostVotes from './PostVotes';
+import { useTranslation } from 'react-i18next';
 
 const PostCard = ({
   index = 100, // index in feed
@@ -24,7 +25,7 @@ const PostCard = ({
   onRemoveFromList = null,
 }) => {
   const history = useHistory();
-
+  const [t, i18n] = useTranslation("global");
   const [post, setPost] = useState(initialPost);
   useEffect(() => {
     setPost(initialPost);
@@ -170,7 +171,7 @@ const PostCard = ({
                   fill="currentColor"
                 />
               </svg>
-              <span>{stringCount(post.noComments, false, 'comment')}</span>
+              <span>{stringCount(post.noComments, false, t('post.comment'))}</span>
             </Link>
           </div>
           <div className="right">

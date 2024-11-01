@@ -162,7 +162,8 @@ const Navbar = ({ offline = false }) => {
                 <div className="navbar-profile-target">
                   <span className="navbar-points">{`${kRound(user.points)} ${stringCount(
                     user.points,
-                    true
+                    true,
+                    t('helper.point'),
                   )}`}</span>
                   <span className="navbar-name">
                     @

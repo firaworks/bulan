@@ -262,7 +262,7 @@ const List = () => {
           <div className="card-content">
             <div className="card-list-item">
               {SVGs.comment}
-              <div>{stringCount(list.numItems, false, 'total item')}</div>
+              <div>{stringCount(list.numItems, false, t('items'))}</div>
             </div>
             <div className="card-list-item">
               {SVGs.calendar}

@@ -206,7 +206,7 @@ const ListThumbnail = ({ list }) => {
           <span className="is-name">{displayName}</span>
           <span className="is-age">{timeAgo(list.lastUpdatedAt, '', false, true)}</span>
         </div>
-        <div className="list-thumb-count">{stringCount(list.numItems, false, 'item')}</div>
+        <div className="list-thumb-count">{stringCount(list.numItems, false, t('items'))}</div>
       </div>
     </Link>
   );

@@ -828,6 +828,15 @@ a {
     .select-bar {
         margin-left: var(--post-card-votes-margin);
 
+        .select-bar-name {
+            word-break: keep-all;
+        }
+
+        .select-bar-item {
+            font-size: smaller;
+            word-break: keep-all;
+        }
+
         @include mixins.tablet {
             margin-left: 0;
         }

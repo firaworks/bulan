@@ -41,9 +41,9 @@ const Comment = ({ comment, onRemoveFromList = null }) => {
       </Link>
       <div className="comment-footer">
         <div className="comment-score">
-          {`${kRound(comment.upvotes)} ${stringCount(comment.upvotes, true, 'upvote')} • ${kRound(
+          {`${kRound(comment.upvotes)} ${stringCount(comment.upvotes, true, t('upvotes'))} • ${kRound(
             comment.downvotes
-          )} ${stringCount(comment.downvotes, true, 'downvote')}`}
+          )} ${stringCount(comment.downvotes, true, t('downvotes'))}`}
         </div>
         <div className="comment-remove">
           {onRemoveFromList && (
