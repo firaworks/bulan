@@ -208,7 +208,7 @@ const Navbar = ({ offline = false }) => {
                   onClick={handleLogout}
                   onKeyUp={(e) => onKeyEnter(e, handleLogout)}
                 >
-                  {t("logout")}
+                  {t('navbar.logout')}
                 </div>
               </div>
             </Dropdown>

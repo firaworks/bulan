@@ -5,6 +5,7 @@ import { kRound, mfetchjson } from '../../helper';
 import { useVoting } from '../../hooks';
 import { loginPromptToggled, snackAlertError } from '../../slices/mainSlice';
 import { postAdded } from '../../slices/postsSlice';
+import i18next from 'i18next';
 
 const PostVotes = ({ className = '', post, sticky = false, disabled = false, mobile = false }) => {
   const loggedIn = useSelector((state) => state.main.user) !== null;
@@ -68,7 +69,7 @@ const PostVotes = ({ className = '', post, sticky = false, disabled = false, mob
         </button>
         <div
           className="post-votes-no"
-          title={`Upvotes: ${post.upvotes.toLocaleString()} • Downvotes: ${post.downvotes.toLocaleString()}`}
+          title={`${i18next.t('upvotes')}: ${post.upvotes.toLocaleString()} • ${i18next.t('downvotes')}: ${post.downvotes.toLocaleString()}`}
         >
           {kRound(points)}
         </div>
@@ -121,7 +122,7 @@ const PostVotes = ({ className = '', post, sticky = false, disabled = false, mob
         </button>
         <div
           className="post-votes-no"
-          title={`Upvotes: ${post.upvotes.toLocaleString()} • Downvotes: ${post.downvotes.toLocaleString()}`}
+          title={`${i18next.t('upvotes')}: ${post.upvotes.toLocaleString()} • ${i18next.t('downvotes')}: ${post.downvotes.toLocaleString()}`}
         >
           {kRound(points)}
         </div>

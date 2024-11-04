@@ -5,52 +5,24 @@ import { useTranslation } from 'react-i18next';
 const Guidelines = () => {
   const [t, i18n] = useTranslation("global");
   return (
-    <StaticPage className="page-guidelines" title="Guidelines">
+    <StaticPage className="page-guidelines" title={t("guidelines.title")}>
       <main className="document">
-        <h1>{t("guidelines.title_1")}</h1>
+        <h1>{t("guidelines.title")}</h1>
         <p>
-          {t("guidelines.text_1")}
+          {t("guidelines.general")}
         </p>
-        <p>
-          {t("guidelines.text_2")}
-        </p>
-        <h2>{t("guidlines.title_2")}</h2>
+        <h2>{t("guidelines.title2")}</h2>
         <ol>
-          <li>
-            <strong>{t("guidelines.text_3")}</strong> {t("guidelines.text_4")}
-          </li>
-          <li>
-            <strong>{t('guidelines.text_5')}</strong> {t('guidelines.text_6')}
-          </li>
-          <li>
-            <p>
-              <strong>{t("guidelines.text_7")}</strong>  {t("guidelines.text_8")}
-            </p>
-            <p>
-              {t("guidelines.text_9")}
-            </p>
-            <p>
-            {t("guidelines.text_10")}
-            </p>
-          </li>
-          <li>
-            <strong>{t("guidelines.text_11")}</strong> {t("guidelines.text_12")}
-          </li>
-          <li>
-            <strong>{t('guidelines.text_13')}</strong> {t('guidelines.text_14')}
-          </li>
-          <li>
-            <strong>{t('guidelines.text_15')}</strong> {t('guidelines.text_16')}
-          </li>
-          <li>
-            <strong>{t('guidelines.text_17')}</strong> {t('guidelines.text_18')}
-          </li>
+          <li><strong>{t("guidelines.subtitle1")}</strong><br /> {t("guidelines.subtext1")}</li>
+          <li><strong>{t("guidelines.subtitle2")}</strong><br /> {t("guidelines.subtext2")}</li>
+          <li><strong>{t("guidelines.subtitle3")}</strong><br /> {t("guidelines.subtext3")}</li>
+          <li><strong>{t("guidelines.subtitle4")}</strong><br /> {t("guidelines.subtext4")}</li>
+          <li><strong>{t("guidelines.subtitle5")}</strong><br /> {t("guidelines.subtext5")}</li>
+          <li><strong>{t("guidelines.subtitle6")}</strong><br /> {t("guidelines.subtext6")}</li>
+          <li><strong>{t("guidelines.subtitle7")}</strong><br /> {t("guidelines.subtext7")}</li>
         </ol>
         <p>
-        {t('guidelines.text_19')}
-        </p>
-        <p>
-        {t('guidelines.text_20')}
+          {t('guidelines.footer')}
         </p>
       </main>
     </StaticPage>

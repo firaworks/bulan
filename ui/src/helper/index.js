@@ -34,34 +34,34 @@ export function timeAgo(date, suffix = ' ago', justNow = true, short = false, la
     date = new Date(date);
   }
   const ms = (Date.now() - date) / 1000;
-  let mnPlural = lang == 'mn' ? '-н' : 's'
   if (ms < 60) {
     if (justNow) {
-      return short ? '0м' : t("timeago.just_now");
+      return short ? ' ' + '0м' : t("timeago.just_now");
     }
     const s = Math.round(ms);
-    mnPlural = 'ийн '
-    return `${s}${short ? t("timeago.s") : ' ' + t("timeago.second")}${short || mnPlural}${suffix}`;
+    return `${s}${short ? t("timeago.s") : ' ' + t("timeago.second")} ${suffix}`;
   } else if (ms < 3600) {
-    mnPlural = 'ын '
     const m = Math.round(ms / 60);
-    return `${m}${short ? t("timeage.m") : ' ' + t("timeago.minute")}${short || mnPlural}${suffix}`;
+    return `${m}${short ? t("timeage.m") : ' ' + t("timeago.minute")} ${suffix}`;
   } else if (ms < 24 * 3600) {
-    mnPlural = 'ийн '
     const h = Math.round(ms / 3600);
-    return `${h}${short ? t("timeago.h") : ' ' + t("timeago.hour")}${short || mnPlural}${suffix}`;
+    return `${h}${short ? t("timeago.h") : ' ' + t("timeago.hour")} ${suffix}`;
   } else if (ms < 7 * 24 * 3600) {
-    mnPlural = 'ийн '
     const d = Math.round(ms / (24 * 3600));
-    return `${d}${short ? t("timeago.d") : ' ' + t("timeago.day")}${short || mnPlural}${suffix}`;
+    return `${d}${short ? t("timeago.d") : ' ' + t("timeago.day")} ${suffix}`;
   } else if (ms < 365 * 24 * 3600) {
-    mnPlural = 'ийн '
-    const w = Math.round(ms / (24 * 3600) / 7);
-    return `${w}${short ? t("timeago.w") : ' ' + t("timeago.week")}${short || mnPlural}${suffix}`;
+    var inv = 1.0 / 0.5;
+    const mo = Math.round((ms / (24 * 3600) / 13) * inv) / inv
+    return `${mo}${short ? t("timeago.mo") : ' ' + t("timeago.month")} ${suffix}`;
   }
+  // weeks was a maximum for en/us languages
+  // else if (ms < 365 * 24 * 3600) {
+  //   const w = Math.round(ms / (24 * 3600) / 7);
+  //   return `${w}${short ? t("timeago.w") : ' ' + t("timeago.week")} ${suffix}`;
+  // }
 
   const y = Math.floor(ms / (365 * 24 * 3600));
-  return `${y}${short ? t("timeago.y") : ' ' + t("timeago.year")}${short || mnPlural}${suffix}`;
+  return `${y}${short ? t("timeago.y") : ' ' + t("timeago.year")} ${suffix}`;
 }
 
 export function isScrollbarVisible() {

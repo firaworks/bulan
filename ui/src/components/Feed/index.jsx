@@ -21,6 +21,7 @@ const Feed = ({
   onRemoveFromList = null,
 }) => {
   const [t, i18n] = useTranslation("global");
+  emptyItemsText = t('nothing_to_show')
   const windowHeight = document.documentElement.clientHeight;
   const rootMargin = Math.round(Math.max(windowHeight * 0.35, 200));
   const [spinnerRef, inView] = useInView({

@@ -1,30 +1,59 @@
 import React from 'react';
 import StaticPage from '../components/StaticPage';
+import { useTranslation } from 'react-i18next';
 
 const PrivacyPolicy = () => {
+  const [t, i18n] = useTranslation("global");
   return (
-    <StaticPage className="" title="Privacy Policy">
+    <StaticPage className="" title={t("privacy_policy.title")}>
       <main className="document">
-        <h1>Privacy Policy</h1>
-        <h2>What information we collect</h2>
+        <h1>{t("privacy_policy.title")}</h1>
+        <p>{t("privacy_policy.general")}</p>
+        <ol>
+          <li>
+            <strong>{t("privacy_policy.subtitle1")}</strong>
+            <ol>
+              <li>{t("privacy_policy.subtitle1_1")}<br /> {t("privacy_policy.subtext1_1")}</li>
+              <li>{t("privacy_policy.subtitle1_2")}<br /> {t("privacy_policy.subtext1_2")}</li>
+              <li>{t("privacy_policy.subtitle1_3")}<br /> {t("privacy_policy.subtext1_3")}</li>
+            </ol>
+          </li>
+          <li>
+            <strong>{t("privacy_policy.subtitle2")}</strong>
+            <ol>
+              <li>{t("privacy_policy.subtitle2_1")}<br /> {t("privacy_policy.subtext2_1")}</li>
+              <li>{t("privacy_policy.subtitle2_2")}<br /> {t("privacy_policy.subtext2_2")}</li>
+              <li>{t("privacy_policy.subtitle2_3")}<br /> {t("privacy_policy.subtext2_3")}</li>
+            </ol>
+          </li>
+          <li>
+            <strong>{t("privacy_policy.subtitle3")}</strong>
+            <ol>
+              <li>
+                {t("privacy_policy.subtitle3_1")}<br /> {t("privacy_policy.subtext3_1")}
+                <ul>
+                  <li>{t("privacy_policy.subtext3_1_1")}</li>
+                  <li>{t("privacy_policy.subtext3_1_2")}</li>
+                  <li>{t("privacy_policy.subtext3_1_3")}</li>
+                </ul>
+              </li>
+              <li>{t("privacy_policy.subtitle3_2")}<br /> {t("privacy_policy.subtext3_2")}</li>
+            </ol>
+          </li>
+          <li><strong>{t("privacy_policy.subtitle4")}</strong><br /> {t("privacy_policy.subtext4")}</li>
+          <li>
+            <strong>{t("privacy_policy.subtitle5")}</strong><br />{t("privacy_policy.subtext5")}
+            <ul>
+              <li>{t("privacy_policy.subtext5_1")}</li>
+              <li>{t("privacy_policy.subtext5_2")}</li>
+              <li>{t("privacy_policy.subtext5_3")}</li>
+            </ul>
+          </li>
+          <li><strong>{t("privacy_policy.subtitle6")}</strong><br /> {t("privacy_policy.subtext6")}</li>
+        </ol>
         <p>
-          To make your experience using {import.meta.env.VITE_SITENAME} better, we collect
-          information from your interactions with our website.
+          {t('privacy_policy.footer')}
         </p>
-        <p>Information we collect from all visitors to our website includes:</p>
-        <ul>
-          <li>Visitors IP address.</li>
-          <li>Information about the visitors browser (type, version, etc).</li>
-          <li>Timestamps of network requests.</li>
-        </ul>
-        <h2>What we do with your information</h2>
-        <p>
-          Some of this information is neccessary for the website to work, and some improve existing
-          functionality and provide insight into future improvements, and some are neccessary for
-          security reasons like combating malicious user activity.
-        </p>
-        <h2>Changes to this policy</h2>
-        <p>We reserve the right to revise this Privacy Policy at any time.</p>
       </main>
     </StaticPage>
   );

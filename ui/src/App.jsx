@@ -55,6 +55,7 @@ import {
   userLoggedIn,
 } from './slices/mainSlice';
 import LoginForm from './views/LoginForm';
+import i18next from 'i18next';
 
 // Value taken from _mixins.scss file.
 const tabletBreakpoint = 1170;
@@ -261,7 +262,7 @@ const App = () => {
       >
         <div className="modal-card modal-form modal-login">
           <div className="modal-card-head">
-            <div className="modal-card-title">Login</div>
+            <div className="modal-card-title">{i18next.t('auth.login')}</div>
             <ButtonClose onClick={() => dispatch(loginModalOpened(false))} />
           </div>
           <LoginForm isModal />

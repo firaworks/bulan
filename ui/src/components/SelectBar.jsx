@@ -8,7 +8,7 @@ const SelectBar = ({ name, options, value, onChange, ...rest }) => {
   const [t, i18n] = useTranslation("global");
   const [id] = useState(`select-${name}-${Date.now().toString().substr(-5)}`);
   const isMobile = useIsMobile();
-  console.log('NAME INCOMING', name)
+
   const handleClick = (value) => {
     if (onChange) {
       onChange(value);

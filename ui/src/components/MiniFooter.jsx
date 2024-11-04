@@ -10,8 +10,10 @@ const MiniFooter = () => {
       <Link to="/terms">{t("mini_footer.terms")}</Link>
       <Link to="/privacy-policy">{t("mini_footer.privacy")}</Link>
       <Link to="/guidelines">{t("mini_footer.guidelines")}</Link>
-      <a href={`mailto:${import.meta.env.VITE_EMAILCONTACT}`}>{t("mini_footer.contact")}</a>
+      {/* <a href={`mailto:${import.meta.env.VITE_EMAILCONTACT}`}>{t("mini_footer.contact")}</a> */}
+      <br />
       <span>© 2024 {import.meta.env.VITE_SITENAME}.</span>
+      <span style={{ color: "var(--color-link)" }}>contact@bulan.mn</span>
     </footer>
   );
 };
