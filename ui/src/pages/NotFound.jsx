@@ -16,7 +16,7 @@ const NotFound = () => {
       </Helmet>
       <Sidebar />
       <h1>404: {t("not_found")}!</h1>
-      <p>{"The page you're looking for does not exist."}</p>
+      <p>{t("page_does_not_exist")}</p>
       <Link to="/">{t("go_home")}</Link>
     </div>
   );
