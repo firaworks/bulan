@@ -56,7 +56,7 @@ const DeleteAccount = ({ user }) => {
           </div>
           <div className="form modal-card-content">
             <div className="form-field">
-              <p>{t("settings.delete_accoutn.alert_2")}</p>
+              <p>{t("settings.delete_account.alert_2")}</p>
             </div>
             <FormField label={t("settings.delete_account.password")} error={passwordError ? t("settings.delete_account.invald_pass") : undefined}>
               <InputPassword value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -67,7 +67,7 @@ const DeleteAccount = ({ user }) => {
           </div>
           <div className="modal-card-actions">
             <button className="button-red" onClick={handleOnDelete} disabled={confirm !== 'YES'}>
-              {t("delete")}
+              {t("del")}
             </button>
             <button onClick={handleClose}>{t("cancel")}</button>
           </div>

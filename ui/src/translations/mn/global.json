@@ -13,15 +13,15 @@
         "actions": {
             "delete_all": "Бүгдийг устгах",
             "mark_all_as_seen": "Үзсэнээр тэмдэглэх",
-            "mark_all_upvotes_as_seen": "Дээшээ саналуудыг үзсэнээр тэмдэглэх"
+            "mark_all_upvotes_as_seen": "Сайшаалуудыг харснаар тэмдэглэх"
         },
         "data": {
             "comment": " таны пост дээр коммент үлдээлээ ",
             "comments": " таны пост дээр шинэ комментүүд нэмэгдлээ ",
             "reply": " таны постонд хариулав ",
             "replies": " таны постонд шинэ хариу ирлээ ",
-            "upvote": "шинэ дээшээ санал ",
-            "vote": "шинэ санал",
+            "upvote": "шинэ сайшаалт ",
+            "vote": "шинэ буруушаалт",
             "on_your_post": "постон дээр чинь ирлээ",
             "on_your_comment_in": "доторх коммент дээр чинь ирлээ",
             "deleted_post": {
@@ -68,6 +68,8 @@
     "members": "гишүүд",
     "comment": "коммент",
     "comments": "комментууд",
+    "joined": "Нэгдсэн",
+    "join": "Нэгдэх",
     "chat": {
         "send": "Илгээх"
     },
@@ -122,7 +124,7 @@
         "alert_1": "Та аль хэдийн ховлосон байна",
         "report": "Ховлох"
     },
-    "cancel": "Cancel",
+    "cancel": "Болих",
     "save_to_list": {
         "remove_from": "Хасагдав",
         "saved_to": "Нэмэв",
@@ -141,6 +143,7 @@
     "sidebar": {
         "home": "Нүүр",
         "subscriptions": "Миний дагадаг",
+        "bookmarks": "Миний тэмдэглэл",
         "communities": "Булангууд",
         "guidelines": "Чиглэл авах",
         "terms": "Үйлчилгээний нөхцөл",
@@ -222,7 +225,8 @@
     "ip_bans": "IP бандах",
     "community_warning_1": "Хөөе",
     "community_warning_2": "Булангаас гаруул Мод нь байхаа болино штээ. Итгэлтэй байна уу?",
-    "community_rules": "Булангий дүрмүүд",
+    "community_rules": "Булангийн дүрмүүд",
+    "community_created_at": "Булан төрсөн өдөр:",
     "homepage": {
         "text_1": "Гар утсан дээр Булангаа суулгаарай",
         "install": "Суулгах",
@@ -316,9 +320,11 @@
         }
     },
     "save": "Хадгалах",
-    "delete": "Устгах",
     "edit": "Өөрчлөх",
     "change": "Өөрчлөх",
+    "del": "Устгах",
+    "delete": "Устгах",
+    "reply": "Хариулт",
     "new_post": {
         "select_community": "Булан сонгох",
         "community_question": "Аль Буланд постыг оруулах вэ?",
@@ -370,7 +376,7 @@
         "alert_11": "Энэхүү постыг устгасан",
         "delete_button": "Устгах:",
         "text_1": "Энэхүү постыг түгжсэн",
-        "upvoted": "% Дээшээ",
+        "upvoted": "% сайшаав",
         "no_comment": "Коммент алга."
     },
     "speaking": {
@@ -394,6 +400,11 @@
     "to_x": "Twitter",
     "to_fb": "Facebook",
     "settings": {
+        "home_feed": "Нүүр хуудас дээрх постууд",
+        "home_feed_selections": {
+            "all": "бүх булангууд",
+            "subscriptions": "зөвхөн элссэн булангууд"
+        },
         "change_password": {
             "alert_1": "2 нууц үг зөрөөд байна",
             "alert_2": "Нууц үг богинодоод байна",
@@ -417,6 +428,7 @@
         },
         "settings": "Тохиргоо",
         "account_settings": "Гишүүнчлэл тохиргоо",
+        "username": "Нэр",
         "label_1": "Нэр",
         "description_1": "Нэрийг өөрчлөх боломжгүй",
         "label_2": "Имейл",
@@ -428,13 +440,15 @@
         "label_6": "Гишүүний про зургийг харуулах",
         "heading_1": "Төхөөрөмжний тохиргоо",
         "heading_2": "Нотификейшн",
-        "label_7": "Дээшээ санал дээр нотификейшн",
+        "label_7": "Сайшаалт дээр нотификейшн",
         "label_8": "Хариу бичилтэнд нотификейшн",
         "text_1": "Хүчилдэг нотификейшн",
         "heading_3": "Амыг нь хамхисан Булангууд",
         "heading_4": "Амыг нь хамхисан гишүүд"
     },
     "none": "Хоосон",
+    "mute": "-н амыг нь хамхих",
+    "unmute": "-н амыг нь нээх",
     "unmute_all": "Бүгдийн дуу хоолойг сэргээх",
     "user": {
         "modal": {
@@ -467,7 +481,7 @@
             "text_9": "Медалууд",
             "text_10": "Жагсаалтууд",
             "text_11": "Жагсаалтууд харуулахдаа фейлдэв",
-            "text_12": "Элссэн огноо",
+            "text_12": "Буландаж эхэлсэн огноо",
             "text_13": "Гишүүнчлэлийг устгасан огноо",
             "unmute": "Амыг нь нээх",
             "mute": "Амыг нь хамхих",
@@ -487,10 +501,10 @@
         "is_mobile_2": "by clicking on the button below",
         "text_1": "Communities are currently available only on a per request basis. You can request one",
         "text_2": "and if you seem reasonable and trustworthy, the requested community will be created and you will be added as a moderator of that community.",
-        "title": "All communities",
+        "title": "Бүх булангууд",
         "text_3": "New",
         "text_4": "New communities",
-        "text_5": "Request a community",
+        "text_5": "Request a comйййmunity",
         "alert_2": "Requested!",
         "alert_1": "Community name has to have at least 3 characters."
     },
@@ -656,5 +670,17 @@
     "upvotes": "сайшаалт",
     "downvotes": "буруушаалт",
     "upvoted": "сайшаав",
-    "downvoted": "буруушаав"
+    "downvoted": "буруушаав",
+    "snack_alert": {
+        "slowdown": "Та жаахан аядна уу дээ? арай олон дараад байна аа хө",
+        "too_many_requests": "Хэт олон удаа оролдоод байгаа юм бишүү?",
+        "make_sure_connected": "Интернэтэд холбогдоогүй байгаа юм бишбээз?",
+        "something_went_wrong": "Ямар нэг алдаа гарлаа",
+        "muted_bulan": "булангийн постуудыг танд харуулахаа болилоо.",
+        "unmuted_bulan": "булангийн постууд харагддаг боллоо."
+    },
+    "network_error": "Сүлжээнд бишдсээн...",
+    "add_comment": "Комментлох",
+    "update_comment": "Засах",
+    "save_to": "Хадгалах"
 }

@@ -10,7 +10,7 @@ const PostVotesBar = ({ up = 20000, down = 1000 }) => {
   const none = up + down === 0;
   const title = none
     ? t('no_votes')
-    : `${u.toFixed(0)}% upvoted • ${up.toLocaleString()} ${stringCount(
+    : `${u.toFixed(0)}% ${t('upvoted')} • ${up.toLocaleString()} ${stringCount(
       up,
       true,
       t('upvotes')

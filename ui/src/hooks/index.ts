@@ -14,6 +14,7 @@ import {
   unmuteUser,
 } from '../slices/mainSlice';
 import { selectUser, userAdded } from '../slices/usersSlice';
+import { t } from 'i18next';
 
 /**
  * Run a callback function after a specific amount of time.
@@ -386,7 +387,7 @@ export function useMuteCommunity({
   return {
     isMuted,
     toggleMute,
-    displayText: (isMuted ? 'Unmute' : 'Mute') + ` /${communityName}`,
+    displayText: ` /${communityName}` + (isMuted ? t('unmute') : t('mute')),
   };
 }
 

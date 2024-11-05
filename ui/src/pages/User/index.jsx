@@ -482,7 +482,7 @@ const User = () => {
             </div>
           )}
           <div className="user-card-badges is-m">{renderBadgesList()}</div>
-          <div className="user-card-joined">{t("user.index.text_12")} {dateString1(user.createdAt)}.</div>
+          <div className="user-card-joined">{t("user.index.text_12")} {dateString1(user.createdAt, true)}</div>
           {user.deleted && (
             <div className="user-card-joined">{t("user.index.text_13")} {dateString1(user.deletedAt)}</div>
           )}

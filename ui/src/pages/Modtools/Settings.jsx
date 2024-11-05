@@ -154,7 +154,7 @@ const Settings = ({ community }) => {
                 {t("change")}
               </button>
               <button onClick={handleDeleteProPic} disabled={isUploading}>
-                {t("delete")}
+                {t("del")}
               </button>
               <input
                 ref={proPicFileInputRef}
@@ -175,7 +175,7 @@ const Settings = ({ community }) => {
                 {t("change")}
               </button>
               <button onClick={handleDeleteBannerImage} disabled={isUploading}>
-                {t("delete")}
+                {t("del")}
               </button>
             </div>
             <input

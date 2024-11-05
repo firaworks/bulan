@@ -165,6 +165,7 @@ const Lists = () => {
 export default Lists;
 
 const ListThumbnail = ({ list }) => {
+  const [t, i18n] = useTranslation("global")
   // TODO: Display list private status.
   const { username, name, displayName } = list;
   return (

@@ -36,8 +36,8 @@ const JoinButton = ({ className, community, ...rest }) => {
   if (className) cls += ` ${className}`;
 
   return (
-    <button onClick={handleFollow} className={cls} {...rest}>
-      {joined ? 'Joined' : 'Join'}
+    <button style={{ wordBreak: 'keep-all' }} onClick={handleFollow} className={cls}  {...rest} >
+      {joined ? t('joined') : t('join')}
     </button>
   );
 };

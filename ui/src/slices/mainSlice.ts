@@ -3,6 +3,7 @@ import { APIError, mfetch, mfetchjson } from '../helper';
 import { Community, List, Mute, Mutes, Notification, User } from '../serverTypes';
 import { AppDispatch, RootState, UnknownAction } from '../store';
 import { communitiesAdded } from './communitiesSlice';
+import i18next, { t } from 'i18next';
 
 export interface Alert {
   id: string | number | null;
@@ -460,40 +461,40 @@ export const sidebarCommunitiesUpdated = (communities?: Community[] | null) => {
 
 export const allCommunitiesUpdated =
   (communities: Community[] = []) =>
-  (dispatch: ThunkDispatch<RootState, unknown, UnknownAction>) => {
-    communities = communities || [];
-    const names = communities.map((item) => item.name);
-    dispatch({
-      type: 'main/allCommunitiesUpdated',
-      payload: {
-        items: names || [],
-        loading: false,
-      },
-    });
-    dispatch(communitiesAdded(communities));
-  };
+    (dispatch: ThunkDispatch<RootState, unknown, UnknownAction>) => {
+      communities = communities || [];
+      const names = communities.map((item) => item.name);
+      dispatch({
+        type: 'main/allCommunitiesUpdated',
+        payload: {
+          items: names || [],
+          loading: false,
+        },
+      });
+      dispatch(communitiesAdded(communities));
+    };
 
 export const snackAlert =
   (text: string, id: string | number | null, timeout = 3000) =>
-  (dispatch: AppDispatch) => {
-    const alert: Alert = { id: id || Date.now(), text: text };
-    dispatch({ type: 'main/alertAdded', payload: alert });
-    alert.timer = window.setTimeout(() => {
-      dispatch({ type: 'main/alertRemoved', payload: alert.id });
-    }, timeout);
-  };
+    (dispatch: AppDispatch) => {
+      const alert: Alert = { id: id || Date.now(), text: text };
+      dispatch({ type: 'main/alertAdded', payload: alert });
+      alert.timer = window.setTimeout(() => {
+        dispatch({ type: 'main/alertRemoved', payload: alert.id });
+      }, timeout);
+    };
 
 export const snackAlertError = (error: unknown) => {
   console.error(error);
   if (error instanceof APIError) {
     if (error.status === 429) {
-      return snackAlert('Whoah, slow down there!', 'too_many_requests');
+      return snackAlert(i18next.t('snack_alert.slowdown'), i18next.t('snack_alert.too_many_requests'));
     }
   }
   if (error instanceof TypeError) {
-    return snackAlert(`Make sure you're connected to the internet`, 'network_error');
+    return snackAlert(i18next.t('snack_alert.make_sure_connected'), i18next.t('network_error'));
   }
-  return snackAlert('Something went wrong.', 'generic');
+  return snackAlert(i18next.t('snack_alert.something_went_wrong'), i18next.t('generic_error'));
 };
 
 export const loginPromptToggled = () => {
@@ -536,20 +537,20 @@ export const notificationsUpdated = (notification: NotificationsResponse) => {
 
 export const markNotificationAsSeen =
   (notif: Notification, seen = true) =>
-  async (dispatch: AppDispatch) => {
-    const errMsg = 'Error marking notification as seen: ';
-    try {
-      await mfetchjson(
-        `/api/notifications/${notif.id}?action=markAsSeen&seen=${seen ? 'true' : 'false'}`,
-        {
-          method: 'PUT',
-        }
-      );
-      dispatch({ type: 'main/notificationSeen', payload: { notifId: notif.id, seen } });
-    } catch (err) {
-      console.error(errMsg, err);
-    }
-  };
+    async (dispatch: AppDispatch) => {
+      const errMsg = 'Error marking notification as seen: ';
+      try {
+        await mfetchjson(
+          `/api/notifications/${notif.id}?action=markAsSeen&seen=${seen ? 'true' : 'false'}`,
+          {
+            method: 'PUT',
+          }
+        );
+        dispatch({ type: 'main/notificationSeen', payload: { notifId: notif.id, seen } });
+      } catch (err) {
+        console.error(errMsg, err);
+      }
+    };
 
 export const notificationsNewCountReset = () => {
   return { type: 'main/notificationsNewCountReset' };
@@ -595,79 +596,79 @@ export const showAppInstallButton = (show: boolean, deferredPrompt: unknown) => 
 
 export const muteUser =
   (userId: string, username: string) =>
-  async (dispatch: ThunkDispatch<RootState, unknown, UnknownAction>) => {
-    try {
-      const mutes = await mfetchjson('/api/mutes', {
-        method: 'POST',
-        body: JSON.stringify({
-          userId: userId,
-        }),
-      });
-      dispatch(mutesAdded(mutes));
-      dispatch(
-        snackAlert(
-          `Posts from @${username} won't appear on any of your feeds from now on.`,
-          null,
-          5000
-        )
-      );
-    } catch (error) {
-      dispatch(snackAlertError(error));
-    }
-  };
+    async (dispatch: ThunkDispatch<RootState, unknown, UnknownAction>) => {
+      try {
+        const mutes = await mfetchjson('/api/mutes', {
+          method: 'POST',
+          body: JSON.stringify({
+            userId: userId,
+          }),
+        });
+        dispatch(mutesAdded(mutes));
+        dispatch(
+          snackAlert(
+            `Posts from @${username} won't appear on any of your feeds from now on.`,
+            null,
+            5000
+          )
+        );
+      } catch (error) {
+        dispatch(snackAlertError(error));
+      }
+    };
 
 export const unmuteUser =
   (userId: string, username: string) =>
-  async (dispatch: ThunkDispatch<RootState, unknown, UnknownAction>) => {
-    try {
-      const res = await mfetch(`/api/mutes/users/${userId}`, {
-        method: 'DELETE',
-      });
-      if (res.ok) {
-        dispatch(muteRemoved('user', userId));
-        dispatch(snackAlert(`Unmuted @${username}`, null));
-      } else {
-        throw new Error('Failed unmuting user: ' + (await res.text()));
+    async (dispatch: ThunkDispatch<RootState, unknown, UnknownAction>) => {
+      try {
+        const res = await mfetch(`/api/mutes/users/${userId}`, {
+          method: 'DELETE',
+        });
+        if (res.ok) {
+          dispatch(muteRemoved('user', userId));
+          dispatch(snackAlert(`Unmuted @${username}`, null));
+        } else {
+          throw new Error('Failed unmuting user: ' + (await res.text()));
+        }
+      } catch (error) {
+        dispatch(snackAlertError(error));
       }
-    } catch (error) {
-      dispatch(snackAlertError(error));
-    }
-  };
+    };
 
 export const muteCommunity =
   (communityId: string, communityName: string) =>
-  async (dispatch: ThunkDispatch<RootState, unknown, UnknownAction>) => {
-    try {
-      const mutes = await mfetchjson('/api/mutes', {
-        method: 'POST',
-        body: JSON.stringify({
-          communityId: communityId,
-        }),
-      });
-      dispatch(mutesAdded(mutes));
-      dispatch(snackAlert(`Posts from /${communityName} won't appear on All anymore.`, null, 5000));
-    } catch (error) {
-      dispatch(snackAlertError(error));
-    }
-  };
+    async (dispatch: ThunkDispatch<RootState, unknown, UnknownAction>) => {
+      try {
+        const mutes = await mfetchjson('/api/mutes', {
+          method: 'POST',
+          body: JSON.stringify({
+            communityId: communityId,
+          }),
+        });
+        dispatch(mutesAdded(mutes));
+        dispatch(snackAlert(`/${communityName} ${t('snack_alert.muted_bulan')}`, null, 5000));
+      } catch (error) {
+        dispatch(snackAlertError(error));
+      }
+    };
 
 export const unmuteCommunity =
   (communityId: string, communityName: string) =>
-  async (dispatch: ThunkDispatch<RootState, unknown, UnknownAction>) => {
-    try {
-      const res = await mfetch(`/api/mutes/communities/${communityId}`, {
-        method: 'DELETE',
-      });
-      if (res.ok) {
-        dispatch(muteRemoved('community', communityId));
-        dispatch(snackAlert(`Unmuted /${communityName}`, null));
-      } else {
-        throw new Error('Failed unmuting user: ' + (await res.text()));
+    async (dispatch: ThunkDispatch<RootState, unknown, UnknownAction>) => {
+      try {
+        const res = await mfetch(`/api/mutes/communities/${communityId}`, {
+          method: 'DELETE',
+        });
+        if (res.ok) {
+          dispatch(muteRemoved('community', communityId));
+          dispatch(snackAlert(`/${communityName} ${t('snack_alert.unmuted_bulan')}`, null));
+        } else {
+          throw new Error('Failed unmuting user: ' + (await res.text()));
+        }
+      } catch (error) {
+        dispatch(snackAlertError(error));
       }
-    } catch (error) {
-      dispatch(snackAlertError(error));
-    }
-  };
+    };
 
 export const mutesAdded = (mutes: Mutes) => {
   return { type: 'main/mutesAdded', payload: mutes };

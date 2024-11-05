@@ -425,7 +425,7 @@ const Post = () => {
                 )}
                 {postOwner && !post.deleted && (
                   <button className="button-red" onClick={() => setDeleteModalOpen(true)}>
-                    {t("delete")}
+                    {t("del")}
                   </button>
                 )}
                 {postOwner && post.deleted && !post.deletedContent && post.type !== 'text' && (
@@ -454,7 +454,7 @@ const Post = () => {
                         onClick={() => setDeleteModalOpen(true, 'mods')}
                         disabled={post.deleted}
                       >
-                        {t("delete")}
+                        {t("del")}
                       </button>
                       <div className="dropdown-item is-non-reactive">
                         <div className="checkbox">
@@ -503,7 +503,7 @@ const Post = () => {
                         onClick={() => setDeleteModalOpen(true, 'admins')}
                         disabled={post.deleted}
                       >
-                        {t("delete")}
+                        {t("del")}
                       </button>
                       <button
                         className="button-clear dropdown-item"

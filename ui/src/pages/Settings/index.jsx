@@ -51,8 +51,8 @@ const Settings = () => {
   };
 
   const homeFeedOptions = {
-    all: 'All',
-    subscriptions: 'Subscriptions',
+    all: t('settings.home_feed_selections.all'),
+    subscriptions: t('settings.home_feed_selections.subscriptions'),
   };
   const [homeFeed, setHomeFeed] = useState(user.homeFeed);
 
@@ -118,7 +118,7 @@ const Settings = () => {
     await getNotificationsPermissions(loggedIn, applicationServerKey);
   };
 
-  const handleDisablePushNotifications = () => {};
+  const handleDisablePushNotifications = () => { };
 
   const handleSave = async () => {
     if (email !== '' && !validEmail(email)) {
@@ -290,7 +290,7 @@ const Settings = () => {
                 {t('change')}
               </ButtonUpload>
               <button onClick={handleProPicDelete} disabled={isProPicUploading}>
-                {t("delete")}
+                {t('del')}
               </button>
             </div>
           </FormSection>
@@ -316,7 +316,7 @@ const Settings = () => {
           </FormField>
         </FormSection>
         <FormSection heading={t("settings.label_4")}>
-          <FormField className="is-preference" label="Home feed">
+          <FormField className="is-preference" label={t('settings.home_feed')}>
             <Dropdown
               aligned="right"
               target={<button className="select-bar-dp-target">{homeFeedOptions[homeFeed]}</button>}
@@ -340,14 +340,14 @@ const Settings = () => {
               onChange={(e) => setRememberFeedSort(e.target.checked)}
             />
           </FormField>
-          <FormField className="is-preference is-switch">
+          {/* <FormField className="is-preference is-switch">
             <Checkbox
               label={t("settings.label_5")}
               variant="switch"
               checked={enableEmbeds}
               onChange={(e) => setEnableEmbeds(e.target.checked)}
             />
-          </FormField>
+          </FormField> */}
           <FormField className="is-preference is-switch">
             <Checkbox
               variant="switch"
@@ -357,7 +357,7 @@ const Settings = () => {
             />
           </FormField>
         </FormSection>
-        <FormSection heading={t("settings.heading_1")}>
+        {/* <FormSection heading={t("settings.heading_1")}>
           <FormField className="is-preference" label="Font">
             <Dropdown
               aligned="right"
@@ -372,7 +372,7 @@ const Settings = () => {
               </div>
             </Dropdown>
           </FormField>
-        </FormSection>
+        </FormSection> */}
         <FormSection heading={t("settings.heading_2")}>
           <FormField className="is-preference is-switch">
             <Checkbox

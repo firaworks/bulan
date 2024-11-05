@@ -89,7 +89,7 @@ const AllCommunities = () => {
             <LoginForm />
           </div>
         )}
-        <CommunityCreationCard />
+        {/* <CommunityCreationCard /> */}
         <MiniFooter />
       </aside>
     </div>
@@ -232,7 +232,7 @@ const RequestCommunityButton = ({ children, isMobile = false, ...props }) => {
             </FormField>
             <FormField>
               <button className="button-main" onClick={handleSubmit} style={{ width: '100%' }}>
-              {t("all_communities.text_5")}
+                {t("all_communities.text_5")}
               </button>
             </FormField>
           </div>

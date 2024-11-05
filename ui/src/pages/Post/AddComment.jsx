@@ -159,7 +159,7 @@ const AddComment = ({
               onClick={handleSubmit}
               disabled={empty || sendingRequest}
             >
-              {editing ? 'Update comment' : 'Add comment'}
+              {editing ? t('update_comment') : t('add_comment')}
             </button>
           </div>
         </div>

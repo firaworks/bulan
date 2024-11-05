@@ -117,7 +117,7 @@ export function onEscapeKey(e, callback, stopPropagation = true) {
 }
 
 // Returns date in the format of '21 February 2021'.
-export function dateString1(date) {
+export function dateString1(date, showYear = false) {
   const t = i18next.t;
   // const [t, i18n] = useTranslation("global");
   const months = [
@@ -135,7 +135,7 @@ export function dateString1(date) {
     t("months.december"),
   ];
   if (!(date instanceof Date)) date = new Date(date);
-  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+  return `${showYear ? date.getFullYear() + ' оны ' : ''}${months[date.getMonth()]}ын ${date.getDate()}`;
 }
 
 export function validEmail(emailAddress) {

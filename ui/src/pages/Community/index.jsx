@@ -95,7 +95,7 @@ const Community = () => {
     return (
       <div className="card card-sub card-mods">
         <div className="card-head">
-          <div className="card-title">Moderators</div>
+          <div className="card-title">{t('mod.data.moderators')}</div>
         </div>
         <div className="card-content">
           <ul>
@@ -187,7 +187,7 @@ const Community = () => {
               </ShowMoreBox>
             </div>
             <div className="comm-main-created-at">
-              {`Created on ${dateString1(community.createdAt)}.`}
+              {`${t('community_created_at')} ${dateString1(community.createdAt, true)}`}
             </div>
           </div>
           <div className="tabs is-m">

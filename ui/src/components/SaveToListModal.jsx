@@ -177,8 +177,8 @@ const TheModal = ({ open, onClose, toSaveItemId, toSaveItemType }) => {
       >
         <div className="modal-card-head">
           <div className="modal-card-title">
-            {page === 'list' && 'Save to'}
-            {page === 'new' && 'Create list'}
+            {page === 'list' && t('save_to')}
+            {page === 'new' && t('create_list')}
           </div>
           <ButtonClose onClick={handleClose} />
         </div>
