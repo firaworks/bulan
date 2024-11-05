@@ -266,11 +266,11 @@ const List = () => {
             </div>
             <div className="card-list-item">
               {SVGs.calendar}
-              <div>{`Created on ${dateString1(list.createdAt)}`}</div>
+              <div>{`${t('created_at')} ${dateString1(list.createdAt, true)}`}</div>
             </div>
             <div className="card-list-item">
               {SVGs.clock}
-              <div>{`Last updated ${timeAgo(list.lastUpdatedAt)}`}</div>
+              <div>{`${t('last_updated')} ${timeAgo(list.lastUpdatedAt)}`}</div>
             </div>
           </div>
         </div>
