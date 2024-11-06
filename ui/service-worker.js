@@ -1,6 +1,5 @@
 import { selectImageCopyURL, stringCount } from './src/helper';
 import { badgeImage } from './src/pages/User/badgeImage';
-import i18next from 'i18next';
 
 const SW_BUILD_ID = import.meta.env.VITE_SW_BUILD_ID;
 
@@ -131,7 +130,6 @@ self.addEventListener('fetch', (e) => {
 
 const getNotificationInfo = (notification, csrfToken) => {
   const { type, notif } = notification;
-  const t = i18next.t;
 
   const ret = {
     title: '',
@@ -171,10 +169,10 @@ const getNotificationInfo = (notification, csrfToken) => {
       {
         let to = `/${notif.post.communityName}/post/${notif.post.publicId}`;
         if (notif.noComments === 1) {
-          ret.title = t('notifications.new_comment', { who: `@${notif.commentAuthor}`, title: notif.post.title });
+          ret.title = `@${notif.commentAuthor} таны "${notif.post.title}" пост дээр комментлов`
           to += `/${notif.commentId}`;
         } else {
-          ret.title = t('notifications.new_comments', { title: notif.post.title, num: notif.noComments });
+          ret.title = `Таны "${notif.post.title}" пост дээр ${notif.noComments} шинэ коммент ирлээ`
         }
         setToURL(to);
       }
@@ -183,20 +181,20 @@ const getNotificationInfo = (notification, csrfToken) => {
       {
         let to = `/${notif.post.communityName}/post/${notif.post.publicId}`;
         if (notif.noComments === 1) {
-          ret.title = t('notifications.comment_reply', { who: `@${notif.commentAuthor}`, title: notif.post.title });
+          ret.title = `@${notif.commentAuthor} таны "${notif.post.title}" пост дээрх комментод хариулжээ`
           to += `/${notif.commentId}`;
         } else {
-          ret.title = t('notifications.comment_replies', { title: notif.post.title, num: notif.noComments });
+          ret.title = `"${notif.post.title}" пост дээрх таны комментод ${notif.noComments} шинэ хариулт ирлээ`
         }
         setToURL(to);
       }
       break;
     case 'new_votes':
       if (notif.targetType === 'post') {
-        ret.title = t('notifications.new_votes_on_post', { title: notif.post.title, num: notif.noVotes });
+        ret.title = `Таны "${notif.post.title}" постыг ${notif.noVotes} хүн шинээр сайшаалаа`
         setToURL(`/${notif.post.communityName}/post/${notif.post.publicId}`);
       } else {
-        ret.title = t('notifications.new_votes_on_comment', { title: notif.post.title, num: notif.noVotes });
+        ret.title = `"${notif.post.title}" пост дээрх таны комментыг ${notif.noVotes} хүн сайшаалаа`
         setToURL(
           `/${notif.comment.communityName}/post/${notif.comment.postPublicId}/${notif.comment.id}`
         );
@@ -205,18 +203,18 @@ const getNotificationInfo = (notification, csrfToken) => {
     case 'deleted_post':
       {
         const by =
-          notif.deletedAs === 'mods' ? `/${notif.post.communityName} ${t('by_mods_of')}` : t('by_admins');
-        ret.title = t('notifications.deleted_post', { title: notif.post.title, who: by });
+          notif.deletedAs === 'mods' ? `/${notif.post.communityName} булангийн моднуудаас` : 'админуудаас';
+        ret.title = `Таны "${notif.post.title}" постыг ${by} устгасан байна`
         setToURL(`/${notif.post.communityName}/post/${notif.post.publicId}`);
       }
       break;
     case 'mod_add':
-      ret.title = t('notifications.mod_add', { who: `@${notif.addedBy}`, community: `/${notif.communityName}` });
+      ret.title = `@${notif.addedBy} таныг /${notif.communityName} булангийн мод(модератор) болголоо`
       setToURL(`/${notif.communityName}`);
       break;
     case 'new_badge':
       {
-        ret.title = t('notifications.new_badge');
+        ret.title = `Май медал ав!`
         setToURL(`/@${notif.user.username}`);
         const { src } = badgeImage(notif.badgeType);
         setImage(src);
