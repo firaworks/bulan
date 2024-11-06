@@ -48,10 +48,10 @@ const Fallback = ({ error, resetErrorBoundary }) => {
 
   return (
     <div className="page-app-error">
-      <h1>Something went wrong</h1>
+      <h1>Нэг юм бишдсээн...</h1>
       <p>{error.toString()}</p>
       <button onClick={handleReload} disabled={reloadDisabled}>
-        Try reloading page
+        Рэфрэш хийгээд үзүүл яасын
       </button>
     </div>
   );

@@ -131,6 +131,7 @@ self.addEventListener('fetch', (e) => {
 
 const getNotificationInfo = (notification, csrfToken) => {
   const { type, notif } = notification;
+  const t = i18next.t;
 
   const ret = {
     title: '',
@@ -170,10 +171,10 @@ const getNotificationInfo = (notification, csrfToken) => {
       {
         let to = `/${notif.post.communityName}/post/${notif.post.publicId}`;
         if (notif.noComments === 1) {
-          ret.title = `@${notif.commentAuthor} ${t("service_worker.text_1")} '${notif.post.title}'`;
+          ret.title = t('notifications.new_comment', { who: `@${notif.commentAuthor}`, title: notif.post.title });
           to += `/${notif.commentId}`;
         } else {
-          ret.title = `${notif.noComments} ${t("service_worker.text_2")} '${notif.post.title}'`;
+          ret.title = t('notifications.new_comments', { title: notif.post.title, num: notif.noComments });
         }
         setToURL(to);
       }
@@ -182,21 +183,20 @@ const getNotificationInfo = (notification, csrfToken) => {
       {
         let to = `/${notif.post.communityName}/post/${notif.post.publicId}`;
         if (notif.noComments === 1) {
-          ret.title = `@${notif.commentAuthor} ${t("service_worker.text_3")} '${notif.post.title}'`;
+          ret.title = t('notifications.comment_reply', { who: `@${notif.commentAuthor}`, title: notif.post.title });
           to += `/${notif.commentId}`;
         } else {
-          ret.title = `${notif.noComments} ${t("service_worker.text_4")} '${notif.post.title}'`;
+          ret.title = t('notifications.comment_replies', { title: notif.post.title, num: notif.noComments });
         }
         setToURL(to);
       }
       break;
     case 'new_votes':
       if (notif.targetType === 'post') {
-        // i18next.t("helper.point")
-        ret.title = `${stringCount(notif.noVotes, false, t("service_worker.new_upvote"))} ${t("service_worker.vote_on")} '${notif.post.title}'`;
+        ret.title = t('notifications.new_votes_on_post', { title: notif.post.title, num: notif.noVotes });
         setToURL(`/${notif.post.communityName}/post/${notif.post.publicId}`);
       } else {
-        ret.title = `${stringCount(notif.noVotes, false, t("service_worker.new_vote"))} ${t("service_worker.vote_on_comment")} '${notif.post.title}'`;
+        ret.title = t('notifications.new_votes_on_comment', { title: notif.post.title, num: notif.noVotes });
         setToURL(
           `/${notif.comment.communityName}/post/${notif.comment.postPublicId}/${notif.comment.id}`
         );
@@ -205,19 +205,18 @@ const getNotificationInfo = (notification, csrfToken) => {
     case 'deleted_post':
       {
         const by =
-          notif.deletedAs === 'mods' ? `${t("service_worker.deleted_by_1")} ${notif.post.communityName}` : t("service_worker.deleted_by_2");
-        ret.title = `${t("service_worker.deleted_text_1")} '${notif.post.title}' ${t("service_worker.deleted_text_2")} ${by}`;
+          notif.deletedAs === 'mods' ? `/${notif.post.communityName} ${t('by_mods_of')}` : t('by_admins');
+        ret.title = t('notifications.deleted_post', { title: notif.post.title, who: by });
         setToURL(`/${notif.post.communityName}/post/${notif.post.publicId}`);
       }
       break;
     case 'mod_add':
-      ret.title = `${t("service_worker.mod_add_1")} /${notif.communityName} ${t("service_worker.mod_add_2")} @${notif.addedBy}`;
+      ret.title = t('notifications.mod_add', { who: `@${notif.addedBy}`, community: `/${notif.communityName}` });
       setToURL(`/${notif.communityName}`);
       break;
     case 'new_badge':
       {
-        ret.title =
-          t("service_worker.new_badge");
+        ret.title = t('notifications.new_badge');
         setToURL(`/@${notif.user.username}`);
         const { src } = badgeImage(notif.badgeType);
         setImage(src);

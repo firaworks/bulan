@@ -96,7 +96,7 @@ func New(db *sql.DB, conf *config.Config) (*Server, error) {
 		log.Printf("Error generating vapid keys: %v (you might want to run migrations)\n", err)
 	} else {
 		s.webPushVAPIDKeys = *keys
-		core.EnablePushNotifications(keys, "discuit@previnder.com")
+		core.EnablePushNotifications(keys, "contact@bulan.mn")
 	}
 
 	s.openLoggers()
