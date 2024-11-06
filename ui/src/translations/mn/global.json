@@ -12,32 +12,20 @@
         "title": "Нотификейшн",
         "actions": {
             "delete_all": "Бүгдийг устгах",
-            "mark_all_as_seen": "Үзсэнээр тэмдэглэх",
-            "mark_all_upvotes_as_seen": "Сайшаалуудыг харснаар тэмдэглэх"
+            "mark_all_as_seen": "Бүгдийг үзсэнээр тэмдэглэх",
+            "mark_all_upvotes_as_seen": "Сайшаалуудыг үзсэнээр тэмдэглэх"
         },
-        "data": {
-            "comment": " таны пост дээр коммент үлдээлээ ",
-            "comments": " таны пост дээр шинэ комментүүд нэмэгдлээ ",
-            "reply": " таны постонд хариулав ",
-            "replies": " таны постонд шинэ хариу ирлээ ",
-            "upvote": "шинэ сайшаалт ",
-            "vote": "шинэ буруушаалт",
-            "on_your_post": "постон дээр чинь ирлээ",
-            "on_your_comment_in": "доторх коммент дээр чинь ирлээ",
-            "deleted_post": {
-                "your_post": " таны пост",
-                "has_been_removed_by": "устгагдлаа.",
-                "moderators_of": "булангийн мод"
-            },
-            "mod_add_1": "Таныг МОД болгож нэмлээ",
-            "mod_add_2": "Мод болгож нэмсэн",
-            "new_badge_1": "Таньд олгосон медал",
-            "new_badge_2": "дэмжигч",
-            "new_badge_3": "Чи гоё сда шүү!!!",
-            "mark_seen": "Үзсэнээр тэмдэглэх",
-            "mark_unseen": "Үзээгүйгээр тэмдэглэх",
-            "delete_button": "Устгах"
-        },
+        "new_comment": "<bold>{{who}}</bold> таны \"{{title}}\" пост дээр комментлов",
+        "new_comments": "Таны <bold>\"{{title}}\"</bold> пост дээр <bold>{{num}}</bold> шинэ коммент ирлээ",
+        "comment_reply": "<bold>{{who}}</bold> таны <bold>\"{{title}}\"</bold> пост дээрх комментод хариулжээ",
+        "comment_replies": "<bold>\"{{title}}\"</bold> пост дээрх таны комментод <bold>{{num}}</bold> шинэ хариулт ирлээ",
+        "new_votes_on_post": "Таны <bold>\"{{title}}\"</bold> постыг <bold>{{num}}</bold> хүн шинээр сайшаалаа",
+        "new_votes_on_comment": "<bold>\"{{title}}\"</bold> пост дээрх таны комментыг <bold>{{num}}</bold> хүн сайшаалаа",
+        "deleted_post": "Таны <bold>\"{{title}}\"</bold> постыг <bold>{{who}}</bold> устгасан байна",
+        "mod_add": "<bold>{{who}}</bold> таныг <bold>{{community}}</bold> булангийн мод(модератор) болголоо",
+        "new_badge": "Май медал ав!",
+        "mark_seen": "Үзсэнээр тэмдэглэх",
+        "mark_unseen": "Үзээгүйгээр тэмдэглэх",
         "state": "Нотификейшн алгоо"
     },
     "feed_item": {
@@ -323,8 +311,7 @@
     "save": "Хадгалах",
     "edit": "Өөрчлөх",
     "change": "Өөрчлөх",
-    "del": "Устгах",
-    "delete": "Устгах",
+    "_delete": "Устгах",
     "reply": "Хариулт",
     "new_post": {
         "select_community": "Булан сонгох",
@@ -378,7 +365,6 @@
         "alert_9": "Энэ постыг устгасан",
         "alert_10": "устгасан байна",
         "alert_11": "Энэхүү постыг устгасан",
-        "delete_button": "Устгах:",
         "text_1": "Энэхүү постыг түгжсэн",
         "upvoted": "% сайшаав",
         "no_comment": "Коммент алга."
@@ -684,8 +670,8 @@
         "unmuted_bulan": "булангийн постууд харагддаг боллоо.",
         "muted_user": "-н постуудыг танд харуулахаа болилоо.",
         "unmuted_user": "-н постууд харагддаг боллоо.",
-        "all_notifications_marked_seen": "Бүх нотификейшныг харсан болголоо",
-        "all_upvotes_marked_seen": "Бүх сайшаалтыг харсан болголоо",
+        "all_notifications_marked_seen": "Бүх нотификейшныг үзсэн болголоо",
+        "all_upvotes_marked_seen": "Бүх сайшаалтыг үзсэн болголоо",
         "all_notifications_deleted": "Бүх нотификейшныг устгалаа"
     },
     "network_error": "Сүлжээ бишдсээн...",

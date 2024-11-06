@@ -279,7 +279,7 @@ const Post = () => {
     return `${t("new_comment.alert_11")} ${userGroupSingular(post.deletedAs, true)}.`;
   };
 
-  const deletePostContentButtonText = `${t("new_comment.delete_button")} ${post.type === 'image' ? (post.images.length > 1 ? 'images' : 'image') : post.type
+  const deletePostContentButtonText = `${t('_delete')} ${post.type === 'image' ? (post.images.length > 1 ? 'images' : 'image') : post.type
     }`;
 
   return (
@@ -425,7 +425,7 @@ const Post = () => {
                 )}
                 {postOwner && !post.deleted && (
                   <button className="button-red" onClick={() => setDeleteModalOpen(true)}>
-                    {t("del")}
+                    {t('_delete')}
                   </button>
                 )}
                 {postOwner && post.deleted && !post.deletedContent && post.type !== 'text' && (
@@ -454,7 +454,7 @@ const Post = () => {
                         onClick={() => setDeleteModalOpen(true, 'mods')}
                         disabled={post.deleted}
                       >
-                        {t("del")}
+                        {t('_delete')}
                       </button>
                       <div className="dropdown-item is-non-reactive">
                         <div className="checkbox">
@@ -503,7 +503,7 @@ const Post = () => {
                         onClick={() => setDeleteModalOpen(true, 'admins')}
                         disabled={post.deleted}
                       >
-                        {t("del")}
+                        {t('_delete')}
                       </button>
                       <button
                         className="button-clear dropdown-item"

@@ -380,7 +380,7 @@ const Comment = ({
     return (
       <>
         <div className={cls()} onClick={() => !disabled && setConfirmDeleteOpen(true, 'mods')}>
-          {t("del")}
+          {t('_delete')}
         </div>
         {user.id === comment.userId && (
           <div className={cls('is-non-reactive')}>
@@ -405,7 +405,7 @@ const Comment = ({
     return (
       <>
         <div className="dropdown-item" onClick={() => setConfirmDeleteOpen(true, 'admins')}>
-          {t("del")}
+          {t('_delete')}
         </div>
         {user.id === comment.userId && (
           <div className="dropdown-item is-non-reactive">
@@ -617,7 +617,7 @@ const Comment = ({
                         {t("edit")}
                       </div>
                       <div className="dropdown-item" onClick={() => setConfirmDeleteOpen(true)}>
-                        {t("del")}
+                        {t('_delete')}
                       </div>
                     </>
                   )}
@@ -656,7 +656,7 @@ const Comment = ({
                     {t("edit")}
                   </button>
                   <button className="button-text" onClick={() => setConfirmDeleteOpen(true)}>
-                    {t("del")}
+                    {t('_delete')}
                   </button>
                 </>
               )}

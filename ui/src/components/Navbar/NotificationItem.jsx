@@ -14,7 +14,7 @@ import { ButtonMore } from '../Button';
 import Dropdown from '../Dropdown';
 import Image from '../Image';
 import TimeAgo from '../TimeAgo';
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 const NotificationItem = ({ notification, ...rest }) => {
   const { type, seen, createdAt, notif } = notification;
@@ -40,14 +40,23 @@ const NotificationItem = ({ notification, ...rest }) => {
       case 'new_comment': {
         if (notif.noComments === 1) {
           return (
-            <>
-              <b>@{notif.commentAuthor}</b>{t("notifications.data.comment")}<b>{notif.post.title}</b>.
+            < >
+              <Trans i18nKey="notifications.new_comment"
+                values={{ who: notif.commentAuthor, title: notif.post.title }}
+                components={{ bold: <b /> }}
+              />
             </>
           );
         } else {
           return (
             <>
-              {notif.noComments} {t("notifications.data.comments")} <b>{notif.post.title}</b>.
+              <Trans i18nKey="notifications.new_comments"
+                values={{
+                  title: notif.post.title,
+                  num: notif.noComments
+                }}
+                components={{ bold: <b /> }}
+              />
             </>
           );
         }
@@ -56,14 +65,25 @@ const NotificationItem = ({ notification, ...rest }) => {
         if (notif.noComments === 1) {
           return (
             <>
-              <b>@{notif.commentAuthor}</b>{t("notifications.data.reply")}{' '}
-              <b>{notif.post.title}</b>.
+              <Trans i18nKey="notifications.comment_reply"
+                values={{
+                  who: notif.commentAuthor,
+                  title: notif.post.title,
+                }}
+                components={{ bold: <b /> }}
+              />
             </>
           );
         } else {
           return (
             <>
-              {notif.noComments} {t("notifications.data.replies")} <b>{notif.post.title}</b>.
+              <Trans i18nKey="notifications.comment_replies"
+                values={{
+                  title: notif.post.title,
+                  num: notif.noComments,
+                }}
+                components={{ bold: <b /> }}
+              />
             </>
           );
         }
@@ -72,15 +92,25 @@ const NotificationItem = ({ notification, ...rest }) => {
         if (notif.targetType === 'post') {
           return (
             <>
-              {stringCount(notif.noVotes, false, t("notifications.data.upvote"))} {t("notifications.data.on_your_post")}{' '}
-              <b>{notif.post.title}</b>.
+              <Trans i18nKey="notifications.new_votes_on_post"
+                values={{
+                  title: notif.post.title,
+                  num: notif.noVotes,
+                }}
+                components={{ bold: <b /> }}
+              />
             </>
           );
         } else {
           return (
             <>
-              {stringCount(notif.noVotes, false, t("notifications.data.vote"))} {t("notifications.data.on_your_comment_in")}{' '}
-              <b>{`~${notif.post.title}`}</b>.
+              <Trans i18nKey="notifications.new_votes_on_comment"
+                values={{
+                  title: notif.post.title,
+                  num: notif.noVotes,
+                }}
+                components={{ bold: <b /> }}
+              />
             </>
           );
         }
@@ -88,29 +118,33 @@ const NotificationItem = ({ notification, ...rest }) => {
       case 'deleted_post': {
         return (
           <>
-            {t("notifications.data.deleted_post.your_post")} <b>{notif.post.title}</b>{t("notifications.data.deleted_post.has_been_removed_by")}{' '}
-            {notif.deletedAs === 'mods' ? (
-              <>
-                {t("notifications.data.deleted_post.moderators_of")} <b>{notif.post.communityName}</b>
-              </>
-            ) : (
-              'the admins'
-            )}
-            .
+            <Trans i18nKey="notifications.deleted_post"
+              values={{
+                title: notif.post.title,
+                who: notif.deletedAs === 'mods' ? `${notif.post.communityName} ${t('by_mods_of')}` : t('by_admins')
+              }}
+              components={{ bold: <b /> }}
+            />
           </>
         );
       }
       case 'mod_add': {
         return (
           <>
-            {t("notifications.data.mod_add_1")} <b>{notif.communityName}</b> {t("notifications.data.modd_add_2")} <b>@{notif.addedBy}.</b>
+            <Trans i18nKey="notifications.deleted_post"
+              values={{
+                who: `@${notif.addedBy}`,
+                community: notif.communityName
+              }}
+              components={{ bold: <b /> }}
+            />
           </>
         );
       }
       case 'new_badge': {
         return (
           <>
-            {t("notifications.data.new_badge_1")}<b>{t("notifications.data.new_badge_2")}</b>{t("notifications.data.new_badge_2")}
+            <Trans i18nKey="notifications.new_badge" />
           </>
         );
       }
@@ -244,10 +278,10 @@ const NotificationItem = ({ notification, ...rest }) => {
         >
           <div className="dropdown-list">
             <button className="button-clear dropdown-item" onClick={handleMarkAsSeen}>
-              {seen ? t("notifications.data.mark_seen") : t("notifications.data.mark_unseen")}
+              {seen ? t("notifications.mark_seen") : t("notifications.mark_unseen")}
             </button>
             <button className="button-clear dropdown-item" onClick={handleDelete}>
-              {t("notifications.data.delete_button")}
+              {t('_delete')}
             </button>
           </div>
         </Dropdown>

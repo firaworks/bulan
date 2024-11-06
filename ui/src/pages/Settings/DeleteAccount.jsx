@@ -67,7 +67,7 @@ const DeleteAccount = ({ user }) => {
           </div>
           <div className="modal-card-actions">
             <button className="button-red" onClick={handleOnDelete} disabled={confirm !== 'YES'}>
-              {t("del")}
+              {t('_delete')}
             </button>
             <button onClick={handleClose}>{t("cancel")}</button>
           </div>

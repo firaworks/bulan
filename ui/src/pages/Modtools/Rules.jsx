@@ -157,7 +157,7 @@ const Rules = ({ community }) => {
               <div className="table-column">{rule.description}</div>
               <div className="table-column" style={{ display: 'flex', justifyContent: 'center' }}>
                 <button className="button-red" onClick={() => handleDeleteRule(rule)}>
-                  {t("del")}
+                  {t('_delete')}
                 </button>
               </div>
               <div className="table-column">

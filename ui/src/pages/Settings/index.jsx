@@ -290,7 +290,7 @@ const Settings = () => {
                 {t('change')}
               </ButtonUpload>
               <button onClick={handleProPicDelete} disabled={isProPicUploading}>
-                {t('del')}
+                {t('_delete')}
               </button>
             </div>
           </FormSection>
