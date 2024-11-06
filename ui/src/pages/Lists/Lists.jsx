@@ -76,8 +76,8 @@ const Lists = () => {
   }
 
   const orderOptions = {
-    name: 'A-Z',
-    lastAdded: 'Last added',
+    name: t('a_z'),
+    lastAdded: t('last_added'),
   };
   const renderOrderDropdown = () => {
     const items = [];
@@ -100,9 +100,9 @@ const Lists = () => {
   };
 
   const filterOptions = {
-    all: 'All',
-    public: 'Public',
-    private: 'Private',
+    all: t('all'),
+    public: t('_public'),
+    private: t('_private'),
   };
   const renderFilterDropdown = () => {
     const items = [];
@@ -131,7 +131,7 @@ const Lists = () => {
         <div className="lists-head">
           <h1>
             <Link to={`/@${username}`}>@{username}</Link>
-            {"'s lists"}
+            {t('lists_of')}
           </h1>
         </div>
         <section className="lists-main">

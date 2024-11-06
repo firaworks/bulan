@@ -19,9 +19,10 @@ const Footer = () => {
           <Link to="/about" className="footer-item">
             {t("footer.about")}
           </Link>
-          <a href={`mailto:${import.meta.env.VITE_EMAILCONTACT}`} className="footer-item">
+          <span className="footer-item">contact@bulan.mn</span>
+          {/* <a href={`mailto:${import.meta.env.VITE_EMAILCONTACT}`} className="footer-item">
             {t("footer.contact")}
-          </a>
+          </a> */}
         </div>
         <div className="footer-col">
           <div className="footer-title">{t("footer.social")}</div>

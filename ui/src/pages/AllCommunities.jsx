@@ -25,6 +25,7 @@ import {
 import LoginForm from '../views/LoginForm';
 import JoinButton from './Community/JoinButton';
 import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
 const prepareText = (isMobile = false) => {
   const [t, i18n] = useTranslation("global");
@@ -71,9 +72,9 @@ const AllCommunities = () => {
       <main>
         <div className="page-comms-header card card-padding">
           <h1>{t('all_communities.title')}</h1>
-          <RequestCommunityButton className="button-main is-m" isMobile>
+          {/* <RequestCommunityButton className="button-main is-m" isMobile>
             {t("all_communities.text_3")}
-          </RequestCommunityButton>
+          </RequestCommunityButton> */}
         </div>
         <div className="comms-list">
           {comms.map((community) => (
@@ -288,7 +289,7 @@ const ListItem = ({ community }) => {
           </a>
           <JoinButton className="comms-list-item-join" community={community} />
         </div>
-        <div className="comms-list-item-count">{`${community.noMembers} members`}</div>
+        <div className="comms-list-item-count">{`${community.noMembers} ${t('members')}`}</div>
         <div className="comms-list-item-about">
           <ShowMoreBox maxHeight="120px">
             <MarkdownBody>{community.about}</MarkdownBody>

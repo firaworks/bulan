@@ -367,7 +367,7 @@ export function useMuteUser({ userId, username }: { userId: string; username: st
   return {
     isMuted,
     toggleMute,
-    displayText: (isMuted ? 'Unmute' : 'Mute') + ` @${username}`,
+    displayText: `@${username}` + (isMuted ? t('unmute') : t('mute')),
   };
 }
 

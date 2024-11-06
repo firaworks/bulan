@@ -3,73 +3,81 @@ import StaticPage from '../components/StaticPage';
 
 const MarkdownGuide = () => {
   return (
-    <StaticPage className="page-markdown-guide" title="Markdown Guide">
+    <StaticPage className="page-markdown-guide" title="Маркдаун заавар">
       <div className="document">
-        <h1>Markdown guide</h1>
+        <h1>Маркдаун заавар</h1>
         <p>
-          {'We use '}
-          <a href="https://en.wikipedia.org/wiki/Markdown" target="_blank" rel="noreferrer">
-            Markdown
+          {'Манай сайт '}
+          <a href="https://mn.wikipedia.org/wiki/Markdown" target="_blank" rel="noreferrer">
+            Маркдаун
           </a>
-          {` to format posts and comments on ${import.meta.env.VITE_SITENAME}. We support `}
+          {` форматыг дэмждэг бөгөөд энэ нь постууд болон коммэнтууд дээр ажилладаг шүү.`}
+          <br />
+          {`Та манай сайт дээр `}
           <a href="https://commonmark.org/" target="_blank" rel="noreferrer">
             CommonMark
           </a>
-          {' and '}
+          {' болон '}
           <a href="https://github.github.com/gfm/" target="_blank" rel="noreferrer">
-            Github Flavored Markdown
+            Github
           </a>
-          {' (with the exception of image tags and raw HTML).'}
+          {'(HTML болон image tag-гүйгээр)-н маркдаун форматуудыг ашиглаж болно.'}
         </p>
-        <h2>The Basics</h2>
+        <h2>Энгийн форматууд:</h2>
         <table>
+          <thead>
+            <tr>
+              <th>Үүнийг хийхдээ</th>
+              <th>Ингэж хийнэ шүү</th>
+            </tr>
+          </thead>
           <tbody>
             <tr>
-              <td>Heading</td>
-              <td># heading</td>
+              <td>Гарчиг</td>
+              <td># гарчиг</td>
             </tr>
             <tr>
-              <td>Bold</td>
-              <td>**bold text**</td>
+              <td>Болд болгох</td>
+              <td>**хөөе Болд оо**</td>
             </tr>
             <tr>
-              <td>Italic</td>
-              <td>*italic text*</td>
+              <td>Италик буюу налуу болгох</td>
+              <td>*налцгаах уу?*</td>
             </tr>
             <tr>
-              <td>List</td>
+              <td>Жагсаалт хэлбэрээр оруулах</td>
               <td>
-                - Item 1 <br />- Item 2
+                - нэг юм <br />- хоёр юм
               </td>
             </tr>
             <tr>
-              <td>Ordered list</td>
+              <td>Дугаартай жагсаалт</td>
               <td>
-                1. Item 1<br />
-                2. Item 2
+                1. нэг дэх юм<br />
+                2. хоёр дахь юм
               </td>
             </tr>
             <tr>
-              <td>Inline code</td>
-              <td>`some inline code`</td>
+              <td>Тухайн мөрөнд код хэлбэрээр харагдуулах</td>
+              <td>`энэ нөгөө keyboard-н 1-н тооны зүүн талд байдаг тэмдэгт шүү`</td>
             </tr>
             <tr>
-              <td>Code block</td>
+              <td>Код хэлбэрийн блок оруулж ирэх</td>
               <td>
                 ```
                 <br />
-                some code here
+                нөгөө тэмдэгтээсээ бүр 3-аар эхлээд, 3-аар хаана гэжүгаа...
                 <br />
                 ```
               </td>
             </tr>
             <tr>
-              <td>Link</td>
-              <td>[link-text](https://en.wikipedia.org)</td>
+              <td>Линк оруулах</td>
+              <td>[линк болж харагдах текст нь](https://mn.wikipedia.org)</td>
             </tr>
             <tr>
-              <td>Blockquote</td>
-              <td>{'> blockquote'}</td>
+              <td>Блок ишлэл</td>
+              <td>{'> зөв хүний үйлдэл нүднээс...🥹'}</td>
             </tr>
           </tbody>
         </table>

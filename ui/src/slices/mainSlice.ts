@@ -605,13 +605,7 @@ export const muteUser =
           }),
         });
         dispatch(mutesAdded(mutes));
-        dispatch(
-          snackAlert(
-            `Posts from @${username} won't appear on any of your feeds from now on.`,
-            null,
-            5000
-          )
-        );
+        dispatch(snackAlert(`@${username}${t('snack_alert.muted_user')}`, null, 5000));
       } catch (error) {
         dispatch(snackAlertError(error));
       }
@@ -626,7 +620,7 @@ export const unmuteUser =
         });
         if (res.ok) {
           dispatch(muteRemoved('user', userId));
-          dispatch(snackAlert(`Unmuted @${username}`, null));
+          dispatch(snackAlert(`@${username}${t('snack_alert.unmuted_user')}`, null));
         } else {
           throw new Error('Failed unmuting user: ' + (await res.text()));
         }

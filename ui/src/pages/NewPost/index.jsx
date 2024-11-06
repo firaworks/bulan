@@ -229,11 +229,11 @@ const NewPost = () => {
             images:
               postType === 'image'
                 ? images.map((image) => {
-                    return {
-                      imageId: image.id,
-                      caption: '',
-                    };
-                  })
+                  return {
+                    imageId: image.id,
+                    caption: '',
+                  };
+                })
                 : undefined,
             url: postType === 'link' ? link : undefined,
           }),
@@ -337,7 +337,7 @@ const NewPost = () => {
         <title>{isEditPost ? t("new_post.edit_post") : t("new_post.new_post")}</title>
       </Helmet>
       <div className="page-new-topbar">
-        <div className="page-new-topbar-title">{isEditPost ?  t("new_post.edit_post") : t("new_post.create_post")}</div>
+        <div className="page-new-topbar-title">{isEditPost ? t("new_post.edit_post") : t("new_post.create_post")}</div>
         <ButtonClose onClick={handleCancel} />
       </div>
       <div className="page-new-content">
@@ -426,7 +426,7 @@ const NewPost = () => {
             {postType === 'text' && (
               <Textarea
                 className="page-new-post-body"
-                placeholder="Post content goes here (optional)..."
+                placeholder={t('post_content_placeholder')}
                 value={body}
                 onChange={handleBodyChange}
                 onPaste={handleBodyPaste}
@@ -471,7 +471,7 @@ const NewPost = () => {
             {postType === 'link' && (
               <Textarea
                 className="page-new-post-body"
-                placeholder="Paste URL here..."
+                placeholder={t('new_post.paste_url')}
                 value={link}
                 onChange={handleLinkChange}
                 onPaste={handleLinkPaste}
@@ -486,11 +486,13 @@ const NewPost = () => {
             </div>
           )}
           <div className="new-page-help">
-            {'Use '}
             <Link to="/markdown_guide" target="_blank">
               {t("new_post.markdown")}
             </Link>
-            {' to format posts.'}
+            {' ' + t("new_post.markdown_desc") + ' '}
+            <Link to="/markdown_guide" target="_blank">
+              {t("instructions")}
+            </Link>
           </div>
           <div className="page-new-buttons is-no-m">
             <button className="button-main" onClick={handleSubmit} disabled={isSubmitDisabled}>
@@ -594,7 +596,7 @@ const ImageUploadArea = ({ isUploading, onImagesUpload, disabled = false }) => {
               disabled={disabled}
             />
             <div>{t("new_post.add_photo")}</div>
-            <div>{t("new_photo.drag")}</div>
+            <div>{t("new_post.drag")}</div>
           </>
         )}
         {disabled && <div>{t('new_post.max')}</div>}

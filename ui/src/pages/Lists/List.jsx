@@ -512,7 +512,7 @@ export const EditListForm = ({ list, onCancel, onSuccess }) => {
           <FormField>
             <Checkbox
               variant="switch"
-              label="Public"
+              label={t('_public')}
               checked={isPublic}
               onChange={(e) => setIsPublic(e.target.checked)}
             />
@@ -529,9 +529,9 @@ export const EditListForm = ({ list, onCancel, onSuccess }) => {
       </Form>
       <div className="modal-card-actions">
         <button className="button-main" onClick={handleSubmit} disabled={formDisabled}>
-          {list ? 'Save' : 'Create'}
+          {list ? t('save') : t('create')}
         </button>
-        <button onClick={onCancel}>{"cancel_button"}</button>
+        <button onClick={onCancel}>{t("cancel")}</button>
       </div>
     </>
   );
