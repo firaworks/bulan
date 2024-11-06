@@ -42,7 +42,7 @@ const NotificationItem = ({ notification, ...rest }) => {
           return (
             < >
               <Trans i18nKey="notifications.new_comment"
-                values={{ who: notif.commentAuthor, title: notif.post.title }}
+                values={{ who: `@${notif.commentAuthor}`, title: notif.post.title }}
                 components={{ bold: <b /> }}
               />
             </>
@@ -67,7 +67,7 @@ const NotificationItem = ({ notification, ...rest }) => {
             <>
               <Trans i18nKey="notifications.comment_reply"
                 values={{
-                  who: notif.commentAuthor,
+                  who: `@${notif.commentAuthor}`,
                   title: notif.post.title,
                 }}
                 components={{ bold: <b /> }}
