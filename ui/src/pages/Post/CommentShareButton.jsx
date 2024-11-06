@@ -10,9 +10,9 @@ export const CommentShareDropdownItems = ({ prefix = '', url }) => {
   const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
   const handleCopyURL = () => {
-    let text = 'Failed to copy link to clipboard.';
+    let text = t('copy_failed')
     if (copyToClipboard(publicURL(url))) {
-      text = 'Link copied to clipboard.';
+      text = t('copied_link')
     }
     dispatch(snackAlert(text, 'comment_link_copied'));
   };

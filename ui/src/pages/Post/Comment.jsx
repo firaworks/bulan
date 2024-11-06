@@ -623,7 +623,7 @@ const Comment = ({
                   )}
                   {showReport && (
                     <div className="dropdown-item" onClick={() => setReportModalOpen(true)}>
-                      {t("report.report")}
+                      {t('report')}
                     </div>
                   )}
                   {loggedIn && (

@@ -46,13 +46,13 @@ const ReportModal = ({
         });
         if (!res.ok) {
           if (res.status === 409) {
-            dispatch(snackAlert(t("report.alert_1") + " " + targetType));
+            dispatch(snackAlert(t('already_reported') + " " + targetType));
             return;
           } else {
             throw new APIError(res.status, await res.json());
           }
         }
-        dispatch(snackAlert(`${targetType[0].toUpperCase() + targetType.slice(1)} reported.`));
+        dispatch(snackAlert(`${targetType[0].toUpperCase() + targetType.slice(1)} ${t('reported')}.`));
       } catch (error) {
         dispatch(snackAlertError(error));
       } finally {
@@ -65,13 +65,13 @@ const ReportModal = ({
     <>
       {noButton ? null : (
         <button className={buttonClassName} onClick={() => setInnerOpen(true)} disabled={disabled}>
-          {t("report.report")}
+          {t('report')}
         </button>
       )}
       <Modal open={open} onClose={handleClose}>
         <div className="modal-card">
           <div className="modal-card-head">
-            <div className="modal-card-title">{t("report.report")} {targetType}</div>
+            <div className="modal-card-title">{t('report')} {targetType}</div>
             <ButtonClose onClick={handleClose} />
           </div>
           <div className="modal-card-content">
@@ -90,7 +90,7 @@ const ReportModal = ({
           </div>
           <div className="modal-card-actions">
             <button className="button-main" onClick={handleReport} disabled={selected === null}>
-              {t("report.report")}
+              {t('report')}
             </button>
             <button onClick={handleClose}>{t("cancel")}</button>
           </div>

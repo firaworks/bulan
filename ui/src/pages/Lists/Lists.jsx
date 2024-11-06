@@ -28,7 +28,7 @@ const Lists = () => {
 
   const handleSuccess = async () => {
     toggleNewListForm();
-    dispatch(snackAlert('List created!', 'success'));
+    dispatch(snackAlert(t('list_created'), 'success'));
     const updatedLists = await mfetchjson(
       `/api/users/${username}/lists?sort=${order}&filter=${filter}`
     );

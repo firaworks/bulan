@@ -54,7 +54,7 @@ const Banned = ({ community }) => {
         } else if (res.status === 409) {
           setModalError(`${username} ${t("mod.ban.alert_2")}`);
         } else if (res.status === 403) {
-          dispatch(snackAlert('Forbidden.', 'forbidden'));
+          dispatch(snackAlert(t('forbidden'), 'forbidden'));
         } else {
           throw new APIError(res.status, await res.json());
         }

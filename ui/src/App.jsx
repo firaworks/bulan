@@ -123,7 +123,7 @@ const App = () => {
         dispatch(listsAdded(initial.lists));
       } catch (err) {
         console.error(err);
-        dispatch(snackAlert('Something went wrong.'));
+        dispatch(snackAlert(i18next.t('generic_error')));
       }
       setLoading('loaded');
     })();

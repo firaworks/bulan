@@ -86,8 +86,8 @@ const NotificationsView = () => {
       await markAsSeen(type);
       dispatch(notificationsAllSeen(type));
 
-      let text = 'All notifications are marked as seen.';
-      if (type === 'new_votes') text = 'All upvote notifications are marked as seen.';
+      let text = t('snack_alert.all_notifications_marked_seen')
+      if (type === 'new_votes') text = t('snack_alert.all_upvotes_marked_seen')
       dispatch(snackAlert(text));
     } catch (error) {
       dispatch(snackAlertError(error));
@@ -98,7 +98,7 @@ const NotificationsView = () => {
       const res = await mfetch(`/api/notifications?action=deleteAll`, { method: 'POST' });
       if (!res.ok) throw new APIError(res.status, await res.text());
       dispatch(notificationsAllDeleted());
-      dispatch(snackAlert('All notifications are deleted.'));
+      dispatch(snackAlert(t('snack_alert.all_notifications_deleted')));
     } catch (error) {
       dispatch(snackAlertError(error));
     }

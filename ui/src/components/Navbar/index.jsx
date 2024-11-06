@@ -40,7 +40,7 @@ const Navbar = ({ offline = false }) => {
         method: 'POST',
       });
       if (!res.ok) {
-        snackAlert('Failed to logout. Something went wrong.');
+        snackAlert(t('logout_failure'))
         return;
       }
       window.location.reload();

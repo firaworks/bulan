@@ -37,9 +37,9 @@ const PostShareButton = ({ post }) => {
 
   const url = `${window.location.origin}/${post.communityName}/post/${post.publicId}`;
   const handleCopyURL = () => {
-    let text = 'Failed to copy link to clipboard.';
+    let text = t('copy_failed')
     if (copyToClipboard(url)) {
-      text = 'Link copied to clipboard.';
+      text = t('copied_link')
     }
     dispatch(snackAlert(text, 'pl_copied'));
   };
