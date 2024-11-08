@@ -34,7 +34,7 @@ const Mods = ({ community }) => {
         alert(`${newModName} ${t("mod.add_alert_1")} ${community.name}`);
         window.location.reload();
       } else if (res.status === 404) {
-        alert(t("mod.add.user_not_found"));
+        alert(t('mod.user_not_found'));
       } else {
         throw new Error(await res.text());
       }
@@ -45,16 +45,13 @@ const Mods = ({ community }) => {
 
   const handleRemoveMod = async (username) => {
     if (
-      !confirm(`${t("mod.add.alert_2")} ${username} ${t("mod.add.alert_3")} ${community.name}?`)
+      !confirm(`@${username}${t("mod.mod_remove_confirm")}?`)
     ) {
       return;
     }
     try {
-      const res = await mfetch(`${baseURL}/${username}`, {
-        method: 'DELETE',
-      });
       if (res.ok) {
-        alert(`${username} ${t("mod.add.alert_3")}`);
+        alert(`@${username}${t("mod.mod_removed")}`);
         window.location.reload();
       } else {
         throw new Error(await res.text());
@@ -77,26 +74,26 @@ const Mods = ({ community }) => {
       <Modal open={addModOpen} onClose={handleAddModClose}>
         <div className="modal-card">
           <div className="modal-card-head">
-            <div className="modal-card-title">{t("mod.add.title")}</div>
+            <div className="modal-card-title">{t('mod_add_title')}</div>
             <ButtonClose onClick={handleAddModClose} />
           </div>
           <form className="modal-card-content" onSubmit={handleAddMod}>
-            <FormField label="Username" errors={null}>
+            <FormField label={t('username')} errors={null}>
               <Input value={newModName} onChange={(e) => setNewModName(e.target.value)} autoFocus />
             </FormField>
           </form>
           <div className="modal-card-actions">
             <button className="button-main" disabled={newModName === ''} onClick={handleAddMod}>
-              {t("mod.add.action_1")}
+              {t("mod.add")}
             </button>
             <button onClick={handleAddModClose}>{t("cancel_button")}</button>
           </div>
         </div>
       </Modal>
       <div className="modtools-content-head">
-        <div className="modtools-title">{t("mod.data.mods")}</div>
+        <div className="modtools-title">{t('mod.mods')}</div>
         <button className="button-main" onClick={() => setAddModOpen(true)}>
-          {t("mod.add.action_1")}
+          {t("mod.add")}
         </button>
       </div>
       <div className="modtools-mods-list">
@@ -108,7 +105,7 @@ const Mods = ({ community }) => {
               <div className="table-column">
                 {(myPos <= index || user.isAdmin) && (
                   <button className="button-red" onClick={() => handleRemoveMod(mod.username)}>
-                    {t("mod.add.action_2")}
+                    {t('mod.remove')}
                   </button>
                 )}
               </div>

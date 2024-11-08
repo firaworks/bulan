@@ -160,7 +160,7 @@ const Sidebar = ({ isMobile = false }) => {
                   fill="currentColor"
                 />
               </svg>
-              <span>{homeFeed === 'all' ? t("sidebar.subscriptions") : 'All'}</span>
+              <span>{homeFeed === 'all' ? t('sidebar.subscriptions') : 'All'}</span>
             </Link>
           )}
           <Link to="/communities" className="sidebar-item with-image" onClick={handleClose}>

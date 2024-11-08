@@ -102,7 +102,7 @@ const Banned = ({ community }) => {
               handleBanClick();
             }}
           >
-            <FormField label="Username" error={modalError}>
+            <FormField label={t('username')} error={modalError}>
               <Input value={username} onChange={(e) => setUsername(e.target.value)} autoFocus />
             </FormField>
           </form>

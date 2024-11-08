@@ -15,18 +15,18 @@ const Comment = ({ comment, onRemoveFromList = null }) => {
         <Link className="comment-username" to={`/@${comment.username}`}>
           {`@${comment.username}`}
         </Link>
-        <span>{t("user.comment.text_1")}</span>
+        <span>{t('ni')}</span>
+        <Link to={`/${comment.communityName}`} style={{ color: 'inherit', fontWeight: '600' }}>
+          {comment.communityName}
+        </Link>
+        <span>{t('of_community')}</span>
         <Link
           className="comment-post-title"
           to={`/${comment.communityName}/post/${comment.postPublicId}`}
         >
           {comment.postTitle}
         </Link>
-        <span>{t('in')}</span>
-        {/*<CommunityLink name={comment.communityName} />*/}
-        <Link to={`/${comment.communityName}`} style={{ color: 'inherit', fontWeight: '600' }}>
-          {comment.communityName}
-        </Link>
+        <span>{t('left_comment_on_post')}.</span>
         <span>
           <TimeAgo time={comment.createdAt} />.
         </span>

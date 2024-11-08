@@ -10,9 +10,10 @@ const PostDeleteModal = ({ open, onClose, onDelete, postType, canDeleteContent =
   const [deleteContent, setDeleteContent] = useState(false);
 
   const showCheckbox = canDeleteContent && (postType === 'image' || postType === 'link');
-  let label = 'Delete ';
-  if (postType === 'image') label += 'image too.';
-  else if (postType === 'link') label += 'link too.';
+
+  let label = t('also_delete');
+  if (postType === 'image') label = t('image_too') + label;
+  else if (postType === 'link') label = t('link_too') + label;
 
   return (
     <Modal open={open} onClose={onClose}>

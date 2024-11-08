@@ -13,11 +13,11 @@ const ReportsView = ({ title, noPosts, noComments, filter, setFilter, children }
     },
     {
       filter: 'posts',
-      text: t("mod.report.posts") + " " +  (noAll == null ? '' : ` (${noPosts})`),
+      text: t("mod.report.posts") + " " + (noAll == null ? '' : ` (${noPosts})`),
     },
     {
       filter: 'comments',
-      text: t("post.report.comments") + " " + (noAll == null ? '' : ` (${noComments})`),
+      text: t("mod.report.comments") + " " + (noAll == null ? '' : ` (${noComments})`),
     },
   ];
 

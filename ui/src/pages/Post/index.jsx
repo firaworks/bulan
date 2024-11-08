@@ -268,15 +268,15 @@ const Post = () => {
   const getDeletedBannerText = (post) => {
     if (post.deletedContent) {
       if (post.deletedAs === post.deletedContentAs) {
-        return `${t("new_comment.alert_7")} ${post.type === 'image' ? 'image(s)' : post.type
-          } ${t("new_comment.alert_8")} ${userGroupSingular(post.deletedAs, true)}.`;
+        return `${t("new_comment.alert_7")} ${post.type === 'image' ? t('image_too') : post.type
+          } ${t("new_comment.alert_8")} (${userGroupSingular(post.deletedAs, true)})`;
       } else {
         return `${t("new_comment.alert_9")} ${userGroupSingular(post.deletedAs, true)} and its ${post.type
           } ${t("new_comment.alert_10")}
         by ${userGroupSingular(post.deletedContentAs, true)}.`;
       }
     }
-    return `${t("new_comment.alert_11")} ${userGroupSingular(post.deletedAs, true)}.`;
+    return `${t("new_comment.alert_11")} (${userGroupSingular(post.deletedAs, true)})`;
   };
 
   const deletePostContentButtonText = `${t('_delete')} ${post.type === 'image' ? (post.images.length > 1 ? 'images' : 'image') : post.type
@@ -378,7 +378,7 @@ const Post = () => {
                       className="post-card-banner is-locked"
                       style={{ color: 'var(--color-red)' }}
                     >
-                      {t("new_comment.text_1")} {userGroupSingular(post.lockedByGroup)}.
+                      {t("new_comment.text_1")} ({userGroupSingular(post.lockedByGroup)})
                     </div>
                   )}
                   {post.deleted && (
@@ -447,7 +447,7 @@ const Post = () => {
                         className="button-clear dropdown-item"
                         onClick={() => handleLock('mods')}
                       >
-                        {isLocked ? 'Unlock' : 'Lock'}
+                        {isLocked ? t('unlock') : t('lock')}
                       </button>
                       <button
                         className="button-clear dropdown-item"

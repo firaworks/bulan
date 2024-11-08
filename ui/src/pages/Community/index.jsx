@@ -95,7 +95,7 @@ const Community = () => {
     return (
       <div className="card card-sub card-mods">
         <div className="card-head">
-          <div className="card-title">{t('mod.data.moderators')}</div>
+          <div className="card-title">{t('mod.moderators')}</div>
         </div>
         <div className="card-content">
           <ul>
@@ -131,7 +131,7 @@ const Community = () => {
         </a>
         {(community.userMod || (user && user.isAdmin)) && (
           <Link className="button border-radius-0" to={`/${name}/modtools`}>
-            {`MOD TOOLS` + (!community.userMod ? ' (ADMIN)' : '')}
+            {t('mod_tools') + (!community.userMod ? ' (ADMIN)' : '')}
           </Link>
         )}
       </>

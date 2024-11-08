@@ -74,12 +74,12 @@ const Modtools = () => {
   return (
     <div className="page-content wrap modtools">
       <Helmet>
-        <title>{t("mod.data.modtools")}</title>
+        <title>{t('mod_tools')}</title>
       </Helmet>
       <Sidebar />
       <div className="modtools-head">
         <h1>
-          <Link to={`/${communityName}`}>{communityName} </Link>{t("mod.data.modtools")}
+          <Link to={`/${communityName}`}>{communityName} </Link>{t('mod_tools')}
         </h1>
       </div>
       <div className="modtools-dashboard">
@@ -88,46 +88,46 @@ const Modtools = () => {
             className={isActiveCls('sidebar-item', pathname === '/modtools/settings')}
             to={`/${communityName}/modtools/settings`}
           >
-            {t("mod.data.community_settings")}
+            {t("mod.community_settings")}
           </Link>
-          <div className="sidebar-topic">{t("mod.tools.content")}</div>
+          <div className="sidebar-topic">{t("mod.content")}</div>
           <Link
             className={isActiveCls('sidebar-item', pathname === '/modtools/reports')}
             to={`/${communityName}/modtools/reports`}
           >
-            {t("mod.tools.reports")}
+            {t("mod.reports")}
           </Link>
           <Link
             className={isActiveCls('sidebar-item', pathname === '/modtools/removed')}
             to={`/${communityName}/modtools/removed`}
           >
-            {t("mod.tools.removed")}
+            {t("mod.removed")}
           </Link>
           <Link
             className={isActiveCls('sidebar-item', pathname === '/modtools/locked')}
             to={`/${communityName}/modtools/locked`}
           >
-            {t("mod.tools.locked")}
+            {t("mod.locked")}
           </Link>
-          <div className="sidebar-topic">{t("mod.tools.users")}</div>
+          <div className="sidebar-topic">{t("mod.users")}</div>
           <Link
             className={isActiveCls('sidebar-item', pathname === '/modtools/banned')}
             to={`/${communityName}/modtools/banned`}
           >
-            {t("mod.tools.banned")}
+            {t("mod.banned")}
           </Link>
           <Link
             className={isActiveCls('sidebar-item', pathname === '/modtools/mods')}
             to={`/${communityName}/modtools/mods`}
           >
-            {t("mod.tools.moderators")}
+            {t("mod.moderators")}
           </Link>
-          <div className="sidebar-topic">{t("mod.tools.rules")}</div>
+          <div className="sidebar-topic">{t("mod.rules")}</div>
           <Link
             className={isActiveCls('sidebar-item', pathname === '/modtools/rules')}
             to={`/${communityName}/modtools/rules`}
           >
-            {t("mod.tools.rules")}
+            {t("mod.rules")}
           </Link>
         </div>
         <Switch>
@@ -141,10 +141,10 @@ const Modtools = () => {
             <Reports community={community} />
           </Route>
           <Route path={`${path}/removed`}>
-            <Removed community={community} filter="deleted" title="Removed" />
+            <Removed community={community} filter="deleted" title={t('mod.removed')} />
           </Route>
           <Route path={`${path}/locked`}>
-            <Removed community={community} filter="locked" title="Locked" />
+            <Removed community={community} filter="locked" title={t('mod.locked')} />
           </Route>
           <Route path={`${path}/banned`}>
             <Banned community={community} />

@@ -1,0 +1,1 @@
+update lists set display_name = "Тэмдэглэл" where display_name = "Bookmarks";

@@ -10,7 +10,7 @@ import { ButtonClose } from './Button';
 import { FormField } from './Form';
 import { InputWithCount, useInputMaxLength } from './Input';
 import Modal from './Modal';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 const CreateCommunity = ({ open, onClose }) => {
   const [name, handleNameChange] = useInputUsername(communityNameMaxLength);
@@ -44,7 +44,7 @@ const CreateCommunity = ({ open, onClose }) => {
         const error = await res.json();
         if (error.code === 'not_enough_points') {
           setFormError(
-            t("create_community.alert_3") + 
+            t("create_community.alert_3") +
             ` ${import.meta.env.VITE_FORUMCREATIONREQPOINTS} ` + t("create_community.alert_4")
           );
         } else if (error.code === 'max_limit_reached') {
@@ -68,7 +68,10 @@ const CreateCommunity = ({ open, onClose }) => {
           <ButtonClose onClick={onClose} />
         </div>
         <div className="form modal-card-content flex-column inner-gap-1">
-          <FormField label={t("create_community.name_label")} description={t("create_community.name_description")}>
+          <FormField label={t("create_community.name_label")} description={
+            <Trans i18nKey="create_community.name_description"
+              values={{ addr: name }} components={{ bold: <b />, s: <small /> }}
+            />}>
             <InputWithCount
               value={name}
               onChange={handleNameChange}
@@ -101,7 +104,7 @@ const CreateCommunity = ({ open, onClose }) => {
           </FormField>
         </div>
       </div>
-    </Modal>
+    </Modal >
   );
 };
 

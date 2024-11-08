@@ -39,7 +39,7 @@ const BanUserButton = ({ user }) => {
         return;
       }
     } else {
-      if (!window.confirm(t("user.ban.confirm_1"))) return;
+      if (!window.confirm(t('confirm'))) return;
     }
     try {
       setBanInProgress(true);

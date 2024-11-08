@@ -65,7 +65,7 @@ const PostCardHeadingDetails = ({
       <div className="left">
         <CommunityLink name={post.communityName} proPic={post.communityProPic} />
         <div className="post-card-heading-by">
-          <span>{t("post.heading.posted_by") }</span>
+          <span>{t("post.heading.posted_by")}</span>
           <UserLink
             className={post.userDeleted && viewerAdmin ? 'is-red' : ''}
             username={isUsernameGhost ? 'Ghost' : post.username}
@@ -91,7 +91,7 @@ const PostCardHeadingDetails = ({
             short
           />
         )}
-        {isPinned && <div className="post-card-heading-pinned">Pinned</div>}
+        {isPinned && <div className="post-card-heading-pinned">{t('pinned')}</div>}
       </div>
       <div className="right">
         {loggedIn && (

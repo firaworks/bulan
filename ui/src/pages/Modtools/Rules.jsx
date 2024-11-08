@@ -86,7 +86,7 @@ const Rules = ({ community }) => {
   };
 
   const handleDeleteRule = async (rule) => {
-    if (confirm(t("mod.rules.alert_1"))) {
+    if (confirm(t('confirm'))) {
       try {
         await mfetchjson(`/api/communities/${community.id}/rules/${rule.id}`, {
           method: 'DELETE',
@@ -102,7 +102,7 @@ const Rules = ({ community }) => {
     return null;
   }
 
-  const modalTitle = isEditRule ? t("mod.rules.action_2") : t("mod.rules.action_1");
+  const modalTitle = isEditRule ? t('mod.rule_edit') : t('mod.rule_add');
   const modalDisabled = rule === '';
 
   return (
@@ -120,10 +120,10 @@ const Rules = ({ community }) => {
               if (!modalDisabled) handleSave();
             }}
           >
-            <FormField label={t("mod.rules.label_1")}>
+            <FormField label={t('mod.rules')}>
               <InputWithCount maxLength={ruleMaxLength} value={rule} onChange={setRule} autoFocus />
             </FormField>
-            <FormField label={t("mod.rules.label_2")}>
+            <FormField label={t('mod.rule_desc')}>
               <InputWithCount
                 textarea
                 rows="5"
@@ -143,9 +143,9 @@ const Rules = ({ community }) => {
         </div>
       </Modal>
       <div className="modtools-content-head">
-        <div className="modtools-title">{t("mod.rules.label_1")}</div>
+        <div className="modtools-title">{t('mod.rules')}</div>
         <button className="button-main" onClick={handleAddRule}>
-          {t("mod.rules.action_1")}
+          {t('mod.rule_add')}
         </button>
       </div>
       <div className="modtools-rules-list">

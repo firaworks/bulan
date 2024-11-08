@@ -139,7 +139,7 @@ const Settings = ({ community }) => {
   return (
     <div className="modtools-content modtools-settings">
       <div className="modtools-content-head">
-        <div className="modtools-title">Community settings</div>
+        <div className="modtools-title">{t('mod.community_settings')}</div>
       </div>
       {/*<div className="flex-column inner-gap-1">*/}
       <div className="form">
@@ -199,7 +199,7 @@ const Settings = ({ community }) => {
             onChange={setDescription}
           />
         </FormField>
-        <FormField label="NSFW">
+        <FormField label={t('nsfw')}>
           <Checkbox
             variant="switch"
             label={t("mod.settings.label_4")}
