@@ -2,13 +2,16 @@ package core
 
 import (
 	"context"
+	"crypto/rand"
 	"crypto/sha1"
 	"database/sql"
+	"encoding/base64"
 	"encoding/hex"
 	"errors"
 	"fmt"
 	"log"
 	"net/http"
+	"net/mail"
 	"slices"
 	"strings"
 	"sync"
@@ -300,6 +303,18 @@ func GetUserByEmail(ctx context.Context, db *sql.DB, email string, viewer *uid.I
 	}
 	return users[0], err
 }
+func GetUserByPasswordResetToken(ctx context.Context, db *sql.DB, token string, viewer *uid.ID) (*User, error) {
+	rows, err := db.QueryContext(ctx, buildSelectUserQuery("WHERE users.password_reset_token = ?"), token)
+	if err != nil {
+		return nil, err
+	}
+
+	users, err := scanUsers(ctx, db, rows, viewer)
+	if err != nil {
+		return nil, err
+	}
+	return users[0], err
+}
 
 // scanUsers returns errUserNotFound if no rows can be found.
 func scanUsers(ctx context.Context, db *sql.DB, rows *sql.Rows, viewer *uid.ID) ([]*User, error) {
@@ -436,20 +451,28 @@ func RegisterUser(ctx context.Context, db *sql.DB, username, email, password str
 		return nil, err
 	}
 
-	// Note: Thet email address is not checked to be a valid email address. Any
-	// string can be stored as an email address currently.
-	nullEmail := msql.NullString{}
-	if email != "" {
-		nullEmail.Valid = true
-		nullEmail.String = email
+	if email == "" {
+		err = errors.New("email is required")
+	} else {
+		_, err := mail.ParseAddress(email)
+		if err != nil {
+			return nil, err
+		}
 	}
+	// // Note: Thet email address is not checked to be a valid email address. Any
+	// // string can be stored as an email address currently.
+	// nullEmail := msql.NullString{}
+	// if email != "" {
+	// 	nullEmail.Valid = true
+	// 	nullEmail.String = email
+	// }
 
 	id := uid.New()
 	query, args := msql.BuildInsertQuery("users", []msql.ColumnValue{
 		{Name: "id", Value: id},
 		{Name: "username", Value: username},
 		{Name: "username_lc", Value: strings.ToLower(username)},
-		{Name: "email", Value: nullEmail},
+		{Name: "email", Value: email},
 		{Name: "password", Value: hash},
 	})
 	_, err = db.ExecContext(ctx, query, args...)
@@ -828,6 +851,29 @@ func (u *User) ChangePassword(ctx context.Context, previousPass, newPass string)
 		return err
 	}
 	_, err = u.db.ExecContext(ctx, "UPDATE users SET password = ? WHERE id = ?", hash, u.ID)
+	u.Password = string(hash)
+	return err
+}
+
+func (u *User) ForgotPassword(ctx context.Context) (string, error) {
+	token, err := generateToken()
+	if err != nil {
+		return "", err
+	}
+	_, err = u.db.ExecContext(ctx, "UPDATE users SET password_reset_token = ?, password_reset_token_expiry = ? WHERE id = ? ", token, time.Now().Add(time.Hour*24), u.ID)
+	return token, err
+}
+
+func (u *User) ResetPassword(ctx context.Context, token, newPass string) error {
+	// // MatchLoginCredentials checks for deleted account status.
+	// if _, err := MatchLoginCredentials(ctx, u.db, u.Username, previousPass); err != nil {
+	// 	return err
+	// }
+	hash, err := HashPassword([]byte(newPass))
+	if err != nil {
+		return err
+	}
+	_, err = u.db.ExecContext(ctx, "UPDATE users SET password = ? WHERE id = ? AND password_reset_token_expiry > ?", hash, u.ID, time.Now())
 	u.Password = string(hash)
 	return err
 }
@@ -1307,4 +1353,13 @@ func GetUsers(ctx context.Context, db *sql.DB, limit int, next *string) ([]*User
 	}
 
 	return users, nextNext, nil
+}
+
+func generateToken() (string, error) {
+	tokenBytes := make([]byte, 32)
+	_, err := rand.Read(tokenBytes)
+	if err != nil {
+		return "", err
+	}
+	return base64.URLEncoding.EncodeToString(tokenBytes), nil
 }

@@ -73,6 +73,13 @@ type Config struct {
 	DiscordURL     string `yaml:"discordURL"`
 	GithubURL      string `yaml:"githubURL"`
 	SubstackURL    string `yaml:"substackURL"`
+
+	// added by Fira
+	SmtpHost     string `yaml:"smtpHost"`
+	SmtpPort     int    `yaml:"smtpPort"`
+	SmtpUser     string `yaml:"smtpUser"`
+	SmtpPassword string `yaml:"smtpPassword"`
+	SmtpSender   string `yaml:"smtpSender"`
 }
 
 // Parse parses the yaml file at path and returns a Config.

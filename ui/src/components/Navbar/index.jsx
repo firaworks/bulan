@@ -20,6 +20,7 @@ import { ButtonHamburger, ButtonNotifications } from '../Button';
 import Dropdown from '../Dropdown';
 import Search from './Search';
 import { useTranslation } from "react-i18next";
+import favicon from '../../assets/imgs/favicon.png';
 
 const Navbar = ({ offline = false }) => {
 
@@ -109,9 +110,10 @@ const Navbar = ({ offline = false }) => {
           <Link
             to="/"
             className="navbar-logo"
-            style={{ fontSize: '1.65rem' }}
+            style={{ fontSize: '1.65rem', wordBreak: 'keep-all', display: 'inline-flex' }}
             onClick={handleLogoClick}
           >
+            <img alt={`Bulan.mn`} src={favicon} style={{ height: 25, width: 25, marginRight: 4 }} />
             {import.meta.env.VITE_SITENAME}
           </Link>
           <Search />

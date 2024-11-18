@@ -2,7 +2,10 @@ package server
 
 import (
 	"database/sql"
+	"errors"
+	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -15,6 +18,7 @@ import (
 	"github.com/discuitnet/discuit/internal/httputil"
 	"github.com/discuitnet/discuit/internal/uid"
 	"github.com/gorilla/mux"
+	"gopkg.in/mail.v2"
 )
 
 // /api/users/{username} [GET]
@@ -275,6 +279,90 @@ func (s *Server) signup(w *responseWriter, r *request) error {
 
 	w.WriteHeader(http.StatusCreated)
 	return w.writeJSON(user)
+}
+
+// /api/_pw_request_reset [POST]
+func (s *Server) requestPasswordReset(w *responseWriter, r *request) error {
+	if r.loggedIn {
+		var err = &httperr.Error{
+			HTTPStatus: http.StatusFound,
+			Code:       "already_logged_in",
+			Message:    "User is already logged in.",
+		}
+		return err
+	}
+	values, err := r.unmarshalJSONBodyToStringsMap(true)
+	if err != nil {
+		return err
+	}
+	username := values["username"]
+	user, err := core.GetUserByUsername(r.ctx, s.db, username, nil)
+	if err != nil {
+		user, err = core.GetUserByEmail(r.ctx, s.db, username, nil)
+		if err != nil {
+			return err
+		}
+	}
+	if user != nil && user.Email.Valid {
+		log.Print("found the user", user.Username, time.Now(), time.Now().Add(time.Hour*24))
+		token, err := user.ForgotPassword(r.ctx)
+		if err != nil {
+			return err
+		}
+		title := "Нууц үгээ солино гэснүүдээ? 🔐"
+		resetUrl := "https://bulan.mn/reset-password/" + token
+		body := fmt.Sprint(`
+Та нууц үгээ солих хүсэлт гаргасан уу? Тийм бол <a href="`, resetUrl, `">энд дарна уу</a>
+<br/>
+Дарах боломжгүй бол та линкийг "копидож" аваад браузераар орно уу: <br/>`, resetUrl, `
+<br/><br/>Хэрвээ та нууц үгээ солих хүсэлт гаргаагүй бол энэхүү имейл-г тоохгүй байж болно өө...`)
+		err = s.sendMail(user.Email.String, title, body)
+		if err != nil {
+			return httperr.NewBadRequest("unable-to_email", "could not send email")
+		} else {
+			return w.writeJSON(user)
+		}
+	}
+	return httperr.NewNotFound("user-not-found", "user not found")
+}
+
+// /api/_pw_reset [POST]
+func (s *Server) passwordReset(w *responseWriter, r *request) error {
+	if r.loggedIn {
+		var err = &httperr.Error{
+			HTTPStatus: http.StatusFound,
+			Code:       "already_logged_in",
+			Message:    "User is already logged in.",
+		}
+		return err
+	}
+	values, err := r.unmarshalJSONBodyToStringsMap(true)
+	if err != nil {
+		return err
+	}
+	token := values["token"]
+	password := values["password"]
+	passwordRepeat := values["passwordRepeat"]
+	log.Print(token, password, passwordRepeat)
+	if password != passwordRepeat {
+		var err = &httperr.Error{
+			HTTPStatus: http.StatusBadRequest,
+			Code:       "password_mismatch",
+			Message:    "User provided password and password repeat do not match.",
+		}
+		return err
+	}
+	user, err := core.GetUserByPasswordResetToken(r.ctx, s.db, token, nil)
+	if err != nil {
+		return err
+	}
+	if user != nil {
+		err = user.ResetPassword(r.ctx, token, password)
+		if err != nil {
+			return err
+		}
+	}
+	return w.writeString(`{"success":true}`)
 }
 
 // /api/_user [GET]
@@ -610,4 +698,21 @@ func (s *Server) addBadge(w *responseWriter, r *request) error {
 	}
 
 	return w.writeJSON(user.Badges)
+}
+
+func (s *Server) sendMail(email, title, body string) error {
+	if s.config.SmtpHost != "" &&
+		s.config.SmtpPort != 0 &&
+		s.config.SmtpUser != "" &&
+		s.config.SmtpPassword != "" &&
+		s.config.SmtpSender != "" {
+		d := mail.NewDialer(s.config.SmtpHost, s.config.SmtpPort, s.config.SmtpUser, s.config.SmtpPassword)
+		msg := mail.NewMessage()
+		msg.SetHeader("From", s.config.SmtpSender)
+		msg.SetHeader("To", email)
+		msg.SetHeader("Subject", title)
+		msg.SetBody("text/html", body)
+		return d.DialAndSend(msg)
+	}
+	return errors.New("unable to send email")
 }

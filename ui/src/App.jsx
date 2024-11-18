@@ -14,6 +14,7 @@ import NotificationsView from './components/Navbar/NotificationsView';
 import SaveToListModal from './components/SaveToListModal';
 import Sidebar from './components/Sidebar';
 import Signup from './components/Signup';
+import PasswordReset from './components/PasswordReset';
 import Snacks from './components/Snacks';
 import Elements from './Elements';
 import { isDeviceStandalone, mfetchjson } from './helper';
@@ -47,6 +48,7 @@ import {
   loginModalOpened,
   mutesAdded,
   noUsersUpdated,
+  pwResetModalOpened,
   reportReasonsUpdated,
   sidebarCommunitiesUpdated,
   signupModalOpened,
@@ -56,6 +58,9 @@ import {
 } from './slices/mainSlice';
 import LoginForm from './views/LoginForm';
 import i18next from 'i18next';
+import ResetPassword from './pages/ResetPassword';
+import PasswordResetPrompt from './components/PasswordResetPrompt';
+
 
 // Value taken from _mixins.scss file.
 const tabletBreakpoint = 1170;
@@ -193,6 +198,7 @@ const App = () => {
 
   const loginModalOpen = useSelector((state) => state.main.loginModalOpen);
   const signupModalOpen = useSelector((state) => state.main.signupModalOpen);
+  const pwResetModalOpen = useSelector((state) => state.main.pwResetModalOpen);
 
   const createCommunityOpen = useSelector((state) => state.main.createCommunityModalOpen);
 
@@ -255,6 +261,7 @@ const App = () => {
       <SaveToListModal />
       <LoginPrompt />
       <Signup open={signupModalOpen} onClose={() => dispatch(signupModalOpened(false))} />
+      <PasswordResetPrompt open={pwResetModalOpen} onClose={() => dispatch(pwResetModalOpened(false))} />
       <Modal
         open={loginModalOpen}
         onClose={() => dispatch(loginModalOpened(false))}
@@ -301,6 +308,9 @@ const AppSwitch = () => {
         </ProtectedRoute>
         <Route exact path="/login">
           <Login />
+        </Route>
+        <Route exact path="/reset-password/:token">
+          <ResetPassword />
         </Route>
         <Route exact path={['/', '/subscriptions', '/all']}>
           <Home />

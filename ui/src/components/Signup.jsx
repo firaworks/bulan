@@ -13,8 +13,6 @@ import Input, { InputPassword, InputWithCount } from './Input';
 import Modal from './Modal';
 import { useTranslation } from 'react-i18next';
 
-
-
 const Signup = ({ open, onClose }) => {
   const dispatch = useDispatch();
   const [t, i18n] = useTranslation("global");
@@ -96,7 +94,7 @@ const Signup = ({ open, onClose }) => {
     let errFound = false;
     if (!username) {
       errFound = true;
-      setUsernameError(errors[0]);
+      setUsernameError(t('username_cannot_be_empty'));
     } else if (username.length < 4) {
       errFound = true;
       setUsernameError(errors[2]);
@@ -117,7 +115,10 @@ const Signup = ({ open, onClose }) => {
       errFound = true;
       setRepeatPasswordError(errors[6]);
     }
-    if (email) {
+    if (!email) {
+      errFound = true;
+      setEmailError(t('email_cannot_be_empty'));
+    } else {
       if (!validEmail(email)) {
         errFound = true;
         setEmailError(errors[3]);

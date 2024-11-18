@@ -106,6 +106,8 @@ func New(db *sql.DB, conf *config.Config) (*Server, error) {
 	r.Handle("/api/_login", s.withHandler(s.login)).Methods("POST")
 	r.Handle("/api/_signup", s.withHandler(s.signup)).Methods("POST")
 	r.Handle("/api/_user", s.withHandler(s.getLoggedInUser)).Methods("GET")
+	r.Handle("/api/_pw_request_reset", s.withHandler(s.requestPasswordReset)).Methods("POST")
+	r.Handle("/api/_pw_reset", s.withHandler(s.passwordReset)).Methods("POST")
 
 	r.Handle("/api/users/{username}", s.withHandler(s.getUser)).Methods("GET")
 	r.Handle("/api/users/{username}", s.withHandler(s.deleteUser)).Methods("DELETE")

@@ -5,8 +5,8 @@ import { useLocation } from 'react-router-dom';
 import { Form, FormField } from '../components/Form';
 import Input, { InputPassword } from '../components/Input';
 import { APIError, mfetch } from '../helper';
-import { loginModalOpened, signupModalOpened, snackAlertError } from '../slices/mainSlice';
-import { useTranslation } from 'react-i18next'; 
+import { loginModalOpened, pwResetModalOpened, signupModalOpened, snackAlertError } from '../slices/mainSlice';
+import { useTranslation } from 'react-i18next';
 
 
 const LoginForm = ({ isModal = false }) => {
@@ -72,6 +72,12 @@ const LoginForm = ({ isModal = false }) => {
     dispatch(loginModalOpened(false));
     dispatch(signupModalOpened());
   };
+  const handleOnPasswordReset = (e) => {
+    e.preventDefault();
+    dispatch(loginModalOpened(false));
+    dispatch(signupModalOpened(false));
+    dispatch(pwResetModalOpened());
+  };
 
   return (
     <Form className="login-box modal-card-content" onSubmit={handleLoginSubmit}>
@@ -102,6 +108,12 @@ const LoginForm = ({ isModal = false }) => {
           {t("login_view.text_1")}
         </button>
       </FormField>
+
+      <br></br>
+      <button className="button-link" onClick={handleOnPasswordReset}>
+        {t('forgot_password')}
+      </button>
+
     </Form>
   );
 };

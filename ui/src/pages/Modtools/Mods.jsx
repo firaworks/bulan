@@ -31,7 +31,7 @@ const Mods = ({ community }) => {
         }),
       });
       if (res.ok) {
-        alert(`${newModName} ${t("mod.add_alert_1")} ${community.name}`);
+        alert(`${newModName} ${t("mod.mod_added")}`);
         window.location.reload();
       } else if (res.status === 404) {
         alert(t('mod.user_not_found'));
@@ -50,6 +50,9 @@ const Mods = ({ community }) => {
       return;
     }
     try {
+      const res = await mfetch(`${baseURL}/${username}`, {
+        method: 'DELETE',
+      });
       if (res.ok) {
         alert(`@${username}${t("mod.mod_removed")}`);
         window.location.reload();
@@ -74,7 +77,7 @@ const Mods = ({ community }) => {
       <Modal open={addModOpen} onClose={handleAddModClose}>
         <div className="modal-card">
           <div className="modal-card-head">
-            <div className="modal-card-title">{t('mod_add_title')}</div>
+            <div className="modal-card-title">{t('mod.mod_add_title')}</div>
             <ButtonClose onClick={handleAddModClose} />
           </div>
           <form className="modal-card-content" onSubmit={handleAddMod}>
