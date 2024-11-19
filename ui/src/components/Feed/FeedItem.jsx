@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 const FeedItem = ({
@@ -45,7 +46,7 @@ const FeedItem = ({
 FeedItem.propTypes = {
   itemKey: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   height: PropTypes.number,
   onHeightChange: PropTypes.func.isRequired,
   keepRenderedHtml: PropTypes.bool,

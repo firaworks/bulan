@@ -1,5 +1,6 @@
 import { ThunkDispatch } from 'redux-thunk';
 import { APIError, mfetch, mfetchjson } from '../helper';
+import { getDevicePreference, setDevicePreference } from '../pages/Settings/devicePrefs';
 import { Community, List, Mute, Mutes, Notification, User } from '../serverTypes';
 import { AppDispatch, RootState, UnknownAction } from '../store';
 import { communitiesAdded } from './communitiesSlice';
@@ -18,6 +19,18 @@ export interface NotificationsResponse {
   next: string;
 }
 
+export interface InitialValues {
+  signupsDisabled: boolean;
+  reportReasons: unknown;
+  user: User | null;
+  lists: List[];
+  communities: Community[];
+  noUsers: number;
+  bannedFrom: string[];
+  vapidPublicKey: string;
+  mutes: Mutes;
+}
+
 export interface MainState {
   user: User | null; // If null, user is not logged in.
   vapidPublicKey: string | null; // The applicationServerKey for the Web Push API.
@@ -34,7 +47,8 @@ export interface MainState {
   };
   alerts: Alert[]; // An array of { timestamp: 032948023, text: 'message' }.
   loginPromptOpen: boolean;
-  reportReasons: unknown;
+  signupsDisabled: boolean;
+  reportReasons: InitialValues['reportReasons'];
   sidebarOpen: boolean;
   sidebarCommunitiesExpanded: boolean;
   sidebarScrollY: number;
@@ -55,6 +69,7 @@ export interface MainState {
     toSaveItemType: string | null;
   };
   settingsChanged: number; // A counter to serve as a signal for when user settings change.
+  feedLayout: string;
 }
 
 const initialNotifications = {
@@ -81,6 +96,7 @@ const initialState: MainState = {
   },
   alerts: [],
   loginPromptOpen: false,
+  signupsDisabled: false,
   reportReasons: [],
   sidebarOpen: false,
   sidebarCommunitiesExpanded: false,
@@ -105,6 +121,7 @@ const initialState: MainState = {
     toSaveItemType: null,
   },
   settingsChanged: 0,
+  feedLayout: (getDevicePreference('feed_layout') ?? 'card') as string,
 };
 
 export default function mainReducer(
@@ -113,9 +130,15 @@ export default function mainReducer(
 ): MainState {
   switch (action.type) {
     case 'main/initialValuesAdded': {
+      const payload = action.payload as InitialValues;
+      const values = {
+        vapidPublicKey: payload.vapidPublicKey,
+        noUsers: payload.noUsers,
+        signupsDisabled: payload.signupsDisabled,
+      };
       return {
         ...state,
-        ...(action.payload as { vapidPublicKey: string }),
+        ...values,
       };
     }
     case 'main/chatOpenToggled': {
@@ -151,12 +174,6 @@ export default function mainReducer(
       return {
         ...state,
         allCommunities: action.payload as { items: string[]; loading: boolean },
-      };
-    }
-    case 'main/noUsersUpdated': {
-      return {
-        ...state,
-        noUsers: action.payload as number,
       };
     }
     case 'main/alertAdded': {
@@ -439,15 +456,21 @@ export default function mainReducer(
         settingsChanged: state.settingsChanged + 1,
       };
     }
+    case 'main/feedLayoutChanged': {
+      setDevicePreference('feed_layout', action.payload);
+      return {
+        ...state,
+        feedLayout: action.payload as string,
+      };
+    }
     default:
       return state;
   }
 }
 
-export const initialValuesAdded = (initial: { vapidPublicKey: string }) => {
-  const payload = {
-    vapidPublicKey: initial.vapidPublicKey,
-  };
+// miscInitialValuesAdded sets all the values that were not set by other
+// dispatch calls previously.
+export const miscInitialValuesAdded = (payload: InitialValues) => {
   return { type: 'main/initialValuesAdded', payload };
 };
 
@@ -515,10 +538,6 @@ export const reportReasonsUpdated = (reasons: unknown) => {
 
 export const toggleSidebarOpen = () => {
   return { type: 'main/toggleSidebarOpen' };
-};
-
-export const noUsersUpdated = (noUsers: number) => {
-  return { type: 'main/noUsersUpdated', payload: noUsers };
 };
 
 export const bannedFromUpdated = (communities: string[]) => {
@@ -732,4 +751,20 @@ export const saveToListModalClosed = () => {
 
 export const settingsChanged = () => {
   return { type: 'main/settingsChanged' };
+};
+
+export const feedLayoutChanged = (newLayout: string) => {
+  return { type: 'main/feedLayoutChanged', payload: newLayout };
+};
+
+export const initialFieldsSet = (initial: InitialValues) => (dispatch: AppDispatch) => {
+  if (initial.user) {
+    dispatch(userLoggedIn(initial.user));
+  }
+  dispatch(sidebarCommunitiesUpdated(initial.communities));
+  dispatch(reportReasonsUpdated(initial.reportReasons));
+  dispatch(bannedFromUpdated(initial.bannedFrom || []));
+  dispatch(mutesAdded(initial.mutes));
+  dispatch(listsAdded(initial.lists));
+  dispatch(miscInitialValuesAdded(initial));
 };

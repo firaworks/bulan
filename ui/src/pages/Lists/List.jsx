@@ -17,19 +17,12 @@ import Sidebar from '../../components/Sidebar';
 import { usernameMaxLength } from '../../config';
 import { APIError, dateString1, mfetch, mfetchjson, stringCount, timeAgo } from '../../helper';
 import { useInputUsername } from '../../hooks';
-import {
-  FeedItem,
-  feedInViewItemsUpdated,
-  feedItemHeightChanged,
-  feedReloaded,
-  feedUpdated,
-  selectFeed,
-  selectFeedInViewItems,
-} from '../../slices/feedsSlice';
+import { FeedItem, feedReloaded } from '../../slices/feedsSlice';
 import { listAdded, selectList } from '../../slices/listsSlice';
 import { listsAdded, snackAlertError } from '../../slices/mainSlice';
 import { selectUser } from '../../slices/usersSlice';
 import NotFound from '../NotFound';
+import { isInfiniteScrollingDisabled } from '../Settings/devicePrefs';
 import { MemorizedComment } from '../User/Comment';
 import { useTranslation } from 'react-i18next';
 import { t } from 'i18next';
@@ -74,51 +67,16 @@ const List = () => {
   }, [list, username, listname]);
 
   const feedEndpoint = `${listEndpoint}/items`;
-  const feed = useSelector(selectFeed(feedEndpoint));
-  const setFeed = (res) => {
-    const feedItems = (res.items ?? []).map(
+  const handleFeedFetch = async (next = null) => {
+    const url = next === null ? feedEndpoint : `${feedEndpoint}?next=${next}`;
+    const res = await mfetchjson(url);
+    const items = (res.items || []).map(
       (item) => new FeedItem(item.targetItem, item.targetType, item.id)
     );
-    dispatch(feedUpdated(feedEndpoint, feedItems, res.next ?? null));
-  };
-
-  const feedLoading = feed ? feed.loading : true;
-  const [feedLoadingError, setFeedLoadingError] = useState(null);
-
-  useEffect(() => {
-    if (!feedLoading) {
-      return;
-    }
-    const f = async () => {
-      try {
-        const res = await mfetch(feedEndpoint);
-        if (!res.ok) {
-          if (res.status === 404) {
-            setFeedLoadingError(new Error(t("feed_not_found")));
-            return;
-          }
-        }
-        setFeed(await res.json());
-      } catch (error) {
-        setFeedLoadingError(error);
-        dispatch(snackAlertError(error));
-      }
+    return {
+      items,
+      next: res.next,
     };
-    f();
-  }, [feedEndpoint, feedLoading]);
-
-  const [feedReloading, setFeedReloading] = useState(false);
-  const fetchNextItems = async () => {
-    if (feedReloading) return;
-    try {
-      setFeedReloading(true);
-      const res = await mfetchjson(`${feedEndpoint}?next=${feed.next}`);
-      setFeed(res);
-    } catch (error) {
-      dispatch(snackAlertError(error));
-    } finally {
-      setFeedReloading(false);
-    }
   };
 
   const handleRemoveFromList = async (item, type) => {
@@ -145,6 +103,7 @@ const List = () => {
           initialPost={item.item}
           disableEmbeds={user && user.embedsOff}
           onRemoveFromList={viewerListOwner ? () => handleRemoveFromList(item.item, 'post') : null}
+          compact={compact}
         />
       );
     }
@@ -158,15 +117,6 @@ const List = () => {
         />
       );
     }
-  };
-
-  const handleItemHeightChange = (height, item) => {
-    dispatch(feedItemHeightChanged(item.key, height));
-  };
-
-  const itemsInitiallyInView = useSelector(selectFeedInViewItems(feedEndpoint));
-  const handleSaveVisibleItems = (items) => {
-    dispatch(feedInViewItemsUpdated(feedEndpoint, items));
   };
 
   const handleRemoveAllItems = async () => {
@@ -196,7 +146,10 @@ const List = () => {
     }
   };
 
-  if (feedLoading || feedLoadingError || listLoading !== 'loaded' || !list) {
+  const layout = useSelector((state) => state.main.feedLayout);
+  const compact = layout === 'compact';
+
+  if (listLoading !== 'loaded' || !list) {
     if (listLoading === 'notfound') {
       return <NotFound />;
     }
@@ -242,15 +195,12 @@ const List = () => {
           {/*<PostsFeed feedType="all" />*/}
 
           <Feed
-            loading={feedLoading}
-            items={feed ? feed.items : []}
-            hasMore={Boolean(feed ? feed.next : false)}
-            onNext={fetchNextItems}
-            isMoreItemsLoading={feedReloading}
+            className="posts-feed"
+            feedId={feedEndpoint}
+            onFetch={handleFeedFetch}
             onRenderItem={handleRenderItem}
-            onItemHeightChange={handleItemHeightChange}
-            itemsInitiallyInView={itemsInitiallyInView}
-            onSaveVisibleItems={handleSaveVisibleItems}
+            infiniteScrollingDisabled={isInfiniteScrollingDisabled()}
+            compact={compact}
           />
         </div>
       </main>

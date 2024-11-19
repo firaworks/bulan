@@ -7,8 +7,8 @@ import { RootState } from '../../store';
 import Forbidden from '../Forbidden';
 import Comments from './Comments';
 import Communities from './Communities';
-import Home from './Home';
 import IPBans from './IPBans';
+import Settings from './Settings';
 import Sidebar from './Sidebar';
 import Users from './Users';
 import { useTranslation } from 'react-i18next';
@@ -75,7 +75,7 @@ function AdminDashboard() {
         <div className="page-dashboard-content">
           <Switch>
             <Route exact path={path}>
-              <Home />
+              <Settings />
             </Route>
             <Route exact path={`${path}/users`}>
               <Users />

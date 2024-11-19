@@ -1,8 +1,9 @@
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { Helmet } from 'react-helmet-async';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { usernameMaxLength } from '../config';
 import { APIError, mfetch, validEmail } from '../helper';
 import { useDelayedEffect, useInputUsername } from '../hooks';
@@ -25,6 +26,8 @@ const Signup = ({ open, onClose }) => {
     t("auth.alert_3"),
     t("login_view.alert_4"),
   ];
+  const signupsDisabled = useSelector((state) => state.main.signupsDisabled);
+
   const [username, handleUsernameChange] = useInputUsername(usernameMaxLength);
   const [usernameError, setUsernameError] = useState(null);
   const checkUsernameExists = useCallback(async () => {
@@ -150,12 +153,15 @@ const Signup = ({ open, onClose }) => {
         <style>{`.grecaptcha-badge { visibility: hidden; }`}</style>
       </Helmet>
       <Modal open={open} onClose={onClose} noOuterClickClose={false}>
-        <div className="modal-card modal-signup">
+        <div className={clsx('modal-card modal-signup', signupsDisabled && 'is-disabled')}>
           <div className="modal-card-head">
             <div className="modal-card-title">{t("signup.signup")}</div>
             <ButtonClose onClick={onClose} />
           </div>
           <Form className="modal-card-content" onSubmit={handleSubmit}>
+            {signupsDisabled && (
+              <div className="modal-signup-disabled">{`We have temporarily disabled creating new accounts. Please check back again later.`}</div>
+            )}
             <FormField
               className="is-username"
               label={t("signup.username_label")}
@@ -169,6 +175,7 @@ const Signup = ({ open, onClose }) => {
                 onBlur={() => checkUsernameExists()}
                 autoFocus
                 autoComplete="username"
+                disabled={signupsDisabled}
               />
             </FormField>
             <FormField
@@ -176,13 +183,19 @@ const Signup = ({ open, onClose }) => {
               description={t("signup.email_description")}
               error={emailError}
             >
-              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={signupsDisabled}
+              />
             </FormField>
             <FormField label={t("login_view.label_2")} error={passwordError}>
               <InputPassword
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
+                disabled={signupsDisabled}
               />
             </FormField>
             <FormField label={t("login_view.repeat_password")} error={repeatPasswordError}>
@@ -192,6 +205,7 @@ const Signup = ({ open, onClose }) => {
                   setRepeatPassword(e.target.value);
                 }}
                 autoComplete="new-password"
+                disabled={signupsDisabled}
               />
             </FormField>
             {CAPTCHA_ENABLED && (
@@ -231,7 +245,7 @@ const Signup = ({ open, onClose }) => {
             </FormField>
             <FormField className="is-submit">
               <input type="submit" className="button button-main" value={t("auth.signup")} />
-              <button className="button-link" onClick={handleOnLogin}>
+              <button className="button-link" onClick={handleOnLogin} disabled={signupsDisabled}>
                 {t("signup.login")}
               </button>
             </FormField>

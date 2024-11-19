@@ -29,6 +29,7 @@ import Home from './pages/Home';
 import { List, Lists } from './pages/Lists';
 import Login from './pages/Login';
 import MarkdownGuide from './pages/MarkdownGuide';
+import ModeratorGuidelines from './pages/ModeratorGuidelines';
 import Modtools from './pages/Modtools';
 import NewPost from './pages/NewPost';
 import NotFound from './pages/NotFound';
@@ -41,10 +42,8 @@ import Terms from './pages/Terms';
 import User from './pages/User';
 import PushNotifications from './PushNotifications';
 import {
-  bannedFromUpdated,
   createCommunityModalOpened,
-  initialValuesAdded,
-  listsAdded,
+  initialFieldsSet,
   loginModalOpened,
   mutesAdded,
   noUsersUpdated,
@@ -116,16 +115,7 @@ const App = () => {
         // Cookies.
         window.localStorage.setItem('csrftoken', res.headers.get('Csrf-Token'));
 
-        if (initial.user) {
-          dispatch(userLoggedIn(initial.user));
-        }
-        dispatch(sidebarCommunitiesUpdated(initial.communities));
-        dispatch(reportReasonsUpdated(initial.reportReasons));
-        dispatch(noUsersUpdated(initial.noUsers));
-        dispatch(bannedFromUpdated(initial.bannedFrom || []));
-        dispatch(initialValuesAdded(initial)); // miscellaneous data
-        dispatch(mutesAdded(initial.mutes));
-        dispatch(listsAdded(initial.lists));
+        dispatch(initialFieldsSet(initial));
       } catch (err) {
         console.error(err);
         dispatch(snackAlert(i18next.t('generic_error')));
@@ -326,6 +316,9 @@ const AppSwitch = () => {
         </Route>
         <Route exact path="/guidelines">
           <Guidelines />
+        </Route>
+        <Route exact path="/moderator-guidelines">
+          <ModeratorGuidelines />
         </Route>
         <Route exact path="/terms">
           <Terms />

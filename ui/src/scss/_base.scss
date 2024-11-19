@@ -321,8 +321,7 @@ body {
 #root {
     position: relative;
     z-index: 1;
-    min-height: calc(100vh - var(--navbar-height) - var(--page-top-margin));
-
+    min-height: calc(100vh - var(--navbar-height));
     // overflow-x: auto; // is-sticky doesn't work with this
     @include mixins.mobile() {
         overflow-x: auto;
@@ -377,26 +376,23 @@ h3 {
 }
 
 h1 {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
+    @include mixins.mobile() {
+        font-size: 2.5rem;
+    }
+}
 
+h2 {
+    font-size: 2.5rem;
     @include mixins.mobile() {
         font-size: 2rem;
     }
 }
 
-h2 {
-    font-size: 1.8rem;
-
+h3 {
+    font-size: 2rem;
     @include mixins.mobile() {
         font-size: 1.5rem;
-    }
-}
-
-h3 {
-    font-size: 1.3rem;
-
-    @include mixins.mobile() {
-        font-size: 1.2rem;
     }
 }
 
@@ -523,10 +519,6 @@ code {
 
 .margin-0 {
     margin: 0;
-}
-
-.border-radius-0 {
-    border-radius: 0;
 }
 
 .test-elements {
@@ -1080,8 +1072,7 @@ a,
 
 .page-content {
     padding-top: var(--page-top-margin);
-    min-height: calc(100vh - var(--navbar-height) - var(--page-top-margin));
-
+    min-height: calc(100vh - var(--navbar-height));
     &.page-grid {
         display: grid;
         grid-template-columns: var(--grid-home);

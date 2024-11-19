@@ -1,4 +1,3 @@
-import React from 'react';
 import StaticPage from '../components/StaticPage';
 import { useTranslation } from 'react-i18next';
 

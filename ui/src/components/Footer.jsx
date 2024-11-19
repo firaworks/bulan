@@ -1,12 +1,27 @@
-import React from 'react';
+import { useEffect } from 'react';
 import Link from '../components/Link';
 import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
   const [t, i18n] = useTranslation("global");
 
+  const className = 'footer';
+
+  // For some reason, on Firefox desktop, there's a small (2 pixels perhaps)
+  // white bar on the bottom of the page. This useEffect hook gets rid of that
+  // by making it the background color of the footer.
+  useEffect(() => {
+    const background = document.documentElement.style.background;
+    document.documentElement.style.background = window.getComputedStyle(
+      document.querySelector(className)
+    ).background;
+    return () => {
+      document.documentElement.style.background = background;
+    };
+  }, []);
+
   return (
-    <footer className="footer">
+    <footer className={className}>
       <div className="wrap">
         <div className="footer-col footer-show">
           <Link to="/" className="footer-logo">
@@ -89,6 +104,12 @@ const Footer = () => {
         </div>
         <div className="footer-col">
           <div className="footer-title">Policies</div>
+          <Link className="footer-item" to="/guidelines">
+            Site guidelines
+          </Link>
+          <Link className="footer-item" to="/moderator-guidelines">
+            Moderator guidelines
+          </Link>
           <Link className="footer-item" to="/terms">
             {t("footer.terms")}
           </Link>

@@ -64,6 +64,7 @@ export interface Community {
   noMembers: number;
   proPic: Image | null;
   bannerImage: Image | null;
+  postingRestricted: boolean;
   createdAt: string; // A datetime.
   isDefault?: boolean;
   userJoined: boolean | null;
@@ -218,4 +219,8 @@ export interface Mute {
 export interface Mutes {
   userMutes: Mute[] | null;
   communityMutes: Mute[] | null;
+}
+
+export interface SiteSettings {
+  signupsDisabled: boolean;
 }

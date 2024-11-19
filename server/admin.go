@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/discuitnet/discuit/core"
+	"github.com/discuitnet/discuit/core/sitesettings"
 	"github.com/discuitnet/discuit/internal/httperr"
 )
 
@@ -119,7 +120,7 @@ func (s *Server) getComments(w *responseWriter, r *request) error {
 		nextPtr = &next
 	}
 
-	comments, nextNext, err := core.GetSiteComments(r.ctx, s.db, 100, nextPtr)
+	comments, nextNext, err := core.GetSiteComments(r.ctx, s.db, 100, nextPtr, r.viewer)
 	if err != nil {
 		return err
 	}
@@ -143,7 +144,7 @@ func (s *Server) getUsers(w *responseWriter, r *request) error {
 		nextPtr = &next
 	}
 
-	users, nextNext, err := core.GetUsers(r.ctx, s.db, 100, nextPtr)
+	users, nextNext, err := core.GetUsers(r.ctx, s.db, 100, nextPtr, r.viewer)
 	if err != nil {
 		return err
 	}
@@ -154,4 +155,27 @@ func (s *Server) getUsers(w *responseWriter, r *request) error {
 	}{users, nextNext}
 
 	return w.writeJSON(res)
+}
+
+func (s *Server) handleSiteSettings(w *responseWriter, r *request) error {
+	_, err := getLoggedInAdmin(s.db, r)
+	if err != nil {
+		return err
+	}
+
+	settings, err := sitesettings.GetSiteSettings(r.ctx, s.db)
+	if err != nil {
+		return err
+	}
+
+	if r.req.Method == "PUT" {
+		if err = r.unmarshalJSONBody(settings); err != nil {
+			return err
+		}
+		if err = settings.Save(r.ctx, s.db); err != nil {
+			return err
+		}
+	}
+
+	return w.writeJSON(settings)
 }

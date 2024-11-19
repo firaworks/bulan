@@ -61,7 +61,9 @@ export default function Users() {
     return (
       <div className="feed-item-user">
         <Link to={`/@${user.username}`}>@{user.username}</Link>
-        <div className="feed-item-user-is-banned">{user.isBanned ? 'Banned' : ''}</div>
+        <div className="feed-item-user-is-banned">
+          {user.isBanned ? 'Banned' : user.deleted ? 'Deleted' : ''}
+        </div>
         <TimeAgo time={user.createdAt} />
       </div>
     );

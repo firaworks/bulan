@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,17 +14,11 @@ import Sidebar from '../../components/Sidebar';
 import UserProPic from '../../components/UserProPic';
 import { APIError, dateString1, mfetch, mfetchjson, stringCount } from '../../helper';
 import { useFetchUsersLists, useMuteUser } from '../../hooks';
-import {
-  feedInViewItemsUpdated,
-  FeedItem,
-  feedItemHeightChanged,
-  feedUpdated,
-  selectFeed,
-  selectFeedInViewItems,
-} from '../../slices/feedsSlice';
+import { FeedItem } from '../../slices/feedsSlice';
 import { snackAlertError } from '../../slices/mainSlice';
 import { selectUser, userAdded } from '../../slices/usersSlice';
 import NotFound from '../NotFound';
+import { isInfiniteScrollingDisabled } from '../Settings/devicePrefs';
 import BadgesList from './BadgesList';
 import BanUserButton from './BanUserButton';
 import { MemorizedComment } from './Comment';
@@ -80,30 +73,12 @@ const User = () => {
   const [userLoading, setUserLoading] = useState(user ? 'loaded' : 'loading');
 
   const url = `/api/users/${username}`;
-  const feedUrl = `${url}/feed?filter=${feedFilter === 'overview' ? '' : feedFilter}`;
+  const feedId = `${url}/feed?filter=${feedFilter === 'overview' ? '' : feedFilter}`; // partial endpoint
 
-  const feed = useSelector(selectFeed(feedUrl));
-  const setFeed = (res) => {
-    const items = res.items ?? [];
-    const next = res.next ?? null;
-    const newItems = items.map((item) => {
-      if (item.type === 'post') {
-        return new FeedItem(item.item, 'post', item.item.publicId);
-      }
-      if (item.type === 'comment') {
-        return new FeedItem(item.item, 'comment', item.item.id);
-      }
-    });
-    dispatch(feedUpdated(feedUrl, newItems, next));
-  };
-
-  const [feedLoading, setFeedLoading] = useState(feed ? 'loaded' : 'loading');
   useEffect(() => {
-    if (feed && user) {
-      setFeedLoading('loaded');
+    if (user) {
       return;
     }
-    setFeedLoading('loading');
     setUserLoading('loading');
     (async () => {
       try {
@@ -121,38 +96,29 @@ const User = () => {
         if (username !== user.username && username.toLowerCase() === user.username.toLowerCase()) {
           // Username case mismatch.
           history.replace(`/@${user.username}`);
-        } else if (isUserFeedAvailable(user, viewer)) {
-          const feed = await mfetchjson(feedUrl);
-          setFeed(feed);
-          setFeedLoading('loaded');
         }
       } catch (error) {
         dispatch(snackAlertError(error));
       }
     })();
-  }, [username, url, feedUrl]);
+  }, [username, url, feedId]);
 
-  const [feedReloading, setFeedReloading] = useState(false);
-  const fetchNextItems = async () => {
-    if (feedReloading) return;
-    try {
-      setFeedReloading(true);
-      const res = await mfetchjson(`${feedUrl}&next=${feed.next}`);
-      setFeed(res);
-    } catch (error) {
-      dispatch(snackAlertError(error));
-    } finally {
-      setFeedReloading(false);
-    }
-  };
-
-  const handleItemHeightChange = (height, item) => {
-    dispatch(feedItemHeightChanged(item.key, height));
-  };
-
-  const itemsInitiallyInView = useSelector(selectFeedInViewItems(feedUrl));
-  const handleSaveVisibleItems = (items) => {
-    dispatch(feedInViewItemsUpdated(feedUrl, items));
+  const handleFeedFetch = async (next = null) => {
+    const url = next === null ? feedId : `${feedId}&next=${next}`;
+    const res = await mfetchjson(url);
+    const items = (res.items || []).map((item) => {
+      if (item.type === 'post') {
+        return new FeedItem(item.item, 'post', item.item.id);
+      }
+      if (item.type === 'comment') {
+        return new FeedItem(item.item, 'comment', item.item.id);
+      }
+      throw new Error('unkown user-feed item type');
+    });
+    return {
+      items,
+      next: res.next,
+    };
   };
 
   const refetchUser = async () => {
@@ -204,6 +170,9 @@ const User = () => {
 
   const { lists, error: listsError } = useFetchUsersLists(username, false);
 
+  const layout = useSelector((state) => state.main.feedLayout);
+  const compact = layout === 'compact';
+
   if (userLoading === 'notfound') {
     return <NotFound />;
   }
@@ -240,7 +209,13 @@ const User = () => {
 
   const handleRenderItem = (item) => {
     if (item.type === 'post') {
-      return <MemorizedPostCard initialPost={item.item} disableEmbeds={user && user.embedsOff} />;
+      return (
+        <MemorizedPostCard
+          initialPost={item.item}
+          disableEmbeds={user && user.embedsOff}
+          compact={compact}
+        />
+      );
     }
     if (item.type === 'comment') {
       return <MemorizedComment comment={item.item} />;
@@ -444,8 +419,6 @@ const User = () => {
     );
   };
 
-  const items = feed ? feed.items : [];
-
   return (
     <div className="page-content page-user wrap page-grid">
       <Helmet>
@@ -532,15 +505,12 @@ const User = () => {
           )}
           {tab === 'content' && (
             <Feed
-              loading={feedLoading !== 'loaded'}
-              items={items}
-              hasMore={Boolean(feed ? feed.next : false)}
-              onNext={fetchNextItems}
-              isMoreItemsLoading={feedReloading}
+              className="posts-feed"
+              feedId={feedId}
+              onFetch={handleFeedFetch}
               onRenderItem={handleRenderItem}
-              onItemHeightChange={handleItemHeightChange}
-              itemsInitiallyInView={itemsInitiallyInView}
-              onSaveVisibleItems={handleSaveVisibleItems}
+              infiniteScrollingDisabled={isInfiniteScrollingDisabled()}
+              compact={compact}
             />
           )}
           {tab === 'about' && (
@@ -570,10 +540,6 @@ const User = () => {
       </aside>
     </div>
   );
-};
-
-User.propTypes = {
-  username: PropTypes.string.isRequired,
 };
 
 export default User;

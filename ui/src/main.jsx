@@ -1,5 +1,5 @@
 import PullToRefresh from 'pulltorefreshjs';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HelmetProvider } from 'react-helmet-async';
@@ -66,19 +66,17 @@ const container = document.getElementById('root');
 const root = createRoot(container);
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <HelmetProvider>
-        <ErrorBoundary FallbackComponent={Fallback} onError={logAppError}>
-          <Router>
+  <Provider store={store}>
+    <HelmetProvider>
+      <ErrorBoundary FallbackComponent={Fallback} onError={logAppError}>
+        <Router>
             <I18nextProvider i18n={i18next}>
-              <App />
+            <App />
             </I18nextProvider>
-          </Router>
-        </ErrorBoundary>
-      </HelmetProvider>
-    </Provider>
-  </React.StrictMode>
+        </Router>
+      </ErrorBoundary>
+    </HelmetProvider>
+  </Provider>
 );
 
 if (isDeviceIos()) {

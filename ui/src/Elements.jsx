@@ -3,13 +3,14 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Button, { ButtonClose, ButtonMore } from './components/Button';
 import Dropdown from './components/Dropdown';
+import FeedSkeleton from './components/Feed/FeedSkeleton';
 import { Form, FormField, FormSection } from './components/Form';
 import Input, { Checkbox, InputPassword, Radio, useInputMaxLength } from './components/Input';
 import Modal from './components/Modal';
 import ModalConfirm from './components/Modal/ModalConfirm';
-import PostCardSkeleton from './components/PostCard/PostCardSkeleton';
 import Spinner from './components/Spinner';
 import { snackAlert } from './slices/mainSlice';
+import { SVGSettings } from './SVGs';
 
 function Elements() {
   const dispatch = useDispatch();
@@ -18,12 +19,10 @@ function Elements() {
 
   const [iwcValue, iwcHandleChange] = useInputMaxLength(1000);
 
-  const [background, setBackground] = useState('#fff');
-  const handleToggleBackground = () => {
-    setBackground((b) => (b === '#fff' ? 'transparent' : '#fff'));
-  };
+  const [transparentBackground, setTransparentBackground] = useState(false);
+  const handleToggleBackground = () => setTransparentBackground((b) => !b);
   const style = {
-    background,
+    background: transparentBackground ? 'transparent' : 'var(--color-bg)',
   };
 
   const icons = {
@@ -159,6 +158,7 @@ function Elements() {
         <Section title="Icon buttons">
           <Button icon={icons.help} />
           <Button icon={icons.trash} />
+          <Button icon={<SVGSettings />} />
         </Section>
         <Section title="Button loading state">
           <Button color="main" loading>
@@ -345,7 +345,7 @@ function Elements() {
         culpa? Pariatur, harum!
       </p>
       <div style={{ width: '100%' }}>
-        <PostCardSkeleton />
+        <FeedSkeleton />
       </div>
     </div>
   );

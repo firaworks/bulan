@@ -13,7 +13,7 @@ const SelectCommunity = ({ initial = '', onFocus, onChange, disabled = false }) 
   useEffect(() => {
     (async function () {
       try {
-        const communities = await mfetchjson('/api/communities?limit=10');
+        const communities = await mfetchjson('/api/communities?sort=size&limit=10');
         setSuggestions(communities);
       } catch (error) {
         dispatch(snackAlertError(error));
@@ -42,7 +42,7 @@ const SelectCommunity = ({ initial = '', onFocus, onChange, disabled = false }) 
     useCallback(() => {
       (async function () {
         try {
-          const communities = await mfetchjson(`/api/communities?q=${value}&limit=10`);
+          const communities = await mfetchjson(`/api/communities?q=${value}&sort=size&limit=10`);
           setSuggestions(communities);
         } catch (error) {
           console.error(error);

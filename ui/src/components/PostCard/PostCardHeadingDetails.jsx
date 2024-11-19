@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toTitleCase, userGroupSingular } from '../../helper';
 import { useIsMobile, useMuteCommunity, useMuteUser } from '../../hooks';
@@ -18,6 +17,7 @@ const PostCardHeadingDetails = ({
   showEdited = false,
   showAuthorProPic = false,
   onRemoveFromList = null,
+  compact = false,
 }) => {
   const [t, i18n] = useTranslation("global");
   // const userURL = `/@${post.username}`;
@@ -65,7 +65,7 @@ const PostCardHeadingDetails = ({
       <div className="left">
         <CommunityLink name={post.communityName} proPic={post.communityProPic} />
         <div className="post-card-heading-by">
-          <span>{t("post.heading.posted_by")}</span>
+          <span>{compact ? null : '{t("post.heading.posted_by")}'}</span>
           <UserLink
             className={post.userDeleted && viewerAdmin ? 'is-red' : ''}
             username={isUsernameGhost ? 'Ghost' : post.username}
@@ -134,6 +134,7 @@ PostCardHeadingDetails.propTypes = {
   showEdited: PropTypes.bool,
   showAuthorProPic: PropTypes.bool,
   onRemoveFromList: PropTypes.func,
+  compact: PropTypes.bool,
 };
 
 export default PostCardHeadingDetails;
