@@ -453,6 +453,7 @@ func RegisterUser(ctx context.Context, db *sql.DB, username, email, password str
 
 	if email == "" {
 		err = errors.New("email is required")
+		return nil, err
 	} else {
 		_, err := mail.ParseAddress(email)
 		if err != nil {
