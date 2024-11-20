@@ -6,13 +6,16 @@ import Button from './Button';
 import Dropdown from './Dropdown';
 import { useTranslation } from 'react-i18next';
 
-const layoutOptions = [
-  { text: 'Card', id: 'card' },
-  { text: 'Compact', id: 'compact' },
-];
+
 
 const SelectBar = ({ name, options, value, onChange, ...rest }) => {
   const [t, i18n] = useTranslation("global");
+
+  const layoutOptions = [
+    { text: t('layout_card'), id: 'card' },
+    { text: t('layout_compact'), id: 'compact' },
+  ]
+
   const handleClick = (value) => {
     if (onChange) {
       onChange(value);
