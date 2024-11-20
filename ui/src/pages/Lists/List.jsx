@@ -160,7 +160,7 @@ const List = () => {
     <div className="page-content wrap page-grid page-list">
       <EditListModal list={list} open={editModalOpen} onClose={() => setEditModalOpen(false)} />
       <Helmet>
-        <title>{`${listname} of @${username}`}</title>
+        <title>{`@${username}-н ${listname}`}</title>
       </Helmet>
       <Sidebar />
       <main className="page-middle">

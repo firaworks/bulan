@@ -157,12 +157,12 @@ const PostsFeed = ({ feedType = 'all', communityId = null }) => {
   };
   useCanonicalTag(canonicalURL(), [location]);
 
-  let name = 'Posts';
+  let name = t('feed.posts')
   if (!communityId) {
     if (feedType === 'all') {
-      name = 'Home';
+      name = t('feed.home')
     } else if (feedType === 'subscriptions') {
-      name = 'Subscriptions';
+      name = t('feed.subscriptions')
     }
   }
 
