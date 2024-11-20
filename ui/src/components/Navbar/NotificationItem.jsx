@@ -131,7 +131,7 @@ const NotificationItem = ({ notification, ...rest }) => {
       case 'mod_add': {
         return (
           <>
-            <Trans i18nKey="notifications.deleted_post"
+            <Trans i18nKey="notifications.mod_add"
               values={{
                 who: `@${notif.addedBy}`,
                 community: notif.communityName

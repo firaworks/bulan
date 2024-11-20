@@ -85,6 +85,7 @@ const Home = () => {
         {canCreateForum && (
           <>
             <Link
+              to="#"
               onClick={() => dispatch(createCommunityModalOpened())}
               className={'button button-main home-btn-new-post is-m'}
             >

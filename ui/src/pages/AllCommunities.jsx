@@ -22,7 +22,6 @@ import { SVGClose, SVGSearch } from '../SVGs';
 import LoginForm from '../views/LoginForm';
 import JoinButton from './Community/JoinButton';
 import { useTranslation } from 'react-i18next';
-import { t } from 'i18next';
 import { isInfiniteScrollingDisabled } from './Settings/devicePrefs';
 
 const prepareText = (isMobile = false) => {
@@ -102,9 +101,9 @@ const AllCommunities = () => {
               onClick={() => setIsSearching((v) => !v)}
             />
             {!isSearching && (
-              {/* <RequestCommunityButton className="button-main is-m comms-new-button" isMobile>
+              <RequestCommunityButton className="button-main is-m comms-new-button" isMobile>
                 {t("all_communities.text_3")}
-              </RequestCommunityButton> */}
+              </RequestCommunityButton>
             )}
           </div>
         </div>
@@ -114,7 +113,7 @@ const AllCommunities = () => {
             onFetch={fetchCommunities}
             onRenderItem={handleRenderItem}
             infiniteScrollingDisabled={isInfiniteScrollingDisabled()}
-            noMoreItemsText="Nothing to show"
+            noMoreItemsText={t('no_more_items')}
           />
         </div>
       </main>
@@ -242,6 +241,7 @@ RequestCommunityButton.propTypes = {
 };
 
 const ListItem = React.memo(function ListItem({ community }) {
+  const [t, i18n] = useTranslation("global")
   const to = `/${community.name}`;
 
   const history = useHistory();

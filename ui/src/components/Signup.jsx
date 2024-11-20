@@ -160,7 +160,7 @@ const Signup = ({ open, onClose }) => {
           </div>
           <Form className="modal-card-content" onSubmit={handleSubmit}>
             {signupsDisabled && (
-              <div className="modal-signup-disabled">{`We have temporarily disabled creating new accounts. Please check back again later.`}</div>
+              <div className="modal-signup-disabled">{t('signup.signups_disabled')}</div>
             )}
             <FormField
               className="is-username"

@@ -65,7 +65,7 @@ const PostCardHeadingDetails = ({
       <div className="left">
         <CommunityLink name={post.communityName} proPic={post.communityProPic} />
         <div className="post-card-heading-by">
-          <span>{compact ? null : '{t("post.heading.posted_by")}'}</span>
+          <span>{compact ? null : t("post.heading.posted_by")}</span>
           <UserLink
             className={post.userDeleted && viewerAdmin ? 'is-red' : ''}
             username={isUsernameGhost ? 'Ghost' : post.username}

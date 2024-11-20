@@ -183,9 +183,9 @@ const NewPost = () => {
 
   const getPostingDisabledText = () => {
     if (isBanned) {
-      return `You've been banned from ${community.name}.`;
+      return t('new_post.banned')
     } else {
-      return `Only approved members of this community can post.`;
+      return t('new_post.posting_restricted')
     }
   };
 

@@ -46,7 +46,6 @@ import {
   initialFieldsSet,
   loginModalOpened,
   mutesAdded,
-  noUsersUpdated,
   pwResetModalOpened,
   reportReasonsUpdated,
   sidebarCommunitiesUpdated,

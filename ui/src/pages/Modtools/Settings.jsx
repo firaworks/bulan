@@ -143,10 +143,10 @@ const Settings = ({ community }) => {
       </div>
       {/*<div className="flex-column inner-gap-1">*/}
       <div className="form">
-        <FormField label="Community name">
+        <FormField label={t('mod.settings.community_name')}>
           <Input value={community.name} disabled />
         </FormField>
-        <FormField label={t("mod.settings.label_1")}>
+        <FormField label={t("mod.settings.community_image")}>
           <div className=" modtools-change-propic">
             <div className="flex">
               <CommunityProPic name={community.name} proPic={community.proPic} size="standard" />
@@ -166,8 +166,8 @@ const Settings = ({ community }) => {
             </div>
           </div>
         </FormField>
-        <div className="form-field modtools-change-banner">
-          <div className="label">{t("mod.settings.label_2")}</div>
+        {/* <div className="form-field modtools-change-banner">
+          <div className="label">{t("mod.settings.community_banner")}</div>
           <div className="flex flex-column">
             <Banner className="modtools-banner" community={community} />
             <div className="flex modtools-change-banner-buttons">
@@ -186,10 +186,10 @@ const Settings = ({ community }) => {
               onChange={handleBannerFileChange}
             />
           </div>
-        </div>
+        </div> */}
         <FormField
-          label={t("mod.settings.label_3")}
-          description={t("mod.settings.description_1")}
+          label={t("mod.settings.community_description")}
+          description={t("mod.settings.community_description_info")}
         >
           <InputWithCount
             textarea
@@ -199,10 +199,10 @@ const Settings = ({ community }) => {
             onChange={setDescription}
           />
         </FormField>
-        <FormField label={t('nsfw')}>
+        <FormField label={t('mod.settings.posting_restricted')}>
           <Checkbox
             variant="switch"
-            label={t("mod.settings.label_4")}
+            label={t("mod.settings.posting_restricted")}
             checked={postingRestricted}
             onChange={(e) => setPostingRestricted(e.target.checked)}
             spaceBetween
@@ -211,7 +211,7 @@ const Settings = ({ community }) => {
         {user.isAdmin && (
           <FormField>
             <button onClick={handleChangeDefault}>
-              {community.isDefault ? t("mod.settings.default_1") : t('mod.settings.default_2')}
+              {community.isDefault ? t('mod.settings.undo_default') : t("mod.settings.make_default")}
             </button>
           </FormField>
         )}

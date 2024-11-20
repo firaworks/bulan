@@ -16,6 +16,7 @@ import Button from '../Button';
 import Spinner from '../Spinner';
 import FeedItemComponent from './FeedItem';
 import FeedSkeleton from './FeedSkeleton';
+import { t } from 'i18next';
 
 export interface FeedProps<FeedItemType> {
   className?: string;
@@ -39,8 +40,8 @@ function Feed<FeedItemType>({
   onFetch,
   onRenderItem,
   banner,
-  noMoreItemsText = 'No more posts',
-  emptyItemsText = 'Nothing to show',
+  noMoreItemsText = t('no_more_items'),
+  emptyItemsText = t('nothing_to_show'),
   skeletons,
   infiniteScrollingDisabled = false,
 }: FeedProps<FeedItemType>) {
