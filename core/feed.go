@@ -197,6 +197,10 @@ func homeFeedWhereClause(ctx context.Context, db *sql.DB, user uid.ID, where str
 		return where, args, err
 	}
 
+	if len(newArgs) == 0 {
+		return where, args, nil
+	}
+
 	joiner := ""
 	if where != "" {
 		joiner = "AND"
