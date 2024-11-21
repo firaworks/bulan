@@ -135,7 +135,7 @@ const Community = () => {
       <main className="comm-content">
         <header className="comm-main">
           <div className="comm-main-top">
-            <div className="comm-main-bg">
+            <div className="comm-main-bg" style={{ 'margin-bottom': 5 }}>
               <Banner community={community} />
             </div>
             <CommunityProPic

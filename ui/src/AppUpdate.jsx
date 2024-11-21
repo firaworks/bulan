@@ -75,19 +75,19 @@ const AppUpdate = () => {
       <Modal open={modalOpen} onClose={handleClose} noOuterClickClose>
         <div className="modal-card is-compact-mobile is-center" style={{ minWidth: '300px' }}>
           <div className="modal-card-head">
-            <div className="modal-card-title">{t("update.title")}</div>
+            <div className="modal-card-title">{t('update.title')}</div>
             <ButtonClose onClick={handleClose} />
           </div>
           <div className="modal-card-content">
             <p>
-              {t("update.text_1")}
+              {t('update.update_description')}
             </p>
           </div>
           <div className="modal-card-actions">
             <button className="button-main" onClick={handleReload}>
-              {t("update.text_2")}
+              {t('update.reload')}
             </button>
-            <button onClick={handleClose}>{t("update.text_3")}</button>
+            <button onClick={handleClose}>{t('update.not_now')}</button>
           </div>
         </div>
       </Modal>

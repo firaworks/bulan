@@ -22,6 +22,7 @@ import (
 	msql "github.com/discuitnet/discuit/internal/sql"
 	"github.com/discuitnet/discuit/internal/uid"
 	"github.com/discuitnet/discuit/internal/utils"
+	"github.com/ipsn/go-adorable"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -451,22 +452,19 @@ func RegisterUser(ctx context.Context, db *sql.DB, username, email, password str
 		return nil, err
 	}
 
-	if email == "" {
-		err = errors.New("email is required")
+	_, err = mail.ParseAddress(email)
+	if err != nil {
 		return nil, err
-	} else {
-		_, err := mail.ParseAddress(email)
-		if err != nil {
-			return nil, err
+	}
+	if exists, _, err := userWithEmailExists(ctx, db, email); err != nil {
+		return nil, err
+	} else if exists {
+		return nil, &httperr.Error{
+			HTTPStatus: http.StatusConflict,
+			Code:       "email_exists",
+			Message:    fmt.Sprintf("A user with email %s already exists.", email),
 		}
 	}
-	// // Note: Thet email address is not checked to be a valid email address. Any
-	// // string can be stored as an email address currently.
-	// nullEmail := msql.NullString{}
-	// if email != "" {
-	// 	nullEmail.Valid = true
-	// 	nullEmail.String = email
-	// }
 
 	id := uid.New()
 	query, args := msql.BuildInsertQuery("users", []msql.ColumnValue{
@@ -490,8 +488,13 @@ func RegisterUser(ctx context.Context, db *sql.DB, username, email, password str
 		log.Println("Failed to create the default community of user: ", username)
 		// Continue on failure.
 	}
-
-	return GetUser(ctx, db, id, nil)
+	avatar := adorable.Random()
+	usr, err := GetUser(ctx, db, id, nil)
+	if err != nil {
+		return nil, err
+	}
+	err = usr.UpdateProPic(ctx, avatar)
+	return usr, err
 }
 
 func addUserToDefaultCommunities(ctx context.Context, db *sql.DB, user uid.ID) error {

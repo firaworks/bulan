@@ -17,6 +17,9 @@ require (
 )
 
 require (
+	github.com/ipsn/go-adorable v1.0.0 // indirect
+	github.com/lucasb-eyer/go-colorful v0.0.0-20181028223441-12d3b2882a08 // indirect
+	golang.org/x/sys v0.10.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/mail.v2 v2.3.1 // indirect
 )

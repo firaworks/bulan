@@ -140,13 +140,13 @@ const PushNotifications = () => {
           <ButtonClose onClick={handleAskModalClose} />
         </div>
         <div className="modal-card-content">
-          {t("notification_settings.text_1")}
+          {t("notification_settings.enable_description")}
         </div>
         <div className="modal-card-actions">
           <button className="button-main" onClick={handlePermissionsAsk}>
-            {t("notification_settings.text_2")}
+            {t("notification_settings.enable")}
           </button>
-          <button onClick={handleAskModalClose}>{t("notification_settings.text_3")}</button>
+          <button onClick={handleAskModalClose}>{t("notification_settings.not_now")}</button>
         </div>
       </div>
     </Modal>
