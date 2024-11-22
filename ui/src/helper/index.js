@@ -42,7 +42,7 @@ export function timeAgo(date, suffix = ' ago', justNow = true, short = false, la
     return `${s}${short ? t("timeago.s") : ' ' + t("timeago.second")} ${suffix}`;
   } else if (ms < 3600) {
     const m = Math.round(ms / 60);
-    return `${m}${short ? t("timeage.m") : ' ' + t("timeago.minute")} ${suffix}`;
+    return `${m}${short ? t("timeago.m") : ' ' + t("timeago.minute")} ${suffix}`;
   } else if (ms < 24 * 3600) {
     const h = Math.round(ms / 3600);
     return `${h}${short ? t("timeago.h") : ' ' + t("timeago.hour")} ${suffix}`;
