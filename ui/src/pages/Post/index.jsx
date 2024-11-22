@@ -38,7 +38,6 @@ import CommunityCard from './CommunityCard';
 import PostImage from './PostImage';
 import PostVotesBar from './PostVotesBar';
 import { useTranslation } from 'react-i18next';
-import ReactGA from 'react-ga4';
 
 const Post = () => {
   const { id, commentId, communityName } = useParams(); // id is post.publicId
@@ -283,12 +282,6 @@ const Post = () => {
 
   const deletePostContentButtonText = `${t('_delete')} ${post.type === 'image' ? (post.images.length > 1 ? 'images' : 'image') : post.type
     }`;
-
-  // GoogleAnalytics
-  useEffect(() => {
-    ReactGA.initialize('G-6FC9YCEJXN');
-    ReactGA.send({ hitType: "pageview", page: window.location.pathname });
-  }, []);
 
   return (
     <div className="page-content page-post wrap">
