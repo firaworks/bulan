@@ -14,6 +14,8 @@ import Input, { InputPassword, InputWithCount } from './Input';
 import Modal from './Modal';
 import { useTranslation } from 'react-i18next';
 
+const HttpStatusConflict = 409
+
 const Signup = ({ open, onClose }) => {
   const dispatch = useDispatch();
   const [t, i18n] = useTranslation("global");
@@ -51,9 +53,31 @@ const Signup = ({ open, onClose }) => {
 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(null);
-  useEffect(() => {
-    setEmailError(null);
-  }, [email]);
+  // useEffect(() => {
+  //   setEmailError(null);
+  // }, [email]);
+  const checkEmailExists = useCallback(async () => {
+    if (email === '') return true;
+    if (validEmail(email)) {
+      try {
+        const res = await mfetch(`/api/useremail/${email}`);
+        if (!res.ok) {
+          throw new APIError(res.status, await res.json());
+        }
+        const body = await res.json()
+        if (body.ef == true) {
+          setEmailError(`${email} ` + t("signup.email_exists"));
+          return true;
+        } else {
+          setEmailError(null);
+          return false;
+        }
+      } catch (error) {
+        dispatch(snackAlertError(error));
+      }
+    }
+  }, [dispatch, email]);
+  useDelayedEffect(checkEmailExists);
 
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(null);
@@ -82,7 +106,17 @@ const Signup = ({ open, onClose }) => {
         method: 'POST',
         body: JSON.stringify({ username, email, password, captchaToken }),
       });
-      if (!res.ok) throw new APIError(res.status, await res.json());
+      if (!res.ok) {
+        if (res.status == HttpStatusConflict) {
+          let body = await res.json()
+          if (body.code != null && body.code == 'email_exists') {
+            setEmailError(t('signup.email_exists'))
+            throw new APIError(res.status, await res.json());
+          }
+        } else {
+          throw new APIError(res.status, await res.json());
+        }
+      }
       window.location.reload();
     } catch (error) {
       dispatch(snackAlertError(error));
@@ -124,7 +158,7 @@ const Signup = ({ open, onClose }) => {
     } else {
       if (!validEmail(email)) {
         errFound = true;
-        setEmailError(errors[3]);
+        setEmailError(t('signup.email_invalid'));
       }
     }
     if (errFound) {

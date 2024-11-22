@@ -13,6 +13,7 @@ import LoginForm from '../../views/LoginForm';
 import PostsFeed from '../../views/PostsFeed';
 import WelcomeBanner from '../../views/WelcomeBanner';
 import { Trans, useTranslation } from 'react-i18next';
+import ReactGA from 'react-ga4';
 
 const Home = () => {
   const [t, i18next] = useTranslation("global");
@@ -61,6 +62,14 @@ const Home = () => {
     localStorage.setItem('neverShowInstallBanner', 'true');
     setNeverShowBanner(true);
   };
+
+  // GoogleAnalytics
+  if (import.meta.env.MODE === 'production') {
+    useEffect(() => {
+      ReactGA.initialize('G-6FC9YCEJXN');
+      ReactGA.send({ hitType: "pageview", page: window.location.pathname });
+    }, []);
+  }
 
   return (
     <div className="page-content page-home wrap page-grid">

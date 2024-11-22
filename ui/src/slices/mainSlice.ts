@@ -516,7 +516,6 @@ export const snackAlert =
     };
 
 export const snackAlertError = (error: unknown) => {
-  console.error(error);
   if (error instanceof APIError) {
     if (error.status === 429) {
       return snackAlert(i18next.t('snack_alert.slowdown'), i18next.t('snack_alert.too_many_requests'));

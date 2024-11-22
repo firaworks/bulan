@@ -304,6 +304,25 @@ func GetUserByEmail(ctx context.Context, db *sql.DB, email string, viewer *uid.I
 	}
 	return users[0], err
 }
+
+func UserEmailExists(ctx context.Context, db *sql.DB, email string, viewer *uid.ID) (bool, error) {
+	var uid uid.ID
+	rows := db.QueryRow("SELECT id from users WHERE email = ?", email)
+	err := rows.Scan(&uid)
+	if err == nil {
+		if uid.Zero() {
+			return false, err
+		} else {
+			return true, err
+		}
+	} else {
+		if err == sql.ErrNoRows {
+			return false, nil
+		}
+		return true, err
+	}
+}
+
 func GetUserByPasswordResetToken(ctx context.Context, db *sql.DB, token string, viewer *uid.ID) (*User, error) {
 	rows, err := db.QueryContext(ctx, buildSelectUserQuery("WHERE users.password_reset_token = ?"), token)
 	if err != nil {
@@ -431,6 +450,7 @@ func scanUsers(ctx context.Context, db *sql.DB, rows *sql.Rows, viewer *uid.ID) 
 
 // RegisterUser creates a new user.
 func RegisterUser(ctx context.Context, db *sql.DB, username, email, password string) (*User, error) {
+	log.Println("REGISTERING USER")
 	// Check for duplicates.
 	if exists, _, err := usernameExists(ctx, db, username); err != nil {
 		return nil, err
@@ -441,7 +461,7 @@ func RegisterUser(ctx context.Context, db *sql.DB, username, email, password str
 			Message:    fmt.Sprintf("A user with username %s already exists.", username),
 		}
 	}
-
+	log.Print("WTH is going on")
 	// Check if username is valid.
 	if err := IsUsernameValid(username); err != nil {
 		return nil, httperr.NewBadRequest("invalid-username", fmt.Sprintf("Username %v.", err))
@@ -452,10 +472,12 @@ func RegisterUser(ctx context.Context, db *sql.DB, username, email, password str
 		return nil, err
 	}
 
+	log.Print("parsing email?:", err)
 	_, err = mail.ParseAddress(email)
 	if err != nil {
 		return nil, err
 	}
+	log.Print("parsed email", err)
 	if exists, _, err := userWithEmailExists(ctx, db, email); err != nil {
 		return nil, err
 	} else if exists {
@@ -465,7 +487,7 @@ func RegisterUser(ctx context.Context, db *sql.DB, username, email, password str
 			Message:    fmt.Sprintf("A user with email %s already exists.", email),
 		}
 	}
-
+	log.Print("guess we met an error or no?:", err)
 	id := uid.New()
 	query, args := msql.BuildInsertQuery("users", []msql.ColumnValue{
 		{Name: "id", Value: id},

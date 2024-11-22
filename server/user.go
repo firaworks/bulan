@@ -45,6 +45,16 @@ func (s *Server) getUser(w *responseWriter, r *request) error {
 	return w.writeJSON(user)
 }
 
+// /api/useremail/{email} [GET]
+func (s *Server) getEmailExists(w *responseWriter, r *request) error {
+	email := r.muxVar("email")
+	exists, err := core.UserEmailExists(r.ctx, s.db, email, r.viewer)
+	if err != nil {
+		return err
+	}
+	return w.writeString(fmt.Sprintf(`{"ef": %v}`, exists))
+}
+
 // /api/users/{username} [DELETE]
 func (s *Server) deleteUser(w *responseWriter, r *request) error {
 	if !r.loggedIn {
@@ -275,7 +285,6 @@ func (s *Server) signup(w *responseWriter, r *request) error {
 			return httperr.NewForbidden("captcha_verify_fail_2", "Captha verification failed.")
 		}
 	}
-
 	ip := httputil.GetIP(r.req)
 	if err := s.rateLimit(r, "signup_1_"+ip, time.Minute, 2); err != nil {
 		return err
@@ -283,7 +292,6 @@ func (s *Server) signup(w *responseWriter, r *request) error {
 	if err := s.rateLimit(r, "signup_2_"+ip, time.Hour*6, 10); err != nil {
 		return err
 	}
-
 	user, err := core.RegisterUser(r.ctx, s.db, username, email, password)
 	if err != nil {
 		return err

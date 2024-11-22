@@ -58,7 +58,7 @@ import LoginForm from './views/LoginForm';
 import i18next from 'i18next';
 import ResetPassword from './pages/ResetPassword';
 import PasswordResetPrompt from './components/PasswordResetPrompt';
-
+import ReactGA from 'react-ga4';
 
 // Value taken from _mixins.scss file.
 const tabletBreakpoint = 1170;
@@ -221,6 +221,14 @@ const App = () => {
     return null;
   } else if (loading === 'loading') {
     return <AppLoading />;
+  }
+
+  // GoogleAnalytics
+  if (import.meta.env.MODE === 'production') {
+    useEffect(() => {
+      ReactGA.initialize('G-6FC9YCEJXN');
+      ReactGA.send({ hitType: "pageview", page: window.location.pathname });
+    }, []);
   }
 
   return (
