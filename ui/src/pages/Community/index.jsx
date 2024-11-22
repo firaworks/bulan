@@ -128,12 +128,10 @@ const Community = () => {
   };
 
   // GoogleAnalytics
-  if (import.meta.env.MODE === 'production') {
-    useEffect(() => {
-      ReactGA.initialize('G-6FC9YCEJXN');
-      ReactGA.send({ hitType: "pageview", page: window.location.pathname });
-    }, []);
-  }
+  useEffect(() => {
+    ReactGA.initialize('G-6FC9YCEJXN');
+    ReactGA.send({ hitType: "pageview", page: window.location.pathname });
+  }, []);
 
   return (
     <div className="page-content page-community wrap page-grid">
