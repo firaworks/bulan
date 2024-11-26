@@ -103,20 +103,14 @@ const Footer = () => {
           )}
         </div>
         <div className="footer-col">
-          <div className="footer-title">Policies</div>
-          <Link className="footer-item" to="/guidelines">
-            Site guidelines
-          </Link>
-          <Link className="footer-item" to="/moderator-guidelines">
-            Moderator guidelines
-          </Link>
+          <div className="footer-title">{t('footer.policies')}</div>
           <Link className="footer-item" to="/terms">
             {t("footer.terms")}
           </Link>
           <Link className="footer-item" to="/privacy-policy">
             {t("footer.privacy")}
           </Link>
-          <Link className="footer-item" to="guidelines">
+          <Link className="footer-item" to="/guidelines">
             {t("footer.guidelines")}
           </Link>
         </div>

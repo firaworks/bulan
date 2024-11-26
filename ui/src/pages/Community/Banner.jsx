@@ -13,21 +13,21 @@ const Banner = ({ community, ...rest }) => {
   return <div className='page-about' style={{ display: 'inline' }}>
     <div className="about-landing" style={{ height: '100%' }}>
       <div className="wrap">
-        <h1 className="about-heading heading-highlight">
-          {t("about_page.title")}
+        <h1 className="about-heading heading-highlight" style={{ marginBottom: 35 }}>
+          {t('community_banner_txt')}
         </h1>
       </div>
     </div>
   </div>
-  return (
-    <Image
-      src={src}
-      alt={`${community.name}'s banner`}
-      backgroundColor={community.bannerImage ? community.bannerImage.averageColor : '#fff'}
-      {...rest}
-      isFullSize
-    />
-  );
+  // return (
+  //   <Image
+  //     src={src}
+  //     alt={`${community.name}'s banner`}
+  //     backgroundColor={community.bannerImage ? community.bannerImage.averageColor : '#fff'}
+  //     {...rest}
+  //     isFullSize
+  //   />
+  // );
 };
 
 Banner.propTypes = {

@@ -450,7 +450,6 @@ func scanUsers(ctx context.Context, db *sql.DB, rows *sql.Rows, viewer *uid.ID) 
 
 // RegisterUser creates a new user.
 func RegisterUser(ctx context.Context, db *sql.DB, username, email, password string) (*User, error) {
-	log.Println("REGISTERING USER")
 	// Check for duplicates.
 	if exists, _, err := usernameExists(ctx, db, username); err != nil {
 		return nil, err
@@ -461,7 +460,6 @@ func RegisterUser(ctx context.Context, db *sql.DB, username, email, password str
 			Message:    fmt.Sprintf("A user with username %s already exists.", username),
 		}
 	}
-	log.Print("WTH is going on")
 	// Check if username is valid.
 	if err := IsUsernameValid(username); err != nil {
 		return nil, httperr.NewBadRequest("invalid-username", fmt.Sprintf("Username %v.", err))
@@ -472,12 +470,13 @@ func RegisterUser(ctx context.Context, db *sql.DB, username, email, password str
 		return nil, err
 	}
 
-	log.Print("parsing email?:", err)
-	_, err = mail.ParseAddress(email)
-	if err != nil {
-		return nil, err
+	if username != "ghost" {
+		_, err = mail.ParseAddress(email)
+		if err != nil {
+			return nil, err
+		}
 	}
-	log.Print("parsed email", err)
+
 	if exists, _, err := userWithEmailExists(ctx, db, email); err != nil {
 		return nil, err
 	} else if exists {
@@ -487,7 +486,7 @@ func RegisterUser(ctx context.Context, db *sql.DB, username, email, password str
 			Message:    fmt.Sprintf("A user with email %s already exists.", email),
 		}
 	}
-	log.Print("guess we met an error or no?:", err)
+
 	id := uid.New()
 	query, args := msql.BuildInsertQuery("users", []msql.ColumnValue{
 		{Name: "id", Value: id},

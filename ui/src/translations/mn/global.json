@@ -89,7 +89,8 @@
         "terms": "Үйлчилгээний Нөхцөл",
         "privacy": "Нууцлал",
         "guidelines": "Контентын зөвлөгөө",
-        "documentation": "Documentation"
+        "documentation": "Documentation",
+        "policies":"Бодлого"
     },
     "auth": {
         "login": "Нэвтрэх",
@@ -253,6 +254,7 @@
     "new_list": "Шинэ жагсаалт",
     "create_list": "Жагсаалт үүсгэх",
     "list_created": "Жагсаалт үүслээ",
+    "community_banner_txt": "Монголчуудын нээлттэй форум",
     "mod_tools": "Модны багаж",
     "mod": {
         "community_settings": "Булангийн тохиргоо",
