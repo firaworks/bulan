@@ -509,12 +509,16 @@ func RegisterUser(ctx context.Context, db *sql.DB, username, email, password str
 		log.Println("Failed to create the default community of user: ", username)
 		// Continue on failure.
 	}
-	avatar := adorable.Random()
 	usr, err := GetUser(ctx, db, id, nil)
-	if err != nil {
-		return nil, err
+
+	if username != "ghost" {
+		avatar := adorable.Random()
+		if err != nil {
+			return nil, err
+		}
+		err = usr.UpdateProPic(ctx, avatar)
 	}
-	err = usr.UpdateProPic(ctx, avatar)
+
 	return usr, err
 }
 
