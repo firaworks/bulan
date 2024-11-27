@@ -96,7 +96,7 @@ const Sidebar = ({ isMobile = false }) => {
                 fill="currentColor"
               />
             </svg>
-            <span>{expanded ? t("show.more") : t("show.show") + ` ${lengthLeft} ` + t("show.show_more")}</span>
+            <span>{expanded ? t('show_less') : t('show_n_more', { n: lengthLeft })}</span>
           </div>
         )}
       </>

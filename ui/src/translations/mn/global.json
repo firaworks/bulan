@@ -90,7 +90,7 @@
         "privacy": "Нууцлал",
         "guidelines": "Контентын зөвлөгөө",
         "documentation": "Documentation",
-        "policies":"Бодлого"
+        "policies": "Бодлого"
     },
     "auth": {
         "login": "Нэвтрэх",
@@ -127,12 +127,9 @@
     "select_bar": {
         "sort": "Ялгах :"
     },
-    "show": {
-        "more": "Өшөө ихийг харуул",
-        "less": "Багыг харуул",
-        "show": "Харуул",
-        "show_more": "Өшөөөө"
-    },
+    "show_less": "Хураах",
+    "show_more": "Дэлгэх",
+    "show_n_more": "Дэлгэх (+{{n}})",
     "subscriptions": "Дагасан",
     "sidebar": {
         "home": "Нүүр",
@@ -212,7 +209,7 @@
         "user": "Гишүүн",
         "invalid": "Тохиромжгүй"
     },
-    "more": "Өшөө",
+    "more": "Ещё",
     "communities": "Булангууд",
     "home": "Нүүр",
     "under_construction": "Газар шорооны ажилтай байна",

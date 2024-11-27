@@ -34,7 +34,7 @@ const ShowMoreBox = ({ maxHeight = '300px', children, showButton = false, ...pro
       {showButton && wasOverflowing && (
         <div className="showmorebox-button">
           <button className="button-clear" onClick={() => setShowAll((x) => !x)}>
-            {showAll ? t("show.less") : t("show.more")}
+            {showAll ? t('show_less') : t('show_more')}
           </button>
         </div>
       )}

@@ -135,7 +135,7 @@ export function dateString1(date, showYear = false) {
     t("months.december"),
   ];
   if (!(date instanceof Date)) date = new Date(date);
-  return `${showYear ? date.getFullYear() + ' оны ' : ''}${months[date.getMonth()]}ын ${date.getDate()}`;
+  return `${showYear ? date.getFullYear() + ' оны ' : ''}${months[date.getMonth()]}ын ${date.getUTCDate()}`;
 }
 
 export function validEmail(emailAddress) {
