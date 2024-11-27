@@ -124,8 +124,22 @@ const cacheFirst = async ({ request, preloadResponsePromise }) => {
   }
 };
 
-self.addEventListener('fetch', (e) => {
-  e.respondWith(cacheFirst({ request: e.request, preloadResponsePromise: e.preloadResponse }));
+// self.addEventListener('fetch', (e) => {
+//   if (e.preloadResponse) {
+//     e.respondWith(cacheFirst({ request: e.request, preloadResponsePromise: e.preloadResponse }));
+//   }
+// });
+
+// Correct (using respondWith - if you want to modify the response):
+self.addEventListener('fetch', event => {
+  if (event.preloadResponse) {
+    event.respondWith(event.preloadResponse.then(response => {
+      return cacheFirst({ request: event.request, preloadResponsePromise: response })
+    }).catch(error => {
+      console.error("Preload error:", error);
+      return new Response("Fallback content", { status: 500 });
+    }));
+  }
 });
 
 const getNotificationInfo = (notification, csrfToken) => {

@@ -159,7 +159,7 @@ export function useIsChanged(deps: unknown[] = []): [boolean, () => void] {
     if (c < 3) setC((c) => c + 1);
   }, deps);
   const resetChanged = () => setC(1);
-  console.log('c: ', c);
+  // console.log('c: ', c);
   return [c > 1, resetChanged];
 }
 
