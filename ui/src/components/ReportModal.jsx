@@ -71,7 +71,7 @@ const ReportModal = ({
       <Modal open={open} onClose={handleClose}>
         <div className="modal-card">
           <div className="modal-card-head">
-            <div className="modal-card-title">{t('report')} {targetType}</div>
+            <div className="modal-card-title">{t('report')}</div>
             <ButtonClose onClick={handleClose} />
           </div>
           <div className="modal-card-content">

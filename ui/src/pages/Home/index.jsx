@@ -153,7 +153,7 @@ export const ButtonAppInstall = ({ deferredPrompt, children, ...props }) => {
                 <li>{t('homepage.ios_step_2')}</li>
                 <li>{t('homepage.ios_step_3')}</li>
               </ol>
-              <p>{t('homepage.ios_description')}</p>
+              {/* <p>{t('homepage.ios_description')}</p> */}
             </div>
           </div>
           <div className="modal-card-actions">

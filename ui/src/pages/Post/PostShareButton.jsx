@@ -92,7 +92,7 @@ const PostShareButton = ({ post }) => {
         {post.type === 'image' && renderImageDownloadButton()}
         {hasMoreShareableOptions && (
           <button className="button-clear dropdown-item" onClick={handleMoreButtonClick}>
-            {t("more")}
+            {t('more')}
           </button>
         )}
       </div>

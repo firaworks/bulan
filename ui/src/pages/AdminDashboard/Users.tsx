@@ -82,7 +82,7 @@ export default function Users() {
       <div className="dashboard-page-content">
         <SimpleFeed items={feedItems} onRenderItem={handleRenderItem} />
         <Button className="is-more-button" loading={nextUsersLoading} onClick={fetchNextUsers}>
-          {t("more")}
+          {t('more')}
         </Button>
       </div>
     </div>
