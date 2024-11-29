@@ -2,6 +2,7 @@
 package httputil
 
 import (
+	"errors"
 	"io"
 	"net"
 	"net/http"
@@ -18,6 +19,10 @@ func GetIP(r *http.Request) string {
 
 var httpClient = &http.Client{
 	Timeout: time.Second * 6,
+	CheckRedirect: func(req *http.Request, via []*http.Request) error {
+		// req.Header.Set("User-Agent", ua)
+		return http.ErrUseLastResponse
+	},
 }
 
 const (
@@ -26,13 +31,30 @@ const (
 
 // Get fetches the file at url with an ordinary looking User-Agent. Make sure to
 // close the http.Response.Body.
-func Get(url string) (*http.Response, error) {
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
+func Get(url string) (resp *http.Response, err error) {
+	nextURL := url
+	var i int
+	for i < 10 {
+		resp, err = httpClient.Get(nextURL)
+		if err != nil {
+			return nil, err
+		}
+		if resp.StatusCode == 200 {
+			return resp, err
+		} else {
+			nextURL = resp.Header.Get("Location")
+			if resp.Request.Host == "www.reddit.com" && resp.StatusCode == 302 {
+				// reddit has a weird way of returning 302 upon sucess
+				return resp, nil
+			}
+			i += 1
+		}
 	}
-	req.Header.Set("User-Agent", userAgent)
-	return httpClient.Do(req)
+	if resp == nil {
+		return nil, errors.New("exceeded redirects")
+	} else {
+		return resp, err
+	}
 }
 
 // ExtractOpenGraphImage returns the Open Graph image tag of the HTML document in r.
