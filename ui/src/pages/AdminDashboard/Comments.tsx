@@ -77,7 +77,7 @@ export default function Comments() {
       <div className="dashboard-page-content">
         <SimpleFeed items={feedItems} onRenderItem={handleRenderItem} />
         <Button className="is-more-button" loading={feedReloading} onClick={fetchNextItems}>
-          {t('more')}
+          {t('other')}
         </Button>
       </div>
     </div>
