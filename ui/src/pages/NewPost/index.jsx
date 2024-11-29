@@ -280,7 +280,7 @@ const NewPost = () => {
     return () => window.removeEventListener('keydown', listner);
   }, [handleSubmit]);
   const handleCancel = () => {
-    if (((changed || isUploading) && confirm(t("new_post.alert_13"))) || !changed) {
+    if (((changed || isUploading) && confirm(t('new_post.unsaved_confirmation'))) || !changed) {
       if (isUploading) abortController.current.abort();
       if (window.appData.historyLength > 1) {
         history.goBack();
