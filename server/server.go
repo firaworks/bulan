@@ -713,19 +713,19 @@ func (s *Server) insertMetaTags(doc *html.Node, r *http.Request) {
 	// The default og:site_name tag is in index.html file.
 
 	if path == "/about" {
-		text := "About " + s.config.SiteName
+		text := s.config.SiteName + " сайтын тухай"
 		appendTitle(text, "")
 		appendDescription(text)
 	} else if path == "/terms" {
-		text := "Terms and conditions of " + s.config.SiteName
+		text := s.config.SiteName + "-н үйлчилгээний нөхцөл"
 		appendTitle(text, "")
 		appendDescription(text)
 	} else if path == "/privacy-policy" {
-		text := "Privacy policy of " + s.config.SiteName
+		text := s.config.SiteName + "-н нууцлалын бодлого"
 		appendTitle(text, "")
 		appendDescription(text)
 	} else if path == "/guidelines" {
-		text := "Guidelines on using " + s.config.SiteName
+		text := s.config.SiteName + "-н агуулгын бодлого"
 		appendTitle(text, "")
 		appendDescription(text)
 	} else if len(list) == 1 {
@@ -742,8 +742,8 @@ func (s *Server) insertMetaTags(doc *html.Node, r *http.Request) {
 				} else {
 					username = user.Username
 				}
-				appendTitle("@"+username, " on "+s.config.SiteName)
-				appendDescription(username + "'s profile.")
+				appendTitle("@"+username, " | "+s.config.SiteName)
+				appendDescription(username + "-н профайл.")
 			}
 		} else {
 			// community page
@@ -772,14 +772,14 @@ func (s *Server) insertMetaTags(doc *html.Node, r *http.Request) {
 		if err == nil {
 			appendTitle(post.Title, "")
 			sep := " • "
-			upVotes := strconv.Itoa(post.Upvotes) + " upvote"
-			if post.Upvotes > 1 || post.Upvotes == 0 {
-				upVotes += "s"
-			}
-			noComments := strconv.Itoa(post.NumComments) + " comment"
-			if post.NumComments > 1 || post.NumComments == 0 {
-				noComments += "s"
-			}
+			upVotes := strconv.Itoa(post.Upvotes) + " сайшаасан"
+			// if post.Upvotes > 1 || post.Upvotes == 0 {
+			// 	upVotes += "s"
+			// }
+			noComments := strconv.Itoa(post.NumComments) + " комменттой"
+			// if post.NumComments > 1 || post.NumComments == 0 {
+			// 	noComments += "s"
+			// }
 			ogDescription := upVotes + sep + noComments
 			appendDescription(ogDescription)
 			appendMetaTag(doc, []html.Attribute{
