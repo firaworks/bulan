@@ -682,7 +682,7 @@ func (c *converter) convert(ctx context.Context, image []byte, r *request) ([]by
 
 	select {
 	case res := <-req.response:
-		if time.Since(t0) > time.Millisecond*300 {
+		if time.Since(t0) > time.Millisecond*900 {
 			// Make note of requests that take too long.
 			log.Printf("converter.convert (id: %v) took %v (format: %v, size: %v, fit: %v)\n", r.id, time.Since(t0), r.format, r.size, r.fit)
 		}
