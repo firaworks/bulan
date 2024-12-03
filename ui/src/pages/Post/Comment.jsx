@@ -590,7 +590,7 @@ const Comment = ({
                   noButton
                 />
               )}
-              <Dropdown target={<button className="button-text">{t("more")}</button>}>
+              <Dropdown target={<button className="button-text">{t('more_actions')}</button>}>
                 <div className="dropdown-list">
                   <CommentShareDropdownItems url={commentShareURL} />
                   {showEditDelete && (
