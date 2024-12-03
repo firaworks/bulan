@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import MobileSwiper from './MobileSwiper';
 
 const ImageGallery = ({
   className,
@@ -90,23 +91,47 @@ const ImageGallery = ({
     }
   }, [showLeftArrow, showRightArrow, keyboardControlsOn]);
 
+  const handleSwipe = useCallback(({ deltaX, deltaY }) => {
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX > 0) {
+        // swipe right
+        if (showLeftArrow) {
+          setCurrentImageIndex((n) => n - 1);
+        }
+      } else {
+        // swipe left
+        if (showRightArrow) {
+          setCurrentImageIndex((n) => n + 1);
+        }
+      }
+    } else {
+      if (deltaY > 0) {
+        // scroll down
+      } else {
+        // scroll up
+      }
+    }
+  })
+
   return (
-    <div className={'image-gallery' + (className ? ` ${className}` : '')} {...props}>
-      <div
-        className="image-gallery-next-btn is-button is-previous"
-        onClick={() => setCurrentImageIndex(showLeftArrow ? (n) => n - 1 : numImages - 1)}
-      >
-        {nextIcon}
+    <MobileSwiper onSwipe={handleSwipe}>
+      <div className={'image-gallery' + (className ? ` ${className}` : '')} {...props}>
+        <div
+          className="image-gallery-next-btn is-button is-previous"
+          onClick={() => setCurrentImageIndex(showLeftArrow ? (n) => n - 1 : numImages - 1)}
+        >
+          {nextIcon}
+        </div>
+        <div
+          className="image-gallery-next-btn is-button"
+          onClick={() => setCurrentImageIndex(showRightArrow ? (n) => n + 1 : 0)}
+        >
+          {nextIcon}
+        </div>
+        {renderImages()}
+        {renderDots()}
       </div>
-      <div
-        className="image-gallery-next-btn is-button"
-        onClick={() => setCurrentImageIndex(showRightArrow ? (n) => n + 1 : 0)}
-      >
-        {nextIcon}
-      </div>
-      {renderImages()}
-      {renderDots()}
-    </div>
+    </MobileSwiper>
   );
 };
 
