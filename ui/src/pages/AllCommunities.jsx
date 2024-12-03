@@ -100,11 +100,11 @@ const AllCommunities = () => {
               icon={isSearching ? <SVGClose /> : <SVGSearch />}
               onClick={() => setIsSearching((v) => !v)}
             />
-            {!isSearching && (
+            {/* {!isSearching && (
               <RequestCommunityButton className="button-main is-m comms-new-button" isMobile>
                 {t("all_communities.text_3")}
               </RequestCommunityButton>
-            )}
+            )} */}
           </div>
         </div>
         <div className="comms-list">
