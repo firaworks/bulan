@@ -57,7 +57,7 @@ export default function Communities() {
   };
 
   if (loading !== 'loaded') {
-    return <PageLoading />;
+    return <PageLoading text="" />;
   }
 
   const feedItems: SimpleFeedItem<Community>[] = (communitiesState.communities || []).map(
