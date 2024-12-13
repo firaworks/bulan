@@ -1,14 +1,25 @@
 package server
 
 import (
+	"bytes"
+	"context"
+	"errors"
+	"fmt"
 	"io"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/service/mediaconvert"
+	"github.com/aws/aws-sdk-go-v2/service/mediaconvert/types"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/discuitnet/discuit/core"
 	"github.com/discuitnet/discuit/internal/httperr"
 	"github.com/discuitnet/discuit/internal/uid"
+	"github.com/h2non/filetype"
 )
 
 // /api/posts [POST]
@@ -33,6 +44,7 @@ func (s *Server) addPost(w *responseWriter, r *request) error {
 		UserGroup core.UserGroup      `json:"userGroup"`
 		ImageId   string              `json:"imageId"`
 		Images    []*core.ImageUpload `json:"images"`
+		Video     *core.VideoRequest  `json:"video"`
 	}{
 		PostType:  core.PostTypeText,
 		UserGroup: core.UserGroupNormal,
@@ -74,6 +86,22 @@ func (s *Server) addPost(w *responseWriter, r *request) error {
 		post, err = core.CreateImagePost(r.ctx, s.db, *r.viewer, comm.ID, req.Title, images)
 	case core.PostTypeLink:
 		post, err = core.CreateLinkPost(r.ctx, s.db, *r.viewer, comm.ID, req.Title, req.URL)
+	case core.PostTypeVideo:
+		var cmafPath = ""
+		if req.Video != nil {
+			if len(req.Video.S3Path) > 0 && len(req.Video.VideoID) > 0 {
+				cmafPath, err = s.callMediaConvertAWS(r.ctx, req.Video.S3Path)
+				if err != nil {
+					return httperr.NewBadRequest("convert_video_error", "Error while converting video.")
+				}
+				req.Video.CmafPath = cmafPath
+			} else {
+				return httperr.NewBadRequest("invalid_video_id", "Invalid video ID.")
+			}
+		} else {
+			return httperr.NewBadRequest("invalid_video_input", "Invalid video input.")
+		}
+		post, err = core.CreateVideoPost(r.ctx, s.db, *r.viewer, comm.ID, req.Title, req.Video)
 	default:
 		return httperr.NewBadRequest("invalid_post_type", "Invalid post type.")
 	}
@@ -277,7 +305,7 @@ func (s *Server) postVote(w *responseWriter, r *request) error {
 	return w.writeJSON(post)
 }
 
-// /api/_uploads [ POST ]
+// /api/_uploadImage [ POST ]
 func (s *Server) imageUpload(w *responseWriter, r *request) error {
 	if s.config.DisableImagePosts {
 		return httperr.NewForbidden("no_image_posts", "Image posts are not all allowed.")
@@ -315,4 +343,178 @@ func (s *Server) imageUpload(w *responseWriter, r *request) error {
 	}
 
 	return w.writeJSON(image.Image())
+}
+
+// /api/_uploadVideo [ POST ]
+func (s *Server) videoUpload(w *responseWriter, r *request) error {
+	if s.config.DisableVideoPosts {
+		return httperr.NewForbidden("no_video_posts", "Video posts are not all allowed.")
+	}
+	if !r.loggedIn {
+		return errNotLoggedIn
+	}
+
+	if err := s.rateLimit(r, "uploads_1_"+r.viewer.String(), time.Second*1, 5); err != nil {
+		return err
+	}
+	if err := s.rateLimit(r, "uploads_2_"+r.viewer.String(), time.Hour*24, 80); err != nil {
+		return err
+	}
+
+	r.req.Body = http.MaxBytesReader(w, r.req.Body, int64(s.config.MaxVideoSize)) // limit max upload size
+	if err := r.req.ParseMultipartForm(int64(s.config.MaxVideoSize)); err != nil {
+		return httperr.NewBadRequest("file_size_exceeded", "Max file size exceeded.")
+	}
+
+	file, _, err := r.req.FormFile("video")
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	fileData, err := io.ReadAll(file)
+	if err != nil {
+		return err
+	}
+
+	isVid := filetype.IsVideo(fileData)
+	if !isVid {
+		return errors.New("unsupported video type")
+	}
+	id := uid.New()
+	s3dir := "video/input"
+	s3path, err := s.saveToAWS(r.ctx, fileData, s3dir, id.String())
+	if err != nil {
+		return err
+	}
+	video, err := core.SavePostVideo(r.ctx, s.db, *r.viewer, id, s3path)
+	if err != nil {
+		return err
+	}
+	return w.writeJSON(video.Video())
+}
+
+func (s *Server) saveToAWS(ctx context.Context, fileData []byte, s3dir, fname string) (string, error) {
+	ft, _ := filetype.Match(fileData)
+	// fileMeta := map[string]string{"Content-Type": ft.MIME.Value}
+	filename := fname + "." + ft.Extension
+	env := "dev/"
+	if !s.config.IsDevelopment {
+		env = ""
+	}
+	s3path := fmt.Sprintf("%s%s/%s", env, s3dir, filename)
+	creds := aws.Credentials{
+		AccessKeyID:     s.config.AwsAccessKeyId,
+		SecretAccessKey: s.config.AwsSecretAccessKey,
+	}
+	credsProvider := credentials.StaticCredentialsProvider{
+		Value: creds,
+	}
+	s3client := s3.NewFromConfig(aws.Config{
+		Region:      s.config.AwsRegion,
+		Credentials: credsProvider,
+	})
+	_, err := s3client.PutObject(ctx, &s3.PutObjectInput{
+		// Metadata:    fileMeta,
+		ContentType: aws.String(ft.MIME.Value),
+		Bucket:      aws.String(s.config.AwsBucket),
+		Key:         aws.String(s3path),
+		Body:        bytes.NewReader(fileData),
+	})
+	return s3path, err
+}
+
+func (s *Server) callMediaConvertAWS(ctx context.Context, s3path string) (string, error) {
+	cfg := aws.Config{
+		Region: s.config.AwsRegionMediaConvert,
+		Credentials: credentials.StaticCredentialsProvider{
+			Value: aws.Credentials{
+				AccessKeyID:     s.config.AwsAccessKeyId,
+				SecretAccessKey: s.config.AwsSecretAccessKey,
+			},
+		},
+	}
+	mcClient := mediaconvert.NewFromConfig(cfg)
+	var inputs []types.Input
+	audioSelector := make(map[string]types.AudioSelector)
+	audioSelector["Audio Selector 1"] = types.AudioSelector{
+		DefaultSelection: "DEFAULT",
+	}
+	inputs = append(inputs, types.Input{
+		FileInput:      aws.String(fmt.Sprintf("s3://%s/%s", s.config.AwsBucket, s3path)),
+		VideoSelector:  &types.VideoSelector{Rotate: types.InputRotateAuto},
+		AudioSelectors: audioSelector,
+		TimecodeSource: types.InputTimecodeSource(*aws.String("ZEROBASED")),
+	})
+	jobInput := &mediaconvert.CreateJobInput{
+		Role:        aws.String(s.config.AwsMediaConvertRoleARN),
+		JobTemplate: aws.String(s.config.AwsMediaConvertJobTemplate),
+		Settings: &types.JobSettings{
+			Inputs: inputs,
+		},
+	}
+	// to track if job completes through transition to tomorrow
+	tBefore := time.Now().UTC().Format("20060102")
+	jobOutput, err := mcClient.CreateJob(context.Background(), jobInput)
+	if err != nil {
+		return "", err
+	}
+	jobId := *jobOutput.Job.Id
+	err = waitForJobCompletion(ctx, mcClient, jobId)
+	if err != nil {
+		return "", err
+	}
+	// to make sure
+	tAfter := time.Now().UTC().Format("20060102")
+	// extract filename from path
+	parts := strings.Split(s3path, "/")
+	filenameWithoutExt := strings.TrimSuffix(parts[len(parts)-1], filepath.Ext(parts[len(parts)-1]))
+	cmafExt := "m3u8"
+	urlBefore := fmt.Sprintf("%s/v/%s/%s.%s", s.config.CdnBaseUrl, tBefore, filenameWithoutExt, cmafExt)
+	urlAfter := fmt.Sprintf("%s/v/%s/%s.%s", s.config.CdnBaseUrl, tAfter, filenameWithoutExt, cmafExt)
+	// finally check if the converted medias exist
+	finalUrl, err := checkMediaUrls(urlBefore, urlAfter)
+	if err != nil {
+		return "", err
+	}
+	if err != nil {
+		return "", err
+	}
+	return finalUrl, nil
+}
+
+func waitForJobCompletion(ctx context.Context, client *mediaconvert.Client, jobId string) error {
+	for {
+		input := &mediaconvert.GetJobInput{
+			Id: aws.String(jobId),
+		}
+		result, err := client.GetJob(ctx, input)
+		if err != nil {
+			return err
+		}
+		if result.Job.Status == types.JobStatusComplete {
+			return nil
+		} else if result.Job.Status == types.JobStatusError || result.Job.Status == types.JobStatusCanceled {
+			return fmt.Errorf("job failed: %s", result.Job.Status)
+		}
+		time.Sleep(2 * time.Second)
+	}
+}
+
+func checkMediaUrls(url1, url2 string) (string, error) {
+	r, err := http.Head(url1)
+	if err != nil {
+		return "", err
+	}
+	if r.StatusCode == http.StatusOK {
+		return url1, nil
+	}
+	r, err = http.Head(url2)
+	if err != nil {
+		return "", err
+	}
+	if r.StatusCode == http.StatusOK {
+		return url2, nil
+	}
+	return "", errors.New("media convert output failure")
 }

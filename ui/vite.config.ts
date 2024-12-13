@@ -45,6 +45,7 @@ interface AppConfig {
   githubURL: string;
   substackURL: string;
   disableImagePosts: boolean;
+  disableVideoPosts: boolean;
   disableForumCreation: boolean;
   forumCreationReqPoints: number;
   defaultFeedSort: string;
@@ -69,6 +70,7 @@ function parseYamlConfigFile(): { define: { [index: string]: string }; config: A
     githubURL: configFile.githubURL,
     substackURL: configFile.substackURL,
     disableImagePosts: configFile.disableImagePosts,
+    disableVideoPosts: configFile.disableVideoPosts,
     disableForumCreation: configFile.disableForumCreation,
     forumCreationReqPoints: configFile.forumCreationReqPoints,
     defaultFeedSort: configFile.defaultFeedSort,

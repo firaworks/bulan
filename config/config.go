@@ -48,12 +48,14 @@ type Config struct {
 
 	DisableRateLimits bool `yaml:"disableRateLimits"`
 	MaxImageSize      int  `yaml:"maxImageSize"`
+	MaxVideoSize      int  `yaml:"maxVideoSize"`
 
 	// If API requests have a URL query parameter of the form 'adminKey=value',
 	// where value is AdminAPIKey, rate limits are disabled.
 	AdminAPIKey string `yaml:"adminAPIKey"`
 
 	DisableImagePosts bool `yaml:"disableImagePosts"`
+	DisableVideoPosts bool `yaml:"disableVideoPosts"`
 
 	DisableForumCreation   bool `yaml:"disableForumCreation"`   // If true, only admins can create communities.
 	ForumCreationReqPoints int  `yaml:"forumCreationReqPoints"` // Minimum points required for non-admins to create community, Required non-empty config field.
@@ -80,6 +82,16 @@ type Config struct {
 	SmtpUser     string `yaml:"smtpUser"`
 	SmtpPassword string `yaml:"smtpPassword"`
 	SmtpSender   string `yaml:"smtpSender"`
+
+	// aws access
+	CdnBaseUrl                 string `yaml:"cdnBaseUrl"`
+	AwsRegion                  string `yaml:"awsRegion"`
+	AwsBucket                  string `yaml:"awsBucket"`
+	AwsAccessKeyId             string `yaml:"awsAccessKeyId"`
+	AwsSecretAccessKey         string `yaml:"awsSecretAccessKey"`
+	AwsRegionMediaConvert      string `yaml:"awsRegionMediaConvert"`
+	AwsMediaConvertJobTemplate string `yaml:"awsMediaConvertJobTemplate"`
+	AwsMediaConvertRoleARN     string `yaml:"awsMediaConvertRoleARN"`
 }
 
 // Parse parses the yaml file at path and returns a Config.
@@ -95,6 +107,7 @@ func Parse(path string) (*Config, error) {
 		DefaultFeedSort:    core.FeedSortHot,
 		MaxImageSize:       25 * (1 << 20),
 		MaxImagesPerPost:   10,
+		MaxVideoSize:       100 * (1 << 20),
 
 		// Required fields:
 		ForumCreationReqPoints: -1,
@@ -137,12 +150,14 @@ func Parse(path string) (*Config, error) {
 
 		"DISCUIT_DISABLE_RATE_LIMITS": &c.DisableRateLimits,
 		"DISCUIT_MAX_IMAGE_SIZE":      &c.MaxImageSize,
+		"DISCUIT_MAX_VIDEO_SIZE":      &c.MaxVideoSize,
 
 		// If API requests have a URL query parameter of the form 'adminKey=value',
 		// where value is AdminApiKey, rate limits are disabled.
 		"DISCUIT_ADMIN_API_KEY": &c.AdminAPIKey,
 
 		"DISCUIT_DISABLE_IMAGE_POSTS": &c.DisableImagePosts,
+		"DISCUIT_DISABLE_VIDEO_POSTS": &c.DisableVideoPosts,
 
 		"DISCUIT_DISABLE_FORUM_CREATION":    &c.DisableForumCreation,
 		"DISCUIT_FORUM_CREATION_REQ_POINTS": &c.ForumCreationReqPoints,

@@ -10,6 +10,7 @@ import (
 	"math"
 	"net/http"
 	"net/url"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -20,6 +21,7 @@ import (
 	msql "github.com/discuitnet/discuit/internal/sql"
 	"github.com/discuitnet/discuit/internal/uid"
 	"github.com/discuitnet/discuit/internal/utils"
+	"github.com/discuitnet/discuit/internal/videos"
 	"golang.org/x/exp/slices"
 )
 
@@ -41,6 +43,7 @@ const (
 	PostTypeText = PostType(iota)
 	PostTypeImage
 	PostTypeLink
+	PostTypeVideo
 )
 
 // Valid reports whether t is a valid PostType.
@@ -59,6 +62,8 @@ func (t PostType) MarshalText() ([]byte, error) {
 		s = "image"
 	case PostTypeLink:
 		s = "link"
+	case PostTypeVideo:
+		s = "video"
 	default:
 		return nil, errPostTypeUnsupported
 	}
@@ -74,6 +79,8 @@ func (p *PostType) UnmarshalText(text []byte) error {
 		*p = PostTypeImage
 	case "link":
 		*p = PostTypeLink
+	case "video":
+		*p = PostTypeVideo
 	default:
 		return errPostTypeUnsupported
 	}
@@ -113,8 +120,10 @@ type Post struct {
 	Title string          `json:"title"`
 	Body  msql.NullString `json:"body"`
 
-	Image  *images.Image   `json:"image"`
-	Images []*images.Image `json:"images"`
+	Image   *images.Image   `json:"image"`
+	Images  []*images.Image `json:"images"`
+	VideoID uid.NullID      `json:"video_id"`
+	Video   *videos.Video   `json:"video"`
 
 	link *postLink `json:"-"` // what's saved to the DB
 
@@ -180,6 +189,7 @@ var selectPostCols = []string{
 	"posts.title",
 	"posts.body",
 	"posts.link_info",
+	"posts.video_id",
 	"posts.locked",
 	"posts.locked_at",
 	"posts.locked_by",
@@ -213,9 +223,11 @@ func init() {
 	selectPostCols = append(selectPostCols, images.ImageColumns("link_image")...)
 	selectPostCols = append(selectPostCols, images.ImageColumns("comm_pro_pic")...)
 	selectPostCols = append(selectPostCols, images.ImageColumns("comm_banner")...)
+	selectPostCols = append(selectPostCols, videos.VideoColumns("post_video")...)
 	selectPostJoins = append(selectPostJoins, "LEFT JOIN images AS link_image ON link_image.id = posts.link_image")
 	selectPostJoins = append(selectPostJoins, "LEFT JOIN images AS comm_pro_pic ON comm_pro_pic.id = communities.pro_pic_2")
 	selectPostJoins = append(selectPostJoins, "LEFT JOIN images AS comm_banner ON comm_banner.id = communities.banner_image_2")
+	selectPostJoins = append(selectPostJoins, "LEFT JOIN videos AS post_video ON post_video.id = posts.video_id")
 }
 
 func buildSelectPostQuery(loggedIn bool, where string) string {
@@ -322,6 +334,7 @@ func scanPosts(ctx context.Context, db *sql.DB, rows *sql.Rows, viewer *uid.ID) 
 			&post.Title,
 			&post.Body,
 			&linkBytes,
+			&post.VideoID,
 			&post.Locked,
 			&post.LockedAt,
 			&post.LockedBy,
@@ -349,9 +362,11 @@ func scanPosts(ctx context.Context, db *sql.DB, rows *sql.Rows, viewer *uid.ID) 
 		linkImage := &images.Image{}
 		proPic := &images.Image{}
 		bannerImage := &images.Image{}
+		video := &videos.Video{}
 		dest = append(dest, linkImage.ScanDestinations()...)
 		dest = append(dest, proPic.ScanDestinations()...)
 		dest = append(dest, bannerImage.ScanDestinations()...)
+		dest = append(dest, video.ScanDestinations()...)
 		if loggedIn {
 			dest = append(dest, &post.ViewerVoted, &post.ViewerVotedUp)
 		}
@@ -382,6 +397,22 @@ func scanPosts(ctx context.Context, db *sql.DB, rows *sql.Rows, viewer *uid.ID) 
 			post.link = dbLink
 			post.Link = link
 			post.Link.SetImageCopies()
+		}
+		if video.ID != nil {
+			// Putting together thumbnail imgurl
+			//
+			// example cmaf: https://cdn.bulan.mn/v/20241212/18107aae643bae60958f8bed.m3u8
+			// example thumb: https://cdn.bulan.mn/t/20241212/18107aae643bae60958f8bed.0000004.jpg
+			// Only using magic string here due to config being in the package "server"
+			thumbsBase := "https://cdn.bulan.mn/t"
+			parts := strings.Split(video.CmafPath.String, "/")
+			filenameWithoutExt := strings.TrimSuffix(parts[len(parts)-1], filepath.Ext(parts[len(parts)-1]))
+			dir := parts[len(parts)-2]
+			thumb := fmt.Sprintf("%s/%s/%s.000000%d.jpg", thumbsBase, dir, filenameWithoutExt, *video.ThumbnailID)
+			// no need to reveal s3path to ui
+			video.S3path = nil
+			video.ThumbnailURL = &thumb
+			post.Video = video
 		}
 
 		posts = append(posts, post)
@@ -568,6 +599,12 @@ type ImageUpload struct {
 	ImageID uid.ID `json:"imageId"`
 	Caption string `json:"caption"`
 }
+type VideoRequest struct {
+	VideoID     uid.ID `json:"id"`
+	S3Path      string `json:"s3_path"`
+	ThumbnailID int    `json:"thumbnail_id"`
+	CmafPath    string `json:"-"`
+}
 
 type createPostOpts struct {
 	// Required:
@@ -582,6 +619,7 @@ type createPostOpts struct {
 	linkImage []byte // for link posts (thumbnail image)
 	// image     uid.ID // for image posts
 	images []*ImageUpload // for image posts
+	video  *VideoRequest  // for video posts
 }
 
 func createPost(ctx context.Context, db *sql.DB, opts *createPostOpts) (*Post, error) {
@@ -689,6 +727,20 @@ func createPost(ctx context.Context, db *sql.DB, opts *createPostOpts) (*Post, e
 			imageIDs[i] = opts.images[i].ImageID
 		}
 		if _, err = tx.ExecContext(ctx, fmt.Sprintf("DELETE FROM temp_images WHERE image_id IN %s", msql.InClauseQuestionMarks(len(opts.images))), imageIDs...); err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+	}
+	if opts.postType == PostTypeVideo {
+		if _, err := tx.ExecContext(ctx, "UPDATE videos SET cmaf_path = ? WHERE id = ?", opts.video.CmafPath, opts.video.VideoID); err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		if _, err := tx.ExecContext(ctx, "UPDATE posts SET video_id = ? WHERE id = ?", opts.video.VideoID, post.ID); err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		if _, err = tx.ExecContext(ctx, "DELETE FROM temp_videos WHERE video_id = ?", opts.video.VideoID); err != nil {
 			tx.Rollback()
 			return nil, err
 		}
@@ -853,6 +905,25 @@ func (p *Post) truncateTitleAndBody() {
 
 func (p *Post) HasLinkImage() bool {
 	return p.Link != nil && p.Link.Image != nil && p.Link.Image.ID != nil
+}
+
+func CreateVideoPost(ctx context.Context, db *sql.DB, author, community uid.ID, title string, videoReq *VideoRequest) (*Post, error) {
+	// We don't check whether the video belongs to the person who uploaded it.
+	// This is not a big deal as video ids are hard to guess.
+	_, err := videos.GetVideoRecord(ctx, db, videoReq.VideoID)
+	if err == videos.ErrVideoNotFound {
+		return nil, videos.ErrVideoNotFound
+	}
+	if videoReq.CmafPath == "" {
+		return nil, videos.ErrBadURL
+	}
+	return createPost(ctx, db, &createPostOpts{
+		postType:  PostTypeVideo,
+		author:    author,
+		community: community,
+		title:     title,
+		video:     videoReq,
+	})
 }
 
 // Save updates the post's updatable fields.
@@ -1876,4 +1947,69 @@ func getPinnedPosts(ctx context.Context, db *sql.DB, viewer, community *uid.ID) 
 		return nil, err
 	}
 	return posts, err
+}
+
+func SavePostVideo(ctx context.Context, db *sql.DB, authorID uid.ID, id uid.ID, s3path string) (*videos.VideoRecord, error) {
+	err := msql.Transact(ctx, db, func(tx *sql.Tx) (err error) {
+		id, err = videos.SaveVideoToDB(ctx, tx, id, s3path)
+		if err != nil {
+			return fmt.Errorf("failed to save post video (author: %v): %w", authorID, err)
+		}
+		if _, err := tx.ExecContext(ctx, "INSERT INTO temp_videos (user_id, video_id) values (?, ?)", authorID, id); err != nil {
+			return fmt.Errorf("failed to insert row into temp_videos (author: %v, video: %v): %w", authorID, id, err)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return videos.GetVideoRecord(ctx, db, id)
+}
+
+// RemoveTempVideos removes all temp videos older than 12 hours and returns how
+// many were removed.
+func RemoveTempVideos(ctx context.Context, db *sql.DB) (int, error) {
+	t := time.Now().Add(-time.Hour * 12)
+	rows, err := db.QueryContext(ctx, "select video_id from temp_videos where created_at < ?", t)
+	if err != nil {
+		return 0, err
+	}
+
+	var imageIDs []uid.ID
+	for rows.Next() {
+		var imageID uid.ID
+		if err = rows.Scan(&imageID); err != nil {
+			return 0, err
+		}
+		imageIDs = append(imageIDs, imageID)
+	}
+
+	if err = rows.Err(); err != nil {
+		return 0, err
+	}
+	if len(imageIDs) == 0 {
+		return 0, nil
+	}
+
+	err = msql.Transact(ctx, db, func(tx *sql.Tx) (err error) {
+		args := make([]any, len(imageIDs))
+		for i := range imageIDs {
+			args[i] = imageIDs[i]
+		}
+		query := fmt.Sprintf("DELETE FROM temp_images WHERE image_id IN %s", msql.InClauseQuestionMarks(len(imageIDs)))
+		if _, err := db.ExecContext(ctx, query, args...); err != nil {
+			return fmt.Errorf("failed to delete %d rows from temp_images: %w", len(imageIDs), err)
+		}
+		for _, id := range imageIDs {
+			if err := images.DeleteImagesTx(ctx, tx, db, id); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return 0, err
+	}
+
+	return len(imageIDs), nil
 }

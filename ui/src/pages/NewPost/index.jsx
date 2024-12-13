@@ -76,6 +76,10 @@ const NewPost = () => {
   const [body, setBody] = useState('');
   const [link, setLink] = useState('');
   const [images, SetImages] = useState([]);
+  const [video, setVideo] = useState(null);
+  const [videoThumbnails, setVideoThumbnails] = useState([]);
+  const [videoThumbnailId, setVideoThumbnailId] = useState(0);
+
   const maxNumOfImages = import.meta.env.VITE_MAXIMAGESPERPOST;
 
   const [post, setPost] = useState(null);
@@ -93,6 +97,8 @@ const NewPost = () => {
             SetImages(post.images);
           } else if (post.type === 'link') {
             setLink(post.deletedContent ? 'Deleted link' : post.link.url);
+          } else if (post.type == 'video') {
+            setVideo(post.deletedContent ? 'Deleted video' : post.video)
           }
           setPostType(post.type);
           setLoading('loaded');
@@ -130,7 +136,7 @@ const NewPost = () => {
       try {
         const data = new FormData();
         data.append('image', file);
-        const res = await mfetch('/api/_uploads', {
+        const res = await mfetch('/api/_uploadImage', {
           signal: abortController.current.signal,
           method: 'POST',
           body: data,
@@ -164,6 +170,49 @@ const NewPost = () => {
   const deleteImage = (imageId) => {
     // TODO: send DELETE request to server.
     SetImages((images) => images.filter((image) => image.id !== imageId));
+  };
+
+  const handleVideoUpload = async (files = []) => {
+    if (isUploading) {
+      return;
+    }
+    // Check to see if uploading multiple files.
+    if (files.length > 1) {
+      alert(`${t('only_single_video_allowed')}`);
+      return;
+    }
+    setIsUploading(true);
+    try {
+      const data = new FormData();
+      data.append('video', files[0]);
+      const res = await mfetch('/api/_uploadVideo', {
+        signal: abortController.current.signal,
+        method: 'POST',
+        body: data,
+      });
+      if (!res.ok) {
+        if (res.status === 400) {
+          const error = await res.json();
+          if (error.code === 'file_size_exceeded') {
+            dispatch(snackAlert(t('new_post.file_size_exceeded')));
+            return;
+          } else if (error.code === 'unsupported_image') {
+            dispatch(snackAlert(t("new_post.alert_5")));
+            return;
+          }
+        }
+        throw new APIError(res.status, await res.json());
+      }
+      const resVid = await res.json();
+      const thumbs = await extractVideoFrames(files[0])
+      setVideoThumbnails(thumbs)
+      setVideo(resVid)
+    } catch (error) {
+      if (!(error instanceof DOMException && error.name === 'AbortError')) {
+        dispatch(snackAlertError(error));
+      }
+    }
+    setIsUploading(false);
   };
 
   // For only when editing a post.
@@ -221,6 +270,12 @@ const NewPost = () => {
         return;
       }
     }
+    if (postType === 'video') {
+      if (video == null) {
+        alert(t("new_post.missing_video"));
+        return;
+      }
+    }
     try {
       setIsSubmitting(true);
       let newPost;
@@ -230,6 +285,9 @@ const NewPost = () => {
           body: JSON.stringify({ title, body, userGroup }),
         });
       } else {
+        if (postType == 'video') {
+          setLoading('loading')
+        }
         const res = await mfetch('/api/posts', {
           method: 'POST',
           body: JSON.stringify({
@@ -248,6 +306,11 @@ const NewPost = () => {
                 })
                 : undefined,
             url: postType === 'link' ? link : undefined,
+            video: postType === 'video' ? {
+              id: video.id,
+              s3_path: video.s3Path,
+              thumbnail_id: video.thumbnailID
+            } : undefined,
           }),
         });
         if (!res.ok) {
@@ -267,6 +330,9 @@ const NewPost = () => {
     } catch (error) {
       dispatch(snackAlertError(error));
     } finally {
+      if (postType == 'video') {
+        setLoading('loaded')
+      }
       setIsSubmitting(false);
     }
   };
@@ -336,12 +402,13 @@ const NewPost = () => {
   if (loading !== 'loaded') {
     return (
       <div className="page-new">
-        <PageLoading />
+        <PageLoading text={t('new_post.converting_video')} />
       </div>
     );
   }
 
   const isImagePostsDisabled = import.meta.env.VITE_DISABLEIMAGEPOSTS === true;
+  const isVideoPostsDisabled = import.meta.env.VITE_DISABLEVIDEOPOSTS === true;
 
   return (
     <div className="page-new">
@@ -367,6 +434,7 @@ const NewPost = () => {
               className={clsx(
                 'page-new-tabs',
                 isImagePostsDisabled && ' is-two-tabs',
+                !isVideoPostsDisabled && ' is-four-tabs',
                 isPostingDisabled && 'is-disabled'
               )}
             >
@@ -412,6 +480,22 @@ const NewPost = () => {
                     <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z" />
                   </svg>
                   <span>{t("image")}</span>
+                </button>
+              )}
+              {!isVideoPostsDisabled && (
+                <button
+                  className={
+                    'button-clear button-with-icon pn-tabs-item' +
+                    (postType === 'video' ? ' is-selected' : '')
+                  }
+                  onClick={() => setPostType('video')}
+                  disabled={isPostingDisabled || isEditPost}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="var(--color-green)" className="size-6">
+                    <path strokeLinecap='round' strokeLinejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
+                  </svg>
+
+                  <span>{t("video")}</span>
                 </button>
               )}
               <button
@@ -501,6 +585,46 @@ const NewPost = () => {
                 adjustable
                 disabled={isEditPost}
               />
+            )}
+            {postType === 'video' && (
+              <div className="page-new-image-upload">
+                {!isEditPost && !(post && post.deletedContent) && !video && (
+                  <VidepUploadArea
+                    isUploading={isUploading}
+                    onVideoUpload={handleVideoUpload}
+                  />
+                )}
+                {videoThumbnails.length > 0
+                  && (<div>
+                    {t('new_post.video_thumbnail')}:<br />
+                    <img src={videoThumbnails[videoThumbnailId]} style={{ margin: 2, maxWidth: 500, maxHeight: 500 }} />
+                    <br />
+                    {t('new_post.select_thumbnail')}:<br />
+                    {videoThumbnails.map((thumb, i) => (
+                      <img
+                        key={`thumb-${i}`}
+                        src={thumb}
+                        style={{ width: 100, margin: 2, opacity: videoThumbnailId == i ? '100%' : '30%' }}
+                        onClick={() => setVideoThumbnailId(i)} />
+                    ))}
+                  </div>)
+                }
+                {post && post.deletedContent && (
+                  <div className="page-new-image-deleted flex flex-column flex-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="24px"
+                      viewBox="0 0 24 24"
+                      width="24px"
+                      fill="currentColor"
+                    >
+                      <path d="M0 0h24v24H0V0z" fill="none" />
+                      <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z" />
+                    </svg>
+                    <p>{t("deleted_image")}</p>
+                  </div>
+                )}
+              </div>
             )}
           </div>
           {!isEditPost && (isUserMod || user.isAdmin) && (
@@ -639,3 +763,158 @@ ImageUploadArea.propTypes = {
   onImagesUpload: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
 };
+
+const VidepUploadArea = ({ isUploading, onVideoUpload }) => {
+  const [t, i18n] = useTranslation("global");
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const dropzoneRef = useRef();
+  const handleOnDrop = (e) => {
+    const dt = e.dataTransfer;
+    if (dt.files.length > 0) {
+      onVideoUpload(dt.files);
+    }
+  };
+
+  const fileInputRef = useRef();
+  const handleFileChange = () => {
+    onVideoUpload(fileInputRef.current.files);
+  };
+
+  const handleAddVideo = () => {
+    fileInputRef.current.click();
+  };
+
+  // Prevent image load on missing drop-zone.
+  useEffect(() => {
+    const handleDrop = (e) => {
+      if (!['TEXTAREA', 'INPUT'].includes(e.target.nodeName)) e.preventDefault();
+    };
+    const handleDragOver = (e) => e.preventDefault();
+    window.addEventListener('drop', handleDrop);
+    window.addEventListener('dragover', handleDragOver);
+    return () => {
+      window.removeEventListener('drop', handleDrop);
+      window.removeEventListener('dragover', handleDragOver);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={dropzoneRef}
+      className={
+        'page-new-image-drop' +
+        (isDraggingOver ? ' is-dropping' : '')
+      }
+      onClick={handleAddVideo}
+      onDragEnter={() => {
+        setIsDraggingOver(true);
+      }}
+      onDragLeave={() => {
+        setIsDraggingOver(false);
+      }}
+      onDragOver={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        setIsDraggingOver(true);
+      }}
+      onDrop={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        setIsDraggingOver(false);
+        handleOnDrop(e);
+      }}
+    >
+      <div className="page-new-image-text">
+        {!isUploading && (
+          <>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="video/*"
+              name="video"
+              style={{ visibility: 'hidden', width: 0, height: 0 }}
+              onChange={handleFileChange}
+            />
+            <div>{t('new_post.add_video')}</div>
+            <div>{t('new_post.drag_video')}</div>
+          </>
+        )}
+        {isUploading && (
+          <div className="flex flex-center page-new-image-uploading">
+            <div className="page-new-uploading-text">{t('new_post.uploading')}</div>
+            <Spinner style={{ marginLeft: 5 }} size={25} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+VidepUploadArea.propTypes = {
+  isUploading: PropTypes.bool.isRequired,
+  onVideoUpload: PropTypes.func.isRequired,
+};
+function handleThumbChange(i) {
+  setVideoThumbnailId(i)
+}
+
+function extractVideoFrames(file) {
+  function extractFrame(video, canvas, offset) {
+    return new Promise((resolve, reject) => {
+      video.onseeked = event => {
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob(blob => {
+          resolve(canvas.toDataURL());
+        }, "image/png");
+      };
+      video.currentTime = offset;
+    });
+  };
+
+  async function serialExtractFrames(video, canvas, offsets) {
+    var frames = [];
+    var lastP = null;
+
+    for (var offset of offsets) {
+      if (offset < video.duration) {
+        if (lastP) {
+          var f = await lastP
+          frames.push(f);
+        }
+        lastP = extractFrame(video, canvas, offset);
+      }
+    }
+    if (lastP) {
+      var f = await lastP;
+      frames.push(f);
+      lastP = null;
+    }
+    return frames;
+  };
+
+  return new Promise((resolve, reject) => {
+    var vvid = document.createElement("video");
+    var vcnv = document.createElement("canvas");
+    vvid.onloadedmetadata = event => {
+      vcnv.width = vvid.videoWidth;
+      vcnv.height = vvid.videoHeight;
+      const fNumerator = 30
+      const fDenominator = 90
+      const maxCaptureCount = 5
+      let frOffsets = []
+      if (vvid.duration) {
+        for (let i = 0; i < maxCaptureCount; i++) {
+          let captureInterval = fDenominator / fNumerator
+          if (vvid.duration > captureInterval * i)
+            frOffsets.push(captureInterval * i)
+        }
+        serialExtractFrames(vvid, vcnv, frOffsets).then(resp => {
+          resolve(resp);
+        })
+      }
+    }
+    vvid.src = URL.createObjectURL(file);
+  });
+};
+

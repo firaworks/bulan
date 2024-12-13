@@ -163,6 +163,9 @@
                 &.is-two-tabs {
                     grid-template-columns: repeat(2, 1fr);
                 }
+                &.is-four-tabs {
+                    grid-template-columns: repeat(4, 1fr);
+                }
                 .pn-tabs-item {
                     display: flex;
                     justify-content: center;

@@ -38,6 +38,7 @@ import CommunityCard from './CommunityCard';
 import PostImage from './PostImage';
 import PostVotesBar from './PostVotesBar';
 import { useTranslation } from 'react-i18next';
+import PostVideo from './PostVideo';
 
 const Post = () => {
   const { id, commentId, communityName } = useParams(); // id is post.publicId
@@ -262,6 +263,7 @@ const Post = () => {
   const isEmbed = !disableEmbeds && _isEmbed;
 
   const showImage = !post.deletedContent && post.type === 'image' && post.image;
+  const showVideo = !post.deletedContent && post.type === 'video' && post.video;
 
   const canVote = !post.locked;
   const canComment = !(post.locked || isBanned);
@@ -363,6 +365,7 @@ const Post = () => {
               {showImage && post.images.length > 1 && (
                 <PostImageGallery post={post} isMobile={isMobile} keyboardControlsOn />
               )}
+              {showVideo && <PostVideo post={post} />}
               {isEmbed && <Embed url={embedURL} />}
               {(isLocked || post.deleted) && (
                 <div className="post-card-banners">

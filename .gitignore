@@ -11,3 +11,4 @@ node_modules
 /images
 .secrets
 .DS_Store
+__debug_bin*

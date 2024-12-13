@@ -14,6 +14,7 @@ import LinkImage from './LinkImage';
 import PostCardHeadingDetails from './PostCardHeadingDetails';
 import PostVotes from './PostVotes';
 import { useTranslation } from 'react-i18next';
+import PostVideo from '../../pages/Post/PostVideo';
 
 const PostCard = ({
   index = 100, // index in feed
@@ -40,6 +41,23 @@ const PostCard = ({
     let isButtonClick = false;
     let el = e.target;
     while (el && !el.classList.contains('post-card-card')) {
+      // if there's multiple video on feed. pause other videos
+      if (el.nodeName === 'VIDEO' || (typeof el.dataset != 'undefined' && el.dataset.mediaType === 'video')) {
+        let curVid = el
+        if (el.nodeName != 'VIDEO') {
+          curVid = el.getElementsByTagName('video')[0]
+        }
+        if (curVid.nodeName === 'VIDEO') {
+          const vids = document.getElementsByTagName('video')
+          for (let i = 0; i < vids.length; i++) {
+            if (vids[i] != curVid) {
+              vids[i].pause()
+            }
+          }
+        }
+        isButtonClick = false
+        return
+      }
       if (el.nodeName === 'BUTTON' || el.nodeName === 'A' || el.classList.contains('is-button')) {
         isButtonClick = true;
         break;
@@ -74,6 +92,7 @@ const PostCard = ({
 
   const showImage = !compact && !post.deletedContent && post.type === 'image' && post.image;
   const imageLoadingStyle = index < 3 ? 'eager' : 'lazy';
+  const showVideo = !post.deletedContent && post.type === 'video' && post.video;
 
   const renderThumbnail = () => {
     if (!(compact || (post.type === 'link' && !isEmbed))) {
@@ -202,6 +221,7 @@ const PostCard = ({
           {showImage && post.images.length > 1 && (
             <PostImageGallery post={post} isMobile={isMobile} />
           )}
+          {showVideo && <PostVideo post={post} />}
         </div>
         <div className="post-card-bottom">
           <div className="left">

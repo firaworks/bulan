@@ -16,7 +16,9 @@
     "clean": "rm -rf dist/*"
   },
   "dependencies": {
+    "@vidstack/react": "^1.12.12",
     "clsx": "^2.1.1",
+    "hls.js": "^1.5.17",
     "i18next": "^23.14.0",
     "pulltorefreshjs": "^0.1.22",
     "react": "^18.3.1",
