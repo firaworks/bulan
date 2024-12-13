@@ -65,7 +65,7 @@ export default function Comments() {
   };
 
   if (loading !== 'loaded') {
-    return <PageLoading />;
+    return <PageLoading text='' />;
   }
 
   const feedItems: SimpleFeedItem<Comment>[] = [];

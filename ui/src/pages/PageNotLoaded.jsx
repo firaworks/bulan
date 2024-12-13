@@ -6,11 +6,11 @@ import NotFound from './NotFound';
 const PageNotLoaded = ({ loading }) => {
   switch (loading) {
     case 'loading':
-      return <PageLoading />;
+      return <PageLoading text='' />;
     case 'notfound':
       return <NotFound />;
   }
-  return <PageLoading />;
+  return <PageLoading text='' />;
 };
 
 PageNotLoaded.propTypes = {

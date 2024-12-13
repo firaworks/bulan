@@ -178,7 +178,7 @@ const User = () => {
   }
 
   if (!user) {
-    return <PageLoading />;
+    return <PageLoading text="" />;
   }
 
   if (user.deleted && !viewerAdmin) {

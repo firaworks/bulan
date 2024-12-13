@@ -80,7 +80,7 @@ const Community = () => {
     if (error === 'notfound') {
       return <NotFound />;
     }
-    return <PageLoading />;
+    return <PageLoading text="" />;
   }
 
   const renderRules = () => {

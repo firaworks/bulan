@@ -153,7 +153,7 @@ const List = () => {
     if (listLoading === 'notfound') {
       return <NotFound />;
     }
-    return <PageLoading />;
+    return <PageLoading text="" />;
   }
 
   return (

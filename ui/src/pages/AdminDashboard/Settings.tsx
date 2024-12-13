@@ -51,7 +51,7 @@ export default function Settings() {
   };
 
   if (settings === null) {
-    return <PageLoading />;
+    return <PageLoading text="" />;
   }
 
   return (

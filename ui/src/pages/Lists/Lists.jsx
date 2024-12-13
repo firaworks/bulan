@@ -59,7 +59,7 @@ const Lists = () => {
   const authedUser = useSelector((state) => state.main.user);
 
   if (userLoading || listsLoading) {
-    return <PageLoading />;
+    return <PageLoading text="" />;
   }
 
   if (userError !== null || listsError !== null) {

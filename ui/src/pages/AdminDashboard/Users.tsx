@@ -70,7 +70,7 @@ export default function Users() {
   };
 
   if (loading !== 'loaded') {
-    return <PageLoading />;
+    return <PageLoading text="" />;
   }
 
   const feedItems: SimpleFeedItem<User>[] = [];
