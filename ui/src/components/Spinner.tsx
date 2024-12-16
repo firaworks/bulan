@@ -11,7 +11,7 @@ export interface SpinnerProps extends React.HTMLAttributes<HTMLDivElement> {
 const Spinner = ({ className, size, color, text, ...props }: SpinnerProps) => {
   return (
     <div className={clsx('spinner-wrapper', className)} {...props}>
-      <div style={{ display: 'inline-grid' }}>
+      <div style={{ display: 'inline-grid', justifyItems: 'center' }}>
         <svg
           className="spinner"
           viewBox="0 0 50 50"
