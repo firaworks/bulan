@@ -1,7 +1,4 @@
 import PropTypes from 'prop-types';
-import { useIsMobile } from '../../hooks';
-import React, { useEffect, useRef } from 'react';
-import hls from "hls.js";
 import VideoPlayer from '../../components/PostCard/VideoPlayer';
 
 // {
