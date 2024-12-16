@@ -16,7 +16,14 @@ import VideoPlayer from '../../components/PostCard/VideoPlayer';
 
 const PostVideo = ({ post }) => {
   const { video } = post;
-  const ar = calcAspectRatio(video.width, video.height)
+
+  let ar = '16:9'
+  if (video.width && video.height) {
+    ar = calcAspectRatio(video.width, video.height)
+  } else {
+    video.width = 640
+    video.height = 360
+  }
 
   const videoJsOptions = {
     autoplay: false,
