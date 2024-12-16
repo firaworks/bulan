@@ -732,7 +732,7 @@ func createPost(ctx context.Context, db *sql.DB, opts *createPostOpts) (*Post, e
 		}
 	}
 	if opts.postType == PostTypeVideo {
-		if _, err := tx.ExecContext(ctx, "UPDATE videos SET cmaf_path = ? WHERE id = ?", opts.video.CmafPath, opts.video.VideoID); err != nil {
+		if _, err := tx.ExecContext(ctx, "UPDATE videos SET cmaf_path = ?, thumbnail_id = ? WHERE id = ?", opts.video.CmafPath, opts.video.ThumbnailID, opts.video.VideoID); err != nil {
 			tx.Rollback()
 			return nil, err
 		}
@@ -1949,9 +1949,9 @@ func getPinnedPosts(ctx context.Context, db *sql.DB, viewer, community *uid.ID) 
 	return posts, err
 }
 
-func SavePostVideo(ctx context.Context, db *sql.DB, authorID uid.ID, id uid.ID, s3path string) (*videos.VideoRecord, error) {
+func SavePostVideo(ctx context.Context, db *sql.DB, authorID uid.ID, id uid.ID, s3path string, w, h int) (*videos.VideoRecord, error) {
 	err := msql.Transact(ctx, db, func(tx *sql.Tx) (err error) {
-		id, err = videos.SaveVideoToDB(ctx, tx, id, s3path)
+		id, err = videos.SaveVideoToDB(ctx, tx, id, s3path, w, h)
 		if err != nil {
 			return fmt.Errorf("failed to save post video (author: %v): %w", authorID, err)
 		}

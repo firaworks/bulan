@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import '@vidstack/react/player/styles/base.css';
-import '@vidstack/react/player/styles/plyr/theme.css';
-import { MediaPlayer, MediaProvider, Poster } from '@vidstack/react';
-import { PlyrLayout, plyrLayoutIcons } from '@vidstack/react/player/layouts/plyr';
+import { useIsMobile } from '../../hooks';
+import React, { useEffect, useRef } from 'react';
+import hls from "hls.js";
+import VideoPlayer from '../../components/PostCard/VideoPlayer';
 
 // {
 //   "id": "18107aae643bae60958f8bed",
@@ -17,20 +16,39 @@ import { PlyrLayout, plyrLayoutIcons } from '@vidstack/react/player/layouts/plyr
 //   "thumbnailURL": "https://cdn.bulan.mn/t/20241212/18107aae643bae60958f8bed.0000000.jpg"
 // }
 
+
 const PostVideo = ({ post }) => {
   const { video } = post;
-  // console.log(video)
-  return <MediaPlayer
-    title={post.title}
-    src={video.cmafPath.String}
-    streamType="on-demand"
-    load="play" posterLoad="visible">
-    <MediaProvider >
-      <Poster src={video.thumbnailURL} alt={post.title} />
-    </MediaProvider>
-    <PlyrLayout icons={plyrLayoutIcons} />
-  </MediaPlayer>
+  const ar = calcAspectRatio(video.width, video.height)
+
+  const videoJsOptions = {
+    autoplay: false,
+    controls: true,
+    responsive: true,
+    loop: true,
+    fluid: true,
+    disablePictureInPicture: true,
+    aspectRatio: ar,
+    poster: video.thumbnailURL,
+    sources: [{
+      src: video.cmafPath.String,
+      type: 'application/x-mpegURL'
+    }],
+  };
+
+  return <div className='post-video'>
+    <div className={video.width > video.height ? 'video-landscape' : 'video-portrait'}>
+      <VideoPlayer {...videoJsOptions} />
+    </div>
+  </div>
 };
+function calcAspectRatio(w, h) {
+  const r = gcd(w, h);
+  return `${w / r}:${h / r}`
+}
+function gcd(a, b) {
+  return (b == 0) ? a : gcd(b, a % b);
+}
 
 PostVideo.propTypes = {
   post: PropTypes.object.isRequired,

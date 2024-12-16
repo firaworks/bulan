@@ -20,6 +20,8 @@ type VideoRecord struct {
 	CmafPath    sql.NullString `json:"cmafPath"`
 	Format      string         `json:"format"`
 	ThumbnailID int            `json:"thumbnailID"`
+	Width       int            `json:"width"`
+	Height      int            `json:"height"`
 	CreatedAt   time.Time      `json:"createdAt"`
 	DeletedAt   *time.Time     `json:"deletedAt"`
 }
@@ -34,6 +36,8 @@ func VideoRecordColumns() []string {
 		"videos.cmaf_path",
 		"videos.format",
 		"videos.thumbnail_id",
+		"videos.width",
+		"videos.height",
 		"videos.created_at",
 		"videos.deleted_at",
 	}
@@ -50,6 +54,8 @@ func (r *VideoRecord) ScanDestinations() []any {
 		&r.CmafPath,
 		&r.Format,
 		&r.ThumbnailID,
+		&r.Width,
+		&r.Height,
 		&r.CreatedAt,
 		&r.DeletedAt,
 	}
@@ -127,6 +133,8 @@ type Video struct {
 	CmafPath     *sql.NullString `json:"cmafPath"`
 	Format       *string         `json:"format"`
 	ThumbnailID  *int            `json:"thumbnailID"`
+	Width        *int            `json:"width"`
+	Height       *int            `json:"height"`
 	ThumbnailURL *string         `json:"thumbnailURL"`
 }
 
@@ -139,6 +147,8 @@ func NewVideo() *Video {
 	m.CmafPath = new(sql.NullString)
 	m.Format = new(string)
 	m.ThumbnailID = new(int)
+	m.Width = new(int)
+	m.Height = new(int)
 	return m
 }
 
@@ -152,6 +162,8 @@ func VideoColumns(tableAlias string) []string {
 		tableAlias + ".cmaf_path",
 		tableAlias + ".format",
 		tableAlias + ".thumbnail_id",
+		tableAlias + ".width",
+		tableAlias + ".height",
 	}
 
 }
@@ -163,5 +175,7 @@ func (m *Video) ScanDestinations() []any {
 		&m.CmafPath,
 		&m.Format,
 		&m.ThumbnailID,
+		&m.Width,
+		&m.Height,
 	}
 }

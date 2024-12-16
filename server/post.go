@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -372,6 +373,17 @@ func (s *Server) videoUpload(w *responseWriter, r *request) error {
 	}
 	defer file.Close()
 
+	width := 1080
+	height := 1920
+	width, err = strconv.Atoi(r.req.PostFormValue("w"))
+	if err != nil {
+		return errors.New("unable to determine vidoe size")
+	}
+	height, err = strconv.Atoi(r.req.PostFormValue("h"))
+	if err != nil || width == 0 || height == 0 {
+		return errors.New("unable to determine vidoe size")
+	}
+
 	fileData, err := io.ReadAll(file)
 	if err != nil {
 		return err
@@ -387,7 +399,7 @@ func (s *Server) videoUpload(w *responseWriter, r *request) error {
 	if err != nil {
 		return err
 	}
-	video, err := core.SavePostVideo(r.ctx, s.db, *r.viewer, id, s3path)
+	video, err := core.SavePostVideo(r.ctx, s.db, *r.viewer, id, s3path, width, height)
 	if err != nil {
 		return err
 	}

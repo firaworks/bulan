@@ -40,9 +40,9 @@ const PostCard = ({
   const handlePostCardClick = (e, target = '_blank') => {
     let isButtonClick = false;
     let el = e.target;
-    while (el && !el.classList.contains('post-card-card')) {
+    while (el && !el.classList.contains('.post-card-card')) {
       // if there's multiple video on feed. pause other videos
-      if (el.nodeName === 'VIDEO' || (typeof el.dataset != 'undefined' && el.dataset.mediaType === 'video')) {
+      if (el.nodeName === 'VIDEO' || (typeof el.dataset != 'undefined' && el.dataset.className === 'post-video')) {
         let curVid = el
         if (el.nodeName != 'VIDEO') {
           curVid = el.getElementsByTagName('video')[0]

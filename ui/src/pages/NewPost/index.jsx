@@ -77,6 +77,8 @@ const NewPost = () => {
   const [link, setLink] = useState('');
   const [images, SetImages] = useState([]);
   const [video, setVideo] = useState(null);
+  const [videoWidth, setVideoWidth] = useState(0)
+  const [videoHeight, setVideoHeight] = useState(0)
   const [videoThumbnails, setVideoThumbnails] = useState([]);
   const [videoThumbnailId, setVideoThumbnailId] = useState(0);
 
@@ -184,7 +186,11 @@ const NewPost = () => {
     setIsUploading(true);
     try {
       const data = new FormData();
-      data.append('video', files[0]);
+      const { thumbs, width, height } = await extractVideoFrames(files[0])
+
+      data.append('w', width)
+      data.append('h', height)
+      data.append('video', files[0])
       const res = await mfetch('/api/_uploadVideo', {
         signal: abortController.current.signal,
         method: 'POST',
@@ -204,7 +210,6 @@ const NewPost = () => {
         throw new APIError(res.status, await res.json());
       }
       const resVid = await res.json();
-      const thumbs = await extractVideoFrames(files[0])
       setVideoThumbnails(thumbs)
       setVideo(resVid)
     } catch (error) {
@@ -309,7 +314,7 @@ const NewPost = () => {
             video: postType === 'video' ? {
               id: video.id,
               s3_path: video.s3Path,
-              thumbnail_id: video.thumbnailID
+              thumbnail_id: videoThumbnailId
             } : undefined,
           }),
         });
@@ -910,7 +915,7 @@ function extractVideoFrames(file) {
             frOffsets.push(captureInterval * i)
         }
         serialExtractFrames(vvid, vcnv, frOffsets).then(resp => {
-          resolve(resp);
+          resolve({ thumbs: resp, width: vcnv.width, height: vcnv.height });
         })
       }
     }

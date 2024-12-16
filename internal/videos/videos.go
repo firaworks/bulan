@@ -44,13 +44,15 @@ func (s VideoSize) MarshalText() ([]byte, error) {
 	return []byte(s.String()), nil
 }
 
-func SaveVideoToDB(ctx context.Context, tx *sql.Tx, id uid.ID, s3path string) (uid.ID, error) {
+func SaveVideoToDB(ctx context.Context, tx *sql.Tx, id uid.ID, s3path string, w, h int) (uid.ID, error) {
 	var err error
 	query, args := msql.BuildInsertQuery("videos", []msql.ColumnValue{
 		{Name: "id", Value: id},
 		{Name: "s3_path", Value: s3path},
 		{Name: "format", Value: filepath.Ext(s3path)},
 		{Name: "thumbnail_id", Value: 0},
+		{Name: "width", Value: w},
+		{Name: "height", Value: h},
 	})
 	if _, err = tx.ExecContext(ctx, query, args...); err != nil {
 		return uid.ID{}, err

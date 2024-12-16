@@ -16,6 +16,8 @@
     "clean": "rm -rf dist/*"
   },
   "dependencies": {
+    "@types/video.js": "^7.3.58",
+    "@videojs/themes": "^1.0.1",
     "@vidstack/react": "^1.12.12",
     "clsx": "^2.1.1",
     "hls.js": "^1.5.17",
@@ -35,7 +37,9 @@
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.2",
-    "remark-gfm": "^4.0.0"
+    "remark-gfm": "^4.0.0",
+    "video.js": "^8.21.0",
+    "videojs-mobile-ui": "^1.1.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

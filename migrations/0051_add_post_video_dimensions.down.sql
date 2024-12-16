@@ -1,0 +1,5 @@
+ALTER TABLE
+	videos DROP COLUMN width;
+
+ALTER TABLE
+	videos DROP COLUMN height;
