@@ -549,7 +549,7 @@ a {
     }
 
     .post-video {
-        // max-height: 460px;
+        margin-top: var(--margin-bottom);
 
         .video-landscape {
             aspect-ratio: 16/9;

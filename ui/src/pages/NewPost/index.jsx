@@ -329,6 +329,10 @@ const NewPost = () => {
           throw new APIError(res.status, await res.json());
         }
         newPost = await res.json();
+        if (postType === 'video') {
+          alert(t('new_post.your_video_will_appear_later'))
+          history.goBack();
+        }
       }
       dispatch(postAdded(newPost));
       returnToWhence(newPost);

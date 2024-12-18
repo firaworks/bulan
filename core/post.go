@@ -15,6 +15,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/mediaconvert"
+	"github.com/aws/aws-sdk-go-v2/service/mediaconvert/types"
 	"github.com/discuitnet/discuit/internal/httperr"
 	"github.com/discuitnet/discuit/internal/httputil"
 	"github.com/discuitnet/discuit/internal/images"
@@ -732,7 +735,7 @@ func createPost(ctx context.Context, db *sql.DB, opts *createPostOpts) (*Post, e
 		}
 	}
 	if opts.postType == PostTypeVideo {
-		if _, err := tx.ExecContext(ctx, "UPDATE videos SET cmaf_path = ?, thumbnail_id = ? WHERE id = ?", opts.video.CmafPath, opts.video.ThumbnailID, opts.video.VideoID); err != nil {
+		if _, err := tx.ExecContext(ctx, "UPDATE videos SET cmaf_path = ?, job_completed_at = NOW() WHERE id = ?", opts.video.CmafPath, opts.video.VideoID); err != nil {
 			tx.Rollback()
 			return nil, err
 		}
@@ -1964,6 +1967,124 @@ func SavePostVideo(ctx context.Context, db *sql.DB, authorID uid.ID, id uid.ID, 
 		return nil, err
 	}
 	return videos.GetVideoRecord(ctx, db, id)
+}
+
+func SaveMediaConvertJobStart(ctx context.Context, db *sql.DB, vid uid.ID, title string, communityId uid.ID, jobId string, startedAt time.Time, thumbID int) (*videos.VideoRecord, error) {
+	if _, err := db.ExecContext(ctx,
+		"UPDATE videos SET title=?, post_community_id=?, job_id=?, job_started_at=?, thumbnail_id=? WHERE id=?",
+		title, communityId, jobId, startedAt, thumbID, vid); err != nil {
+		return nil, err
+	}
+	return videos.GetVideoRecord(ctx, db, vid)
+}
+func CheckForMediaConvertJobCompletions(ctx context.Context, db *sql.DB, key, secret, region, cdnBaseUrl string) (int, error) {
+	rows, err := db.QueryContext(ctx,
+		"SELECT v.id, v.job_id, v.job_started_at, tv.user_id, v.post_community_id, v.title FROM videos v LEFT JOIN temp_videos tv ON v.id = tv.video_id WHERE job_id IS NOT NULL AND v.cmaf_path is NULL")
+	if err != nil {
+		return 0, err
+	}
+	type Job struct {
+		vid       uid.ID
+		jobId     string
+		startedAt *time.Time
+		author    uid.ID
+		community uid.NullID
+		title     string
+	}
+	var jobs []Job
+	defer rows.Close()
+	for rows.Next() {
+		var j Job
+		if err = rows.Scan(&j.vid, &j.jobId, &j.startedAt, &j.author, &j.community, &j.title); err != nil {
+			return 0, err
+		}
+		jobs = append(jobs, j)
+	}
+	if err = rows.Err(); err != nil {
+		return 0, err
+	}
+	if len(jobs) == 0 {
+		return 0, nil
+	} else {
+		mcClient := GetMediaConvertClient(key, secret, region)
+		for i := range jobs {
+			tBefore := jobs[i].startedAt.Format("20060102")
+			err = checkJobCompletion(ctx, mcClient, jobs[i].jobId)
+			if err != nil {
+				return -1, nil
+			}
+			tAfter := time.Now().UTC().Format("20060102")
+			filenameWithoutExt := strings.ToLower(jobs[i].vid.String())
+			cmafExt := "m3u8"
+			urlBefore := fmt.Sprintf("%s/v/%s/%s.%s", cdnBaseUrl, tBefore, filenameWithoutExt, cmafExt)
+			urlAfter := fmt.Sprintf("%s/v/%s/%s.%s", cdnBaseUrl, tAfter, filenameWithoutExt, cmafExt)
+			// finally check if the converted medias exist
+			cmaf, err := CheckMediaUrls(urlBefore, urlAfter)
+			if err != nil {
+				return -1, err
+			}
+			if cmaf == "" {
+				return -1, err
+			}
+			v := &VideoRequest{
+				VideoID:  jobs[i].vid,
+				CmafPath: cmaf,
+			}
+			_, err = CreateVideoPost(ctx, db, jobs[i].author, jobs[i].community.ID, jobs[i].title, v)
+			if err != nil {
+				return -1, err
+			}
+		}
+		return len(jobs), nil
+	}
+}
+
+func checkJobCompletion(ctx context.Context, client *mediaconvert.Client, jobId string) error {
+	input := &mediaconvert.GetJobInput{
+		Id: aws.String(jobId),
+	}
+	result, err := client.GetJob(ctx, input)
+	if err != nil {
+		return err
+	}
+	if result.Job.Status == types.JobStatusComplete {
+		return nil
+	} else if result.Job.Status == types.JobStatusError || result.Job.Status == types.JobStatusCanceled {
+		return fmt.Errorf("job failed: %s", result.Job.Status)
+	} else {
+		return fmt.Errorf("job status unknown")
+	}
+}
+
+func CheckMediaUrls(url1, url2 string) (string, error) {
+	r, err := http.Head(url1)
+	if err != nil {
+		return "", err
+	}
+	if r.StatusCode == http.StatusOK {
+		return url1, nil
+	}
+	r, err = http.Head(url2)
+	if err != nil {
+		return "", err
+	}
+	if r.StatusCode == http.StatusOK {
+		return url2, nil
+	}
+	return "", nil
+}
+func FindJobIDbyS3Input(client *mediaconvert.Client, vid string) (string, time.Time, error) {
+	fileInput := &mediaconvert.SearchJobsInput{
+		InputFile: aws.String(vid),
+	}
+	jobs, err := client.SearchJobs(context.TODO(), fileInput)
+	if err != nil {
+		return "", time.Time{}, err
+	}
+	if len(jobs.Jobs) > 0 {
+		return *jobs.Jobs[0].Id, *jobs.Jobs[0].CreatedAt, nil
+	}
+	return "", time.Time{}, nil
 }
 
 // RemoveTempVideos removes all temp videos older than 12 hours and returns how

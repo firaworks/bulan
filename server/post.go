@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -88,21 +87,24 @@ func (s *Server) addPost(w *responseWriter, r *request) error {
 	case core.PostTypeLink:
 		post, err = core.CreateLinkPost(r.ctx, s.db, *r.viewer, comm.ID, req.Title, req.URL)
 	case core.PostTypeVideo:
-		var cmafPath = ""
 		if req.Video != nil {
 			if len(req.Video.S3Path) > 0 && len(req.Video.VideoID) > 0 {
-				cmafPath, err = s.callMediaConvertAWS(r.ctx, req.Video.S3Path)
+				jobId, startedAt, err := s.callMediaConvertAWS(r.ctx, req.Video)
 				if err != nil {
-					return httperr.NewBadRequest("convert_video_error", "Error while converting video.")
+					return httperr.NewBadRequest("convert_start_failed", "Error while converting video.")
 				}
-				req.Video.CmafPath = cmafPath
+				_, err = core.SaveMediaConvertJobStart(r.ctx, s.db, req.Video.VideoID, req.Title, comm.ID, jobId, startedAt, req.Video.ThumbnailID)
+				if err != nil {
+					return httperr.NewBadRequest("convert_start_unsaved", "Error while marking convert video.")
+				}
+				return w.writeJSON("success")
 			} else {
 				return httperr.NewBadRequest("invalid_video_id", "Invalid video ID.")
 			}
 		} else {
 			return httperr.NewBadRequest("invalid_video_input", "Invalid video input.")
 		}
-		post, err = core.CreateVideoPost(r.ctx, s.db, *r.viewer, comm.ID, req.Title, req.Video)
+		// post, err = core.CreateVideoPost(r.ctx, s.db, *r.viewer, comm.ID, req.Title, req.Video)
 	default:
 		return httperr.NewBadRequest("invalid_post_type", "Invalid post type.")
 	}
@@ -373,6 +375,8 @@ func (s *Server) videoUpload(w *responseWriter, r *request) error {
 	}
 	defer file.Close()
 
+	// TODO: may be really get the dimensions here in the future.
+	// this involves using ffmpeg or other heavy libs. avoided that for now.
 	width := 1080
 	height := 1920
 	width, err = strconv.Atoi(r.req.PostFormValue("w"))
@@ -436,7 +440,7 @@ func (s *Server) saveToAWS(ctx context.Context, fileData []byte, s3dir, fname st
 	return s3path, err
 }
 
-func (s *Server) callMediaConvertAWS(ctx context.Context, s3path string) (string, error) {
+func (s *Server) callMediaConvertAWS(ctx context.Context, v *core.VideoRequest) (string, time.Time, error) {
 	cfg := aws.Config{
 		Region: s.config.AwsRegionMediaConvert,
 		Credentials: credentials.StaticCredentialsProvider{
@@ -446,14 +450,23 @@ func (s *Server) callMediaConvertAWS(ctx context.Context, s3path string) (string
 			},
 		},
 	}
+	// check if job already started
 	mcClient := mediaconvert.NewFromConfig(cfg)
+	jobId, startedAt, err := core.FindJobIDbyS3Input(mcClient, v.VideoID.String())
+	if err != nil {
+		return "", time.Time{}, err
+	}
+	if jobId != "" {
+		return jobId, startedAt, nil
+	}
+
 	var inputs []types.Input
 	audioSelector := make(map[string]types.AudioSelector)
 	audioSelector["Audio Selector 1"] = types.AudioSelector{
 		DefaultSelection: "DEFAULT",
 	}
 	inputs = append(inputs, types.Input{
-		FileInput:      aws.String(fmt.Sprintf("s3://%s/%s", s.config.AwsBucket, s3path)),
+		FileInput:      aws.String(fmt.Sprintf("s3://%s/%s", s.config.AwsBucket, v.S3Path)),
 		VideoSelector:  &types.VideoSelector{Rotate: types.InputRotateAuto},
 		AudioSelectors: audioSelector,
 		TimecodeSource: types.InputTimecodeSource(*aws.String("ZEROBASED")),
@@ -466,67 +479,11 @@ func (s *Server) callMediaConvertAWS(ctx context.Context, s3path string) (string
 		},
 	}
 	// to track if job completes through transition to tomorrow
-	tBefore := time.Now().UTC().Format("20060102")
+	jobStartedAt := time.Now().UTC()
 	jobOutput, err := mcClient.CreateJob(context.Background(), jobInput)
 	if err != nil {
-		return "", err
+		return "", time.Time{}, err
 	}
-	jobId := *jobOutput.Job.Id
-	err = waitForJobCompletion(ctx, mcClient, jobId)
-	if err != nil {
-		return "", err
-	}
-	// to make sure
-	tAfter := time.Now().UTC().Format("20060102")
-	// extract filename from path
-	parts := strings.Split(s3path, "/")
-	filenameWithoutExt := strings.TrimSuffix(parts[len(parts)-1], filepath.Ext(parts[len(parts)-1]))
-	cmafExt := "m3u8"
-	urlBefore := fmt.Sprintf("%s/v/%s/%s.%s", s.config.CdnBaseUrl, tBefore, filenameWithoutExt, cmafExt)
-	urlAfter := fmt.Sprintf("%s/v/%s/%s.%s", s.config.CdnBaseUrl, tAfter, filenameWithoutExt, cmafExt)
-	// finally check if the converted medias exist
-	finalUrl, err := checkMediaUrls(urlBefore, urlAfter)
-	if err != nil {
-		return "", err
-	}
-	if err != nil {
-		return "", err
-	}
-	return finalUrl, nil
-}
-
-func waitForJobCompletion(ctx context.Context, client *mediaconvert.Client, jobId string) error {
-	for {
-		input := &mediaconvert.GetJobInput{
-			Id: aws.String(jobId),
-		}
-		result, err := client.GetJob(ctx, input)
-		if err != nil {
-			return err
-		}
-		if result.Job.Status == types.JobStatusComplete {
-			return nil
-		} else if result.Job.Status == types.JobStatusError || result.Job.Status == types.JobStatusCanceled {
-			return fmt.Errorf("job failed: %s", result.Job.Status)
-		}
-		time.Sleep(2 * time.Second)
-	}
-}
-
-func checkMediaUrls(url1, url2 string) (string, error) {
-	r, err := http.Head(url1)
-	if err != nil {
-		return "", err
-	}
-	if r.StatusCode == http.StatusOK {
-		return url1, nil
-	}
-	r, err = http.Head(url2)
-	if err != nil {
-		return "", err
-	}
-	if r.StatusCode == http.StatusOK {
-		return url2, nil
-	}
-	return "", errors.New("media convert output failure")
+	jobId = *jobOutput.Job.Id
+	return jobId, jobStartedAt, nil
 }

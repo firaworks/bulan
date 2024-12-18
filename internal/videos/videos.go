@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"path/filepath"
 	"strconv"
 
 	msql "github.com/discuitnet/discuit/internal/sql"
@@ -49,7 +48,6 @@ func SaveVideoToDB(ctx context.Context, tx *sql.Tx, id uid.ID, s3path string, w,
 	query, args := msql.BuildInsertQuery("videos", []msql.ColumnValue{
 		{Name: "id", Value: id},
 		{Name: "s3_path", Value: s3path},
-		{Name: "format", Value: filepath.Ext(s3path)},
 		{Name: "thumbnail_id", Value: 0},
 		{Name: "width", Value: w},
 		{Name: "height", Value: h},

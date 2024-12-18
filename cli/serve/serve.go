@@ -86,6 +86,21 @@ func serve(ctx *cli.Context) error {
 		}
 	}()
 
+	go func() {
+		// This go-routine runs a set of periodic functions every 10 secs.
+		time.Sleep(time.Second * 3)
+		for {
+			if n, err := core.CheckForMediaConvertJobCompletions(context.TODO(), db, conf.AwsAccessKeyId, conf.AwsSecretAccessKey, conf.AwsRegionMediaConvert, conf.CdnBaseUrl); err != nil {
+				log.Printf("MediaConvert job checking failed: %v\n", err)
+			} else {
+				if n != 0 {
+					log.Printf("MediaConvert jobs(%d) resolved\n", n)
+				}
+			}
+			time.Sleep(time.Second * 10)
+		}
+	}()
+
 	if !config.AddressValid(conf.Addr) {
 		log.Fatal("Address needs to be a valid address of the form 'host:port' (host can be empty)")
 	}

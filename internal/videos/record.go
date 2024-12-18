@@ -15,15 +15,18 @@ import (
 type VideoRecord struct {
 	db *sql.DB
 
-	ID          uid.ID         `json:"id"`
-	S3Path      string         `json:"s3Path"`
-	CmafPath    sql.NullString `json:"cmafPath"`
-	Format      string         `json:"format"`
-	ThumbnailID int            `json:"thumbnailID"`
-	Width       int            `json:"width"`
-	Height      int            `json:"height"`
-	CreatedAt   time.Time      `json:"createdAt"`
-	DeletedAt   *time.Time     `json:"deletedAt"`
+	ID             uid.ID         `json:"id"`
+	S3Path         string         `json:"s3Path"`
+	CmafPath       sql.NullString `json:"cmafPath"`
+	Title          string         `json:"title"`
+	ThumbnailID    int            `json:"thumbnailID"`
+	Width          int            `json:"width"`
+	Height         int            `json:"height"`
+	JobId          sql.NullString `json:"jobID"`
+	JobStartedAt   *time.Time     `json:"jobStartedAt"`
+	JobCompletedAt *time.Time     `json:"jobCompletedAt"`
+	CreatedAt      time.Time      `json:"createdAt"`
+	DeletedAt      *time.Time     `json:"deletedAt"`
 }
 
 // VideoRecordColumns returns the list of columns of the videos table. Use this
@@ -34,10 +37,13 @@ func VideoRecordColumns() []string {
 		"videos.id",
 		"videos.s3_path",
 		"videos.cmaf_path",
-		"videos.format",
+		"videos.title",
 		"videos.thumbnail_id",
 		"videos.width",
 		"videos.height",
+		"videos.job_id",
+		"videos.job_started_at",
+		"videos.job_completed_at",
 		"videos.created_at",
 		"videos.deleted_at",
 	}
@@ -52,10 +58,13 @@ func (r *VideoRecord) ScanDestinations() []any {
 		&r.ID,
 		&r.S3Path,
 		&r.CmafPath,
-		&r.Format,
+		&r.Title,
 		&r.ThumbnailID,
 		&r.Width,
 		&r.Height,
+		&r.JobId,
+		&r.JobStartedAt,
+		&r.JobCompletedAt,
 		&r.CreatedAt,
 		&r.DeletedAt,
 	}
@@ -120,7 +129,7 @@ func (r *VideoRecord) Video() *Video {
 	*m.ID = r.ID
 	*m.S3path = r.S3Path
 	*m.CmafPath = r.CmafPath
-	*m.Format = r.Format
+	*m.Title = r.Title
 	*m.ThumbnailID = r.ThumbnailID
 	return m
 }
@@ -131,7 +140,7 @@ type Video struct {
 	ID           *uid.ID         `json:"id"`
 	S3path       *string         `json:"s3Path"`
 	CmafPath     *sql.NullString `json:"cmafPath"`
-	Format       *string         `json:"format"`
+	Title        *string         `json:"title"`
 	ThumbnailID  *int            `json:"thumbnailID"`
 	Width        *int            `json:"width"`
 	Height       *int            `json:"height"`
@@ -145,7 +154,7 @@ func NewVideo() *Video {
 	m.ID = new(uid.ID)
 	m.S3path = new(string)
 	m.CmafPath = new(sql.NullString)
-	m.Format = new(string)
+	m.Title = new(string)
 	m.ThumbnailID = new(int)
 	m.Width = new(int)
 	m.Height = new(int)
@@ -160,7 +169,7 @@ func VideoColumns(tableAlias string) []string {
 		tableAlias + ".id",
 		tableAlias + ".s3_path",
 		tableAlias + ".cmaf_path",
-		tableAlias + ".format",
+		tableAlias + ".title",
 		tableAlias + ".thumbnail_id",
 		tableAlias + ".width",
 		tableAlias + ".height",
@@ -173,7 +182,7 @@ func (m *Video) ScanDestinations() []any {
 		&m.ID,
 		&m.S3path,
 		&m.CmafPath,
-		&m.Format,
+		&m.Title,
 		&m.ThumbnailID,
 		&m.Width,
 		&m.Height,
