@@ -64,6 +64,9 @@ const PostCard = ({
         isButtonClick = true;
         break;
       }
+      if (el.parentElement == null) {
+        break
+      }
       el = el.parentElement;
       if (!el.parentElement) isButtonClick = true; // Clicked somewhere outside .post-card-card.
     }
