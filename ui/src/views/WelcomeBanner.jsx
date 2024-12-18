@@ -32,7 +32,8 @@ const WelcomeBanner = ({ className, children, hideIfMember = false, ...props }) 
       <div className="home-welcome-text">
         <div className="home-welcome-join">{t('welcome.join')}</div>
         <div className="home-welcome-subtext">
-          {t("welcome.description_1")} <span>{usersCount}</span> {t("welcome.description_2")}
+          {t("welcome.description_1")} нийт {t("welcome.description_2")}
+          {/* {t("welcome.description_1")} <span>{usersCount}</span> {t("welcome.description_2")} */}
         </div>
       </div>
       <div className="home-welcome-buttons">
