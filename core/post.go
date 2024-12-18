@@ -2003,7 +2003,7 @@ func CheckForMediaConvertJobCompletions(ctx context.Context, db *sql.DB, key, se
 	if err = rows.Err(); err != nil {
 		return 0, err
 	}
-	if len(jobs) == 0 {
+	if len(jobs) < 1 {
 		return 0, nil
 	} else {
 		mcClient := GetMediaConvertClient(key, secret, region)
