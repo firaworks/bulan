@@ -2003,12 +2003,15 @@ func CheckForMediaConvertJobCompletions(ctx context.Context, db *sql.DB, key, se
 	if err = rows.Err(); err != nil {
 		return 0, err
 	}
-	if len(jobs) < 1 {
+	if len(jobs) == 0 {
 		return 0, nil
 	} else {
 		mcClient := GetMediaConvertClient(key, secret, region)
 		for i := range jobs {
-			tBefore := jobs[i].startedAt.Format("20060102")
+			tBefore := time.Now().AddDate(0, 0, -1).UTC().Format("20060102")
+			if jobs[i].startedAt != nil {
+				tBefore = jobs[i].startedAt.Format("20060102")
+			}
 			err = checkJobCompletion(ctx, mcClient, jobs[i].jobId)
 			if err != nil {
 				return -1, nil
@@ -2034,6 +2037,7 @@ func CheckForMediaConvertJobCompletions(ctx context.Context, db *sql.DB, key, se
 			if err != nil {
 				return -1, err
 			}
+
 		}
 		return len(jobs), nil
 	}
