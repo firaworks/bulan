@@ -49,6 +49,7 @@ type Config struct {
 	DisableRateLimits bool `yaml:"disableRateLimits"`
 	MaxImageSize      int  `yaml:"maxImageSize"`
 	MaxVideoSize      int  `yaml:"maxVideoSize"`
+	MaxVideoDuration  int  `yaml:"maxVideoDuration"`
 
 	// If API requests have a URL query parameter of the form 'adminKey=value',
 	// where value is AdminAPIKey, rate limits are disabled.
@@ -63,6 +64,8 @@ type Config struct {
 
 	// The location where images are saved on disk.
 	ImagesFolderPath string `yaml:"imagesFolderPath"`
+	// Temp location for processing videos
+	VideosFolderPath string `yaml:"videosFolderPath"`
 
 	MaxImagesPerPost int `yaml:"maxImagesPerPost"`
 
@@ -108,6 +111,7 @@ func Parse(path string) (*Config, error) {
 		MaxImageSize:       25 * (1 << 20),
 		MaxImagesPerPost:   10,
 		MaxVideoSize:       100 * (1 << 20),
+		MaxVideoDuration:   180,
 
 		// Required fields:
 		ForumCreationReqPoints: -1,
@@ -151,6 +155,7 @@ func Parse(path string) (*Config, error) {
 		"DISCUIT_DISABLE_RATE_LIMITS": &c.DisableRateLimits,
 		"DISCUIT_MAX_IMAGE_SIZE":      &c.MaxImageSize,
 		"DISCUIT_MAX_VIDEO_SIZE":      &c.MaxVideoSize,
+		"DISCUIT_MAX_VIDEO_DURATION":  &c.MaxVideoDuration,
 
 		// If API requests have a URL query parameter of the form 'adminKey=value',
 		// where value is AdminApiKey, rate limits are disabled.

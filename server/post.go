@@ -6,7 +6,11 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"net/http"
+	"os"
+	"os/exec"
+	"path"
 	"strconv"
 	"strings"
 	"time"
@@ -375,19 +379,6 @@ func (s *Server) videoUpload(w *responseWriter, r *request) error {
 	}
 	defer file.Close()
 
-	// TODO: may be really get the dimensions here in the future.
-	// this involves using ffmpeg or other heavy libs. avoided that for now.
-	width := 1080
-	height := 1920
-	width, err = strconv.Atoi(r.req.PostFormValue("w"))
-	if err != nil {
-		return errors.New("unable to determine vidoe size")
-	}
-	height, err = strconv.Atoi(r.req.PostFormValue("h"))
-	if err != nil || width == 0 || height == 0 {
-		return errors.New("unable to determine vidoe size")
-	}
-
 	fileData, err := io.ReadAll(file)
 	if err != nil {
 		return err
@@ -397,6 +388,26 @@ func (s *Server) videoUpload(w *responseWriter, r *request) error {
 	if !isVid {
 		return errors.New("unsupported video type")
 	}
+
+	tempFile, err := s.saveTempVideo(r.ctx, fileData)
+	if err != nil {
+		return httperr.NewBadRequest("video_processing_error", "Error while saving the file")
+	}
+	defer s.removeTempVideo(r.ctx, tempFile)
+
+	width, height, err := s.getVideoDimensions(r.ctx, tempFile)
+	if err != nil {
+		return httperr.NewBadRequest("video_dimensions_unknown", "Error while saving the file")
+	}
+	duration := 0
+	duration, err = s.getVideoDuration(r.ctx, tempFile)
+	if err != nil {
+		return httperr.NewBadRequest("video_duration_unknown", "Error while saving the file")
+	}
+	if duration > s.config.MaxVideoDuration {
+		return httperr.NewBadRequest("video_duration_exceeded", "Error while saving the file")
+	}
+
 	id := uid.New()
 	s3dir := "video/input"
 	s3path, err := s.saveToAWS(r.ctx, fileData, s3dir, id.String())
@@ -486,4 +497,61 @@ func (s *Server) callMediaConvertAWS(ctx context.Context, v *core.VideoRequest) 
 	}
 	jobId = *jobOutput.Job.Id
 	return jobId, jobStartedAt, nil
+}
+func (s *Server) saveTempVideo(ctx context.Context, file []byte) (string, error) {
+	f := uid.New().String()
+	err := os.MkdirAll(s.config.VideosFolderPath, 0755)
+	if err != nil && !os.IsExist(err) {
+		return "", err //fmt.Errorf("error creating folder %v (%w)", path, err)
+	}
+	filepath := path.Join(s.config.VideosFolderPath, f)
+	if err := os.WriteFile(filepath, file, 0755); err != nil {
+		return "", err
+	}
+	return filepath, nil
+}
+
+func (s *Server) removeTempVideo(ctx context.Context, filepath string) error {
+	err := os.Remove(filepath)
+	if errors.Is(err, fs.ErrNotExist) {
+		// Video does not exist for some reason. Could be because of a failed
+		// delete image transaction earlier.
+		return nil
+	}
+	return err
+}
+func (s *Server) getVideoDimensions(ctx context.Context, filepath string) (width, height int, err error) {
+	cmd := exec.Command("ffprobe", "-v", "error", "-show_entries", "stream=width,height", "-of", "default=noprint_wrappers=1", filepath)
+	output, err := cmd.Output()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return 0, 0, err
+	}
+	// Parse the output to extract width and height
+	parts := strings.Split(string(output), "\n")
+	for _, part := range parts {
+		if strings.HasPrefix(part, "width=") {
+			widthStr := strings.Split(part, "=")[1]
+			width, _ = strconv.Atoi(widthStr)
+		} else if strings.HasPrefix(part, "height=") {
+			heightStr := strings.Split(part, "=")[1]
+			height, _ = strconv.Atoi(heightStr)
+		}
+	}
+	return
+}
+func (s *Server) getVideoDuration(ctx context.Context, filepath string) (int, error) {
+	// Use ffprobe to get video duration
+	cmdDur := exec.Command("ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", filepath)
+	out, err := cmdDur.Output()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return 0, err
+	}
+	durStr := string(out)
+	durStr = strings.ReplaceAll(durStr, "\n", "")
+	durStr = strings.ReplaceAll(durStr, " ", "")
+
+	duration, err := strconv.ParseFloat(durStr, 64)
+	return int(duration), nil
 }

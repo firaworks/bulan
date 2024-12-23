@@ -186,11 +186,18 @@ const NewPost = () => {
     setIsUploading(true);
     try {
       const data = new FormData();
-      const { thumbs, width, height } = await extractVideoFrames(files[0])
+      const { thumbs, width, height, duration } = await extractVideoFrames(files[0])
 
       data.append('w', width)
       data.append('h', height)
       data.append('video', files[0])
+
+      if (!isNaN(maxVideoDuration) && duration > maxVideoDuration) {
+        dispatch(snackAlert(t("new_post.video_duration_exceeded")));
+        setIsUploading(false);
+        return;
+      }
+
       const res = await mfetch('/api/_uploadVideo', {
         signal: abortController.current.signal,
         method: 'POST',
@@ -199,8 +206,12 @@ const NewPost = () => {
       if (!res.ok) {
         if (res.status === 400) {
           const error = await res.json();
+          setIsUploading(false);
           if (error.code === 'file_size_exceeded') {
             dispatch(snackAlert(t('new_post.file_size_exceeded')));
+            return;
+          } else if (error.code === 'video_duration_exceeded') {
+            dispatch(snackAlert(t("new_post.video_duration_exceeded")));
             return;
           } else if (error.code === 'unsupported_image') {
             dispatch(snackAlert(t("new_post.alert_5")));
@@ -418,6 +429,7 @@ const NewPost = () => {
 
   const isImagePostsDisabled = import.meta.env.VITE_DISABLEIMAGEPOSTS === true;
   const isVideoPostsDisabled = import.meta.env.VITE_DISABLEVIDEOPOSTS === true;
+  const maxVideoDuration = import.meta.env.VITE_MAXVIDEODURATION;
 
   return (
     <div className="page-new">
@@ -922,7 +934,7 @@ function extractVideoFrames(file) {
             frOffsets.push(captureInterval * i)
         }
         serialExtractFrames(vvid, vcnv, frOffsets).then(resp => {
-          resolve({ thumbs: resp, width: vcnv.width, height: vcnv.height });
+          resolve({ thumbs: resp, width: vcnv.width, height: vcnv.height, duration: vvid.duration });
         })
       }
     }

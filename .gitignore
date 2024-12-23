@@ -9,6 +9,7 @@ node_modules
 /logs
 /discuit
 /images
+/videos
 .secrets
 .DS_Store
 __debug_bin*
