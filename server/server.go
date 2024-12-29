@@ -796,6 +796,10 @@ func (s *Server) insertMetaTags(doc *html.Node, r *http.Request) {
 				if post.Link != nil && post.Link.Image != nil {
 					image = absoluteURL(*post.Link.Image.URL)
 				}
+			} else if post.Type == core.PostTypeVideo {
+				if post.Video != nil && post.Video.ThumbnailURL != nil {
+					image = *post.Video.ThumbnailURL
+				}
 			}
 			if image != "" {
 				appendOGImage(image)
