@@ -17,14 +17,34 @@ import VideoPlayer from '../../components/PostCard/VideoPlayer';
 const PostVideo = ({ post }) => {
   const { video } = post;
 
+  let w = '16'
+  let h = '9'
   let ar = '16:9'
+  let arCss = '169'
   if (video.width && video.height) {
-    ar = calcAspectRatio(video.width, video.height)
+    let asp = calcAspectRatio(video.width, video.height)
+
+    w = asp.w
+    h = asp.h
   } else {
     video.width = 640
     video.height = 360
   }
+  const supportedAspectRatios =
+    ['16/9',
+      '5/4',
+      '4/3',
+      '1/1',
+      '9/16',
+      '4/5',
+      '3/4']
+  if (-1 === supportedAspectRatios.indexOf(`${w}/${h}`)) {
+    w = '1'; h = '1'
+  }
+  ar = `${w}:${h}`
+  arCss = `${w}${h}`
 
+  console.log('what the..', ar, arCss, w, h)
   const videoJsOptions = {
     autoplay: false,
     controls: true,
@@ -41,14 +61,14 @@ const PostVideo = ({ post }) => {
   };
 
   return <div className='post-video'>
-    <div className={video.width > video.height ? 'video-landscape' : 'video-portrait'}>
+    <div className={(video.width > video.height ? 'video-landscape' : 'video-portrait') + ' ' + `video-${arCss}`}>
       <VideoPlayer {...videoJsOptions} />
     </div>
   </div>
 };
 function calcAspectRatio(w, h) {
   const r = gcd(w, h);
-  return `${w / r}:${h / r}`
+  return { w: w / r, h: h / r }
 }
 function gcd(a, b) {
   return (b == 0) ? a : gcd(b, a % b);

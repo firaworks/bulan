@@ -551,15 +551,7 @@ a {
     .post-video {
         margin-top: var(--margin-bottom);
 
-        .video-landscape {
-            aspect-ratio: 16/9;
-            position: relative;
-        }
-
         .video-portrait {
-            aspect-ratio: 9/16;
-            // position: relative;
-            // padding-top: 56.25% !important;
             max-width: 600px;
             max-height: 600px;
             margin: 0 auto;
@@ -575,6 +567,39 @@ a {
                 object-fit: cover
             }
         }
+
+        .video-landscape {
+            position: relative;
+        }
+
+        .video-169 {
+            aspect-ratio: 16/9;
+        }
+
+        .video-54 {
+            aspect-ratio: 5/4;
+        }
+
+        .video-43 {
+            aspect-ratio: 4/3;
+        }
+
+        .video-11 {
+            aspect-ratio: 1/1;
+        }
+
+        .video-916 {
+            aspect-ratio: 9/16;
+        }
+
+        .video-45 {
+            aspect-ratio: 4/5;
+        }
+
+        .video-34 {
+            aspect-ratio: 3/4;
+        }
+
 
         // /* Player ratio: 100 / (1280 / 720) */                
         .vjs-picture-in-picture-control {
