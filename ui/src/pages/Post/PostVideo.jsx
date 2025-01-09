@@ -44,7 +44,6 @@ const PostVideo = ({ post }) => {
   ar = `${w}:${h}`
   arCss = `${w}${h}`
 
-  console.log('what the..', ar, arCss, w, h)
   const videoJsOptions = {
     autoplay: false,
     controls: true,

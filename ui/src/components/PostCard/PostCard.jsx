@@ -49,7 +49,7 @@ const PostCard = ({
         } else if (el.nodeName != 'VIDEO') {
           curVid = el.getElementsByTagName('video')[0]
         }
-        if (curVid.nodeName === 'VIDEO') {
+        if (curVid != null && curVid.nodeName === 'VIDEO') {
           const vids = document.getElementsByTagName('video')
           for (let i = 0; i < vids.length; i++) {
             if (vids[i] != curVid) {

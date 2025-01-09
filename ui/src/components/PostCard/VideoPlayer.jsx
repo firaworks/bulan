@@ -11,7 +11,13 @@ export default class VideoPlayer extends React.Component {
   componentDidMount() {
     this.player = videojs(this.videoNode, this.props, () => {
       this.videoNode.classList.add('video-player')
-      // videojs.log('onPlayerReady', this);
+      this.player.on('fullscreenchange', () => {
+        if (this.player.isFullscreen_) {
+          this.videoNode.parentElement.classList.add('video-port-full')
+        } else {
+          this.videoNode.parentElement.classList.remove('video-port-full')
+        }
+      })
     });
     this.player.mobileUi()
   }
