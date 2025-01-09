@@ -2033,11 +2033,11 @@ func CheckForMediaConvertJobCompletions(ctx context.Context, db *sql.DB, key, se
 				VideoID:  jobs[i].vid,
 				CmafPath: cmaf,
 			}
-			_, err = CreateVideoPost(ctx, db, jobs[i].author, jobs[i].community.ID, jobs[i].title, v)
+			post, err := CreateVideoPost(ctx, db, jobs[i].author, jobs[i].community.ID, jobs[i].title, v)
 			if err != nil {
 				return -1, err
 			}
-
+			post.Vote(ctx, jobs[i].author, true)
 		}
 		return len(jobs), nil
 	}

@@ -343,6 +343,7 @@ const NewPost = () => {
         if (postType === 'video') {
           alert(t('new_post.your_video_will_appear_later'))
           history.goBack();
+          return
         }
       }
       dispatch(postAdded(newPost));
