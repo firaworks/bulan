@@ -222,6 +222,8 @@ const Signup = ({ open, onClose }) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={signupsDisabled}
+                onInvalid={(e) => e.target.setCustomValidity(t('signup.email_invalid'))}
+                onInput={(e) => e.target.setCustomValidity('')}
               />
             </FormField>
             <FormField label={t("login_view.label_2")} error={passwordError}>
