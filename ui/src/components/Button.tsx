@@ -217,6 +217,25 @@ export const ButtonNotifications = ({ count = 0, ...props }: { count?: number } 
   );
 };
 
+export const ButtonBack = ({
+  className,
+  style = {},
+  ...props
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+} & ButtonProps) => {
+  const cls = 'button-icon' + (className ? ` ${className}` : '');
+  return (
+    // <Button className={cls} style={{ padding: '9px', ...style }} {...props}>
+    <Button className={cls} style={{ padding: '0px', marginLeft: '-10px', marginRight: '10px', ...style }} {...props}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" >
+        <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clipRule="evenodd" />
+      </svg>
+    </Button>
+  );
+};
+
 export const ButtonUpload = ({
   children,
   onChange,

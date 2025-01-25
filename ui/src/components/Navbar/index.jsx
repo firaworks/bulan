@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import Link from '../../components/Link';
 import { kRound, mfetch, onKeyEnter, stringCount } from '../../helper';
 import { mobileBreakpointWidth, useTheme, useWindowWidth } from '../../hooks';
@@ -16,17 +16,19 @@ import {
   toggleSidebarOpen,
 } from '../../slices/mainSlice';
 import { homeReloaded } from '../../views/PostsFeed';
-import { ButtonHamburger, ButtonNotifications } from '../Button';
+import { ButtonBack, ButtonHamburger, ButtonNotifications } from '../Button';
 import Dropdown from '../Dropdown';
 import Search from './Search';
 import { useTranslation } from "react-i18next";
 import favicon from '../../assets/imgs/favicon.png';
+import UserProPic from '../UserProPic';
 
 const Navbar = ({ offline = false }) => {
 
   const [t, i18n] = useTranslation("global");
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const user = useSelector((state) => state.main.user);
   const loggedIn = user !== null;
@@ -99,13 +101,23 @@ const Navbar = ({ offline = false }) => {
 
   const windowWidth = useWindowWidth();
   const isMobile = windowWidth <= mobileBreakpointWidth;
+  const path = window.location.pathname
+  const isAtHome = path === '/' ? true : false
 
   return (
     <header className={'navbar' + (blur ? ' is-blured' : '')} ref={navbarRef}>
       <div className="wrap">
         <div className="left">
           <div className="hamburger-m">
-            <ButtonHamburger onClick={handleHamburgerClick} />
+            {isMobile && !isAtHome && (
+              <ButtonBack onClick={() => history.goBack()} />
+            )}
+            {isMobile && isAtHome && (
+              <ButtonHamburger onClick={handleHamburgerClick} />
+            )}
+            {!isMobile && (
+              <ButtonHamburger onClick={handleHamburgerClick} />
+            )}
           </div>
           <Link
             to="/"
@@ -168,10 +180,11 @@ const Navbar = ({ offline = false }) => {
                     t('helper.point'),
                   )}`}</span>
                   <span className="navbar-name">
-                    @
+                    {/* @
                     {windowWidth < 400 || (isMobile && user.username.length > 10)
                       ? 'me'
-                      : user.username}
+                      : user.username} */}
+                    <UserProPic username={user.username} proPic={user.proPic} size='small' />
                   </span>
                 </div>
               }

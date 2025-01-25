@@ -109,7 +109,15 @@
         cursor: pointer;
 
         .navbar-profile-target {
-            span.navbar-name {}
+            display: flex;
+
+            span.navbar-name {
+                .profile-picture {
+                    width: 25px;
+                    height: 25px;
+                    margin-right: 5px;
+                }
+            }
 
             span.navbar-points {
                 color: var(--color-gray);

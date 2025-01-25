@@ -327,7 +327,6 @@ func (s *Server) requestPasswordReset(w *responseWriter, r *request) error {
 		}
 	}
 	if user != nil && user.Email.Valid {
-		log.Print("found the user", user.Username, time.Now(), time.Now().Add(time.Hour*24))
 		token, err := user.ForgotPassword(r.ctx)
 		if err != nil {
 			return err
