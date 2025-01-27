@@ -61,6 +61,8 @@
     "members": "гишүүд",
     "comment": "коммент",
     "comments": "комментууд",
+    "new_comments": " шинэ коммент",
+    "loading": "уншиж байна",
     "joined": "Нэгдсэн",
     "join": "Нэгдэх",
     "chat": {

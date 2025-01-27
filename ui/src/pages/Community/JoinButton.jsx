@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { mfetchjson } from '../../helper';
 import { communityAdded } from '../../slices/communitiesSlice';
@@ -10,8 +10,8 @@ const JoinButton = ({ className, community, ...rest }) => {
   const [t, i18next] = useTranslation("global");
   const loggedIn = useSelector((state) => state.main.user) !== null;
   const dispatch = useDispatch();
+  const [joined, setJoined] = useState(community ? community.userJoined : false);
 
-  const joined = community ? community.userJoined : false;
   const handleFollow = async () => {
     if (!loggedIn) {
       dispatch(loginPromptToggled());
@@ -26,6 +26,7 @@ const JoinButton = ({ className, community, ...rest }) => {
         method: 'POST',
         body: JSON.stringify({ communityId: community.id, leave: joined }),
       });
+      setJoined(rcomm.userJoined)
       dispatch(communityAdded(rcomm));
     } catch (error) {
       dispatch(snackAlertError(error));

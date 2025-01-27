@@ -712,7 +712,7 @@ const Comment = ({
             onClick={handleLoadReplies}
             disabled={isRepliesLoading}
           >
-            {isRepliesLoading ? 'loading...' : `${noMoreComments} more replies`}
+            {isRepliesLoading ? `${t('loading')}...` : `${noMoreComments} ${t('new_comments')}`}
           </button>
         )}
       </div>
