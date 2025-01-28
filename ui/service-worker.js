@@ -137,7 +137,7 @@ self.addEventListener('fetch', event => {
       return cacheFirst({ request: event.request, preloadResponsePromise: response })
     }).catch(error => {
       console.error("Preload error:", error);
-      return new Response("Fallback content", { status: 500 });
+      return new Response('Internet yachiv?', { status: 500 });
     }));
   }
 });

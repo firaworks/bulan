@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"net/url"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -827,13 +828,28 @@ func getLinkPostImage(u *url.URL) []byte {
 	}
 	defer res.Body.Close()
 
-	imageURL, err := httputil.ExtractOpenGraphImage(res.Body)
+	sn := ""
+	// check if it was CustomSites
+	urlRegex := regexp.MustCompile(`(https?://)?(www\.)?((gogo|zogii)\.mn)/.*`)
+	// Check if the text contains any matches
+	matches := urlRegex.FindAllStringSubmatch(fullURL, -1)
+	if len(matches) > 0 {
+		for _, match := range matches {
+			if match[3] == "gogo.mn" {
+				sn = "gogo"
+			} else if match[3] == "zogii.mn" {
+				sn = "zogii"
+			}
+		}
+	}
+
+	imageURL, err := httputil.ExtractOpenGraphImage(res.Body, sn)
 	if err != nil {
 		log.Printf("error extracting the og:image tag of url: %v\n", u)
 		return nil
 	}
 	if imageURL == "" {
-		// Since og:image is not found, see if the link itself is an image.
+		// Since og:image is not found, also not of mnSites , see if the link itself is an image.
 		probablyAnImage := slices.Contains([]string{"image/jpeg", "image/png", "image/webp"}, res.Header.Get("Content-Type"))
 		if !probablyAnImage {
 			exts := []string{".jpg", ".jpeg", ".png", ".webp"}

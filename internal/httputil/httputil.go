@@ -6,6 +6,7 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"slices"
 	"time"
 
 	"golang.org/x/net/html"
@@ -58,7 +59,7 @@ func Get(url string) (resp *http.Response, err error) {
 }
 
 // ExtractOpenGraphImage returns the Open Graph image tag of the HTML document in r.
-func ExtractOpenGraphImage(r io.Reader) (string, error) {
+func ExtractOpenGraphImage(r io.Reader, sn string) (string, error) {
 	doc, err := html.Parse(r)
 	if err != nil {
 		return "", err
@@ -86,6 +87,42 @@ func ExtractOpenGraphImage(r io.Reader) (string, error) {
 	}
 	f(doc)
 
+	if sn == "zogii" {
+		if imageURL != "" && string([]rune(imageURL)[0]) == "/" {
+			imageURL = "https://zogii.mn/" + imageURL
+		}
+	}
+	if sn == "gogo" {
+		// try to extract image from gogo.mn
+		var fgogo func(*html.Node)
+		fgogo = func(n *html.Node) {
+			if sn == "gogo" {
+				gogoNewsContainers := []string{"uk-container", "news-cont-container", "news-detail-content-container"}
+				href := ""
+				if n.Type == html.ElementNode && n.Data == "a" {
+					for _, attr := range n.Attr {
+						if attr.Key == "href" {
+							href = attr.Val
+						}
+						if attr.Key == "class" && attr.Val == "gogo-zoom" {
+							for p := n.Parent; p.Data != "body"; p = p.Parent {
+								if len(p.Attr) > 0 && p.Attr[0].Key == "class" && slices.Contains(gogoNewsContainers, p.Attr[0].Val) {
+									if href != "" {
+										imageURL = href
+									}
+									return
+								}
+							}
+						}
+					}
+				}
+			}
+			for c := n.FirstChild; c != nil; c = c.NextSibling {
+				fgogo(c)
+			}
+		}
+		fgogo(doc)
+	}
 	return imageURL, nil
 }
 
