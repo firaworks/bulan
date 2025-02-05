@@ -45,6 +45,12 @@ const MarkdownGuide = () => {
               <td>*налцгаах уу?*</td>
             </tr>
             <tr>
+              <td>Шинэ мөр авах</td>
+              <td>Дуусгаж буй мөрний араас 2 удаа зай(<i>space</i>) аваад <i>enter</i> дарна.<br />
+                <span style={{ backgroundColor: "gray" }}>Яг ингэж:&nbsp;&nbsp;</span>&lt;-2 удаа зай авсан байгаа биз? +Enter<br /><span style={{ backgroundColor: "gray" }}>Эндээс шинэ мөр эхэлж байна.</span>
+              </td>
+            </tr>
+            <tr>
               <td>Жагсаалт хэлбэрээр оруулах</td>
               <td>
                 - нэг юм <br />- хоёр юм
