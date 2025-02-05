@@ -504,14 +504,13 @@ a {
         padding: 0 var(--padding-hor);
     }
 
-    &.is-pinned {
-
-        .post-card-text,
-        .post-image,
-        .image-gallery {
-            display: none;
-        }
-    }
+    // &.is-pinned {
+    //     .post-card-text,
+    //     .post-image,
+    //     .image-gallery {
+    //         display: none;
+    //     }
+    // }
 
     .post-image-gallery,
     .post-image {
