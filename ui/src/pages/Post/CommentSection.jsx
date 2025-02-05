@@ -6,6 +6,7 @@ import { defaultCommentZIndex, moreCommentsAdded } from '../../slices/commentsSl
 import { commentsTree, countChildrenReplies } from '../../slices/commentsTree';
 import { snackAlertError } from '../../slices/mainSlice';
 import { MemorizedComment } from './Comment';
+import { useTranslation } from 'react-i18next';
 
 const CommentSection = ({
   post,
@@ -18,6 +19,7 @@ const CommentSection = ({
   canVote,
   canComment,
 }) => {
+  const [t, i18next] = useTranslation("global");
   const dispatch = useDispatch();
 
   const postId = post.publicId;
@@ -133,7 +135,7 @@ const CommentSection = ({
 
   // const totalRenders = useRef(0);
   const moreCommentsText =
-    moreCommentsLoading === 'loading' ? 'loading...' : `${noMoreReplies} more comments`;
+    moreCommentsLoading === t('loading') ? `${t('loading')}...` : `${noMoreReplies} ${t('new_comments')}`;
 
   return (
     <div className="post-comments-comments">
