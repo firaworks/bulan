@@ -31,11 +31,11 @@ import (
 
 const (
 	publicPostIDLength   = 8
-	maxPostBodyLength    = 20000 // in runes.
+	maxPostBodyLength    = 40000 // in runes.
 	maxPostTitleLength   = 255   // in runes.
 	maxPostLinkLength    = 2048  // in bytes
 	maxCommentDepth      = 15
-	maxCommentBodyLength = maxPostBodyLength
+	maxCommentBodyLength = 20000 // in runes.
 	commentsFetchLimit   = 500
 )
 
