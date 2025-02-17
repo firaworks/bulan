@@ -363,7 +363,7 @@ const Comment = ({
   const userMod = community ? community.userMod : false;
 
   let deletedText = '';
-  if (deleted) deletedText = `${t("new_comment.deleted_by")} ${userGroupSingular(comment.deletedAs, true)}`;
+  if (deleted) deletedText = `${t("new_comment.deleted_by")} (${userGroupSingular(comment.deletedAs, true)})`;
   const disabled = !(canVote && !comment.deletedAt);
   const noRepliesRenderedDirect = children ? children.length : 0;
   const noChildrenReplies = countChildrenReplies(node);

@@ -33,7 +33,8 @@ export function timeAgo(date, suffix = ' ago', justNow = true, short = false, la
     // eslint-disable-next-line no-param-reassign
     date = new Date(date);
   }
-  const ms = (Date.now() - date) / 1000;
+  const now = Date.now()
+  const ms = (now - date) / 1000;
   if (ms < 60) {
     if (justNow) {
       return short ? ' ' + '0м' : t("timeago.just_now");
@@ -46,12 +47,12 @@ export function timeAgo(date, suffix = ' ago', justNow = true, short = false, la
   } else if (ms < 24 * 3600) {
     const h = Math.round(ms / 3600);
     return `${h}${short ? t("timeago.h") : ' ' + t("timeago.hour")} ${suffix}`;
-  } else if (ms < 7 * 24 * 3600) {
+  } else if (ms < 30 * 24 * 3600) {
     const d = Math.round(ms / (24 * 3600));
     return `${d}${short ? t("timeago.d") : ' ' + t("timeago.day")} ${suffix}`;
   } else if (ms < 365 * 24 * 3600) {
     var inv = 1.0 / 0.5;
-    const mo = Math.round((ms / (24 * 3600) / 13) * inv) / inv
+    const mo = Math.round((ms / (24 * 3600) / 30) * inv) / inv
     return `${mo}${short ? t("timeago.mo") : ' ' + t("timeago.month")} ${suffix}`;
   }
   // weeks was a maximum for en/us languages

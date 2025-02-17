@@ -12,7 +12,7 @@ import SelectBar from '../../components/SelectBar';
 import ShowMoreBox from '../../components/ShowMoreBox';
 import Sidebar from '../../components/Sidebar';
 import UserProPic from '../../components/UserProPic';
-import { APIError, dateString1, mfetch, mfetchjson, stringCount } from '../../helper';
+import { APIError, dateString1, mfetch, mfetchjson, stringCount, timeAgo } from '../../helper';
 import { useFetchUsersLists, useMuteUser } from '../../hooks';
 import { FeedItem } from '../../slices/feedsSlice';
 import { snackAlertError } from '../../slices/mainSlice';

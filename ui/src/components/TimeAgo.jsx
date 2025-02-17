@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next';
 
 const TimeAgo = ({ time, inline = true, prefix = '', suffix = ' ago', short = false, ...rest }) => {
   const [tr, i18n] = useTranslation("global");
-  const t = time instanceof Date ? time : new Date(time);
+  if (!(time instanceof Date)) {
+    // eslint-disable-next-line no-param-reassign
+    time = new Date(time);
+    // time.setHours(time.getHours() - 8);
+  }
   suffix = tr("timeago.suffix")
   const [, setCounter] = useState(0);
   useEffect(() => {
@@ -20,7 +24,7 @@ const TimeAgo = ({ time, inline = true, prefix = '', suffix = ' ago', short = fa
   return React.createElement(
     inline ? 'span' : 'div',
     {
-      title: t.toLocaleString('en-US', {
+      title: time.toLocaleString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -29,7 +33,7 @@ const TimeAgo = ({ time, inline = true, prefix = '', suffix = ' ago', short = fa
       }),
       ...rest,
     },
-    `${prefix}${timeAgo(t, suffix, true, short, i18n.language)}`
+    `${prefix}${timeAgo(time, suffix, true, short, i18n.language)}`
   );
 };
 

@@ -10,7 +10,7 @@ import { snackAlertError } from '../../slices/mainSlice';
 import { useTranslation } from 'react-i18next';
 
 const BanUserButton = ({ user }) => {
-  const [open, setOpen] = useState();
+  const [open, setOpen] = useState(false);
   const [t, i18n] = useTranslation("global");
   const [deleteContentChecked, setDeleteContentChecked] = useState(false);
   const [page, setPage] = useState(1);
