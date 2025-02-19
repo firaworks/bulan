@@ -670,6 +670,7 @@ func createPost(ctx context.Context, db *sql.DB, opts *createPostOpts) (*Post, e
 		{Name: "title", Value: post.Title},
 		{Name: "body", Value: post.Body},
 		{Name: "created_at", Value: post.CreatedAt},
+		{Name: "last_activity_at", Value: post.CreatedAt},
 		{Name: "hotness", Value: PostHotness(0, 0, post.CreatedAt)},
 	}
 
