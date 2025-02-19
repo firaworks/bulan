@@ -86,7 +86,7 @@ const PostCardHeadingDetails = ({
           <TimeAgo
             className="post-card-heading-ago"
             time={post.editedAt}
-            prefix="Edited "
+            prefix={t('edited') + ': '}
             suffix=""
             short
           />

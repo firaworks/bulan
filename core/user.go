@@ -494,6 +494,7 @@ func RegisterUser(ctx context.Context, db *sql.DB, username, email, password str
 		{Name: "username_lc", Value: strings.ToLower(username)},
 		{Name: "email", Value: email},
 		{Name: "password", Value: hash},
+		{Name: "created_at", Value: time.Now()},
 	})
 	_, err = db.ExecContext(ctx, query, args...)
 	if err != nil {
