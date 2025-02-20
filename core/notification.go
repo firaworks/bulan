@@ -40,12 +40,13 @@ const MaxNotificationsPerUser = 200
 type NotificationType string
 
 const (
-	NotificationTypeNewComment   = NotificationType("new_comment")
-	NotificationTypeCommentReply = NotificationType("comment_reply")
-	NotificationTypeUpvote       = NotificationType("new_votes") // TODO: change string
-	NotificationTypeDeletePost   = NotificationType("deleted_post")
-	NotificationTypeModAdd       = NotificationType("mod_add")
-	NotificationTypeNewBadge     = NotificationType("new_badge")
+	NotificationTypeNewComment     = NotificationType("new_comment")
+	NotificationTypeCommentReply   = NotificationType("comment_reply")
+	NotificationTypeUpvote         = NotificationType("new_votes") // TODO: change string
+	NotificationTypeDeletePost     = NotificationType("deleted_post")
+	NotificationTypeModAdd         = NotificationType("mod_add")
+	NotificationTypeNewBadge       = NotificationType("new_badge")
+	NotificationTypeCommentMention = NotificationType("comment_mention")
 )
 
 func (t NotificationType) Valid() bool {
@@ -173,6 +174,12 @@ func scanNotifications(db *sql.DB, rows *sql.Rows) ([]*Notification, error) {
 			notif.Notif = nc
 		case NotificationTypeNewBadge:
 			nc := &NotificationNewBadge{}
+			if err := json.Unmarshal(notif.notifRawJSON, nc); err != nil {
+				return nil, err
+			}
+			notif.Notif = nc
+		case NotificationTypeCommentMention:
+			nc := &NotificationCommentMention{}
 			if err := json.Unmarshal(notif.notifRawJSON, nc); err != nil {
 				return nil, err
 			}
@@ -497,6 +504,59 @@ func CreateNewCommentNotification(ctx context.Context, db *sql.DB, post *Post, c
 		FirstCreatedAt: time.Now(),
 	}
 	return CreateNotification(ctx, db, post.AuthorID, NotificationTypeNewComment, n)
+}
+
+// NotificationCommentMention is for when a user mentions another user in a post comment.
+// It is sent to the mentioned user.
+type NotificationCommentMention struct {
+	PostID        uid.ID `json:"postId"`
+	CommentID     uid.ID `json:"commentId"`
+	CommentAuthor string `json:"commentAuthor"`
+	MentionedUser string `json:"mentionedUser"`
+}
+
+func (n NotificationCommentMention) marshalJSONForAPI(ctx context.Context, db *sql.DB) ([]byte, error) {
+	type T NotificationCommentMention
+	out := struct {
+		T
+		Post *Post `json:"post"`
+	}{
+		T: (T)(n),
+	}
+
+	var err error
+	post, err := GetPost(ctx, db, &n.PostID, "", nil, true)
+	if err != nil {
+		return nil, err
+	}
+	out.Post = post
+	return json.Marshal(out)
+}
+
+// CreateCommentMentionNotification creates a notification of type comment_mention. If
+// an identical notification exists in the last 10 items, it is deleted.
+func CreateCommentMentionNotification(ctx context.Context, db *sql.DB, post *Post, comment uid.ID, author *User, userMentioned string) error {
+	user, err := GetUserByUsername(ctx, db, userMentioned, nil)
+	if err != nil {
+		return err
+	}
+	if user.ReplyNotificationsOff {
+		return nil
+	}
+
+	if muted, err := user.Muted(ctx, db, author.ID); err != nil {
+		return err
+	} else if muted {
+		return nil
+	}
+
+	n := NotificationCommentMention{
+		PostID:        post.ID,
+		CommentID:     comment,
+		CommentAuthor: author.Username,
+		MentionedUser: userMentioned,
+	}
+	return CreateNotification(ctx, db, user.ID, NotificationTypeCommentMention, n)
 }
 
 // NotificationCommentReply is for when a comment receives a reply. It is sent to the

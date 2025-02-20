@@ -24,6 +24,7 @@
         "deleted_post": "Таны <bold>\"{{title}}\"</bold> постыг <bold>{{who}}</bold> устгасан байна",
         "mod_add": "<bold>{{who}}</bold> таныг <bold>{{community}}</bold> булангийн мод(модератор) болголоо",
         "new_badge": "Май медал ав!",
+        "comment_mention": "<bold>{{who}}</bold> таныг <bold>\"{{title}}\"</bold> постын комментод дурдсан байна",
         "mark_seen": "Үзсэнээр тэмдэглэх",
         "mark_unseen": "Үзээгүйгээр тэмдэглэх",
         "state": "Нотификейшн алгоо"

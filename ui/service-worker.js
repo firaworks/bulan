@@ -234,6 +234,13 @@ const getNotificationInfo = (notification, csrfToken) => {
         setImage(src);
       }
       break;
+    case 'comment_mention':
+      {
+        let to = `/${notif.post.communityName}/post/${notif.post.publicId}/${notif.commentId}`;
+        ret.title = `@${notif.commentAuthor} таныг дурдсан байна`
+        setToURL(to);
+      }
+      break;
     default: {
       throw new Error('Unkown notification type');
     }

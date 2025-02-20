@@ -148,6 +148,18 @@ const NotificationItem = ({ notification, ...rest }) => {
           </>
         );
       }
+      case 'comment_mention': {
+        return (
+          <>
+            <Trans i18nKey="notifications.comment_mention"
+              values={{
+                who: `@${notif.commentAuthor}`,
+                title: notif.post.title
+              }}
+              components={{ bold: <b /> }} />
+          </>
+        );
+      }
       default: {
         return null; // unknown notification type
       }
@@ -223,6 +235,10 @@ const NotificationItem = ({ notification, ...rest }) => {
       };
       break;
     }
+    case 'comment_mention':
+      to = `/${notif.post.communityName}/post/${notif.post.publicId}/${notif.commentId}`;
+      image = getNotifImage(notif);
+      break;
   }
 
   const actionsRef = useRef();
