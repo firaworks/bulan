@@ -1,6 +1,8 @@
 module github.com/discuitnet/discuit
 
-go 1.21
+go 1.23
+
+toolchain go1.23.4
 
 require (
 	github.com/SherClockHolmes/webpush-go v1.2.0
@@ -35,11 +37,19 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.28.6 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.33.2 // indirect
 	github.com/aws/smithy-go v1.22.1 // indirect
+	github.com/chromedp/cdproto v0.0.0-20250120090109-d38428e4d9c8 // indirect
+	github.com/chromedp/chromedp v0.12.1 // indirect
+	github.com/chromedp/sysutil v1.1.0 // indirect
+	github.com/gobwas/httphead v0.1.0 // indirect
+	github.com/gobwas/pool v0.2.1 // indirect
+	github.com/gobwas/ws v1.4.0 // indirect
 	github.com/h2non/filetype v1.1.3 // indirect
 	github.com/ipsn/go-adorable v1.0.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
+	github.com/josharian/intern v1.0.0 // indirect
 	github.com/lucasb-eyer/go-colorful v0.0.0-20181028223441-12d3b2882a08 // indirect
-	golang.org/x/sys v0.10.0 // indirect
+	github.com/mailru/easyjson v0.9.0 // indirect
+	golang.org/x/sys v0.29.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/mail.v2 v2.3.1 // indirect
 )

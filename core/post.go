@@ -19,6 +19,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/mediaconvert"
 	"github.com/aws/aws-sdk-go-v2/service/mediaconvert/types"
+	"github.com/chromedp/chromedp"
 	"github.com/discuitnet/discuit/internal/httperr"
 	"github.com/discuitnet/discuit/internal/httputil"
 	"github.com/discuitnet/discuit/internal/images"
@@ -831,7 +832,7 @@ func getLinkPostImage(u *url.URL) []byte {
 
 	sn := ""
 	// check if it was CustomSites
-	urlRegex := regexp.MustCompile(`(https?://)?(www\.)?((gogo|zogii)\.mn)/.*`)
+	urlRegex := regexp.MustCompile(`(https?://)?(www\.)?((gogo|zogii|tug|eagle)\.mn)/.*`)
 	// Check if the text contains any matches
 	matches := urlRegex.FindAllStringSubmatch(fullURL, -1)
 	if len(matches) > 0 {
@@ -840,6 +841,10 @@ func getLinkPostImage(u *url.URL) []byte {
 				sn = "gogo"
 			} else if match[3] == "zogii.mn" {
 				sn = "zogii"
+			} else if match[3] == "tug.mn" {
+				sn = "tug"
+			} else if match[3] == "eagle.mn" {
+				sn = "eagle"
 			}
 		}
 	}
@@ -864,7 +869,37 @@ func getLinkPostImage(u *url.URL) []byte {
 		if probablyAnImage {
 			imageURL = fullURL
 		}
+
+		// Use chromedp (for JavaScript-heavy sites)
+		ctx, cancel := chromedp.NewContext(context.Background())
+		defer cancel()
+		ctx, cancel = context.WithTimeout(ctx, 30*time.Second) // 30-second timeout
+		defer cancel()
+
+		siteAction := chromedp.WaitVisible(`body`)
+		// siteAction = chromedp.WaitVisible()
+		if sn == "eagle" {
+			siteAction = chromedp.Sleep(5 * time.Second)
+		}
+		var ogImage string
+		_ = chromedp.Run(ctx,
+			chromedp.Navigate(fullURL),
+			siteAction,
+			chromedp.Evaluate(`
+					 let ogImage = document.querySelector('meta[property="og:image"]') || document.querySelector('meta[name="og:image"]');
+					 if (ogImage) {
+						 ogImage = ogImage.getAttribute('content');
+					 } else {
+						 ogImage = ''; // Return empty string if not found
+					 }
+					 ogImage; // Return the value
+				 `, &ogImage),
+		)
+		if ogImage != "" {
+			imageURL = ogImage
+		}
 	}
+
 	if imageURL != "" {
 		res, err := httputil.Get(imageURL)
 		if err != nil {

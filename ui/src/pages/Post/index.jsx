@@ -271,7 +271,7 @@ const Post = () => {
   const getDeletedBannerText = (post) => {
     if (post.deletedContent) {
       if (post.deletedAs === post.deletedContentAs) {
-        return `${t("new_comment.alert_7")} ${post.type === 'image' ? t('image_too') : post.type
+        return `${t("new_comment.alert_7")} ${post.type === 'image' ? t('image_too') : t(post.type)
           } ${t("new_comment.alert_8")} (${userGroupSingular(post.deletedAs, true)})`;
       } else {
         return `${t("new_comment.alert_9")} ${userGroupSingular(post.deletedAs, true)} and its ${post.type

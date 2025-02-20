@@ -92,6 +92,11 @@ func ExtractOpenGraphImage(r io.Reader, sn string) (string, error) {
 			imageURL = "https://zogii.mn/" + imageURL
 		}
 	}
+	if sn == "tug" {
+		if imageURL != "" && string([]rune(imageURL)[0]) == "/" {
+			imageURL = "https://tug.mn/" + imageURL
+		}
+	}
 	if sn == "gogo" {
 		// try to extract image from gogo.mn
 		var fgogo func(*html.Node)
