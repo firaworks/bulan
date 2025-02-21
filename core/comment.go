@@ -434,7 +434,6 @@ func addComment(ctx context.Context, db *sql.DB, post *Post, author *User, paren
 				log.Printf("Create reply notification failed: %v\n", err)
 			}
 		}()
-
 	}
 	if !post.AuthorID.EqualsTo(author.ID) && (parent == nil || !(parent.AuthorID.EqualsTo(post.AuthorID))) {
 		go func() {
@@ -446,7 +445,7 @@ func addComment(ctx context.Context, db *sql.DB, post *Post, author *User, paren
 	if len(usersMentioned) > 0 {
 		for _, v := range usersMentioned {
 			// Send notifications.
-			if author.Username != v {
+			if author.Username != v && !(parent != nil && parent.Author.Username == v) {
 				go func() {
 					if err := CreateCommentMentionNotification(context.Background(), db, post, id, author, v); err != nil {
 						log.Printf("Create comment_mention notification failed: %v\n", err)
