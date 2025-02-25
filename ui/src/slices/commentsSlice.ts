@@ -51,8 +51,9 @@ export default function commentsReducer(
         next,
       } = action.payload as { postId: string; comments: Comment[]; next: string | null };
       if (state.ids.includes(postId)) return state;
-      let allCommenters = [...new Set(commentsList.map(comment => comment.author?.username).filter(username => username !== undefined))]
-      let commenters: User[] = allCommenters.map(username => commentsList.find(comment => comment.author?.username === username)?.author)
+      const allCommenters = [...new Set(commentsList.map(comment => comment.author?.username).filter(username => username !== undefined))]
+      const commentersUndefined: (User | undefined)[] = allCommenters.map(username => commentsList.find(comment => comment.author?.username === username)?.author)
+      const commenters = commentersUndefined.filter((user): user is User => user !== undefined);
       return {
         ...state,
         items: {
