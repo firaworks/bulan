@@ -601,10 +601,33 @@ a {
             aspect-ratio: 3/4;
         }
 
+        .vjs-volume-panel {
+            display: block !important;
+        }
+
+
+        .vjs-volume-horizontal {
+            display: none !important;
+
+            :active {
+                width: 0;
+            }
+        }
+
+        .vjs-volume-panel.vjs-volume-panel-horizontal.vjs-hover {
+            width: auto;
+        }
 
         // /* Player ratio: 100 / (1280 / 720) */                
         .vjs-picture-in-picture-control {
             display: none !important;
+        }
+
+        .vjs-play-control {
+            .vjs-icon-placeholder::before {
+                // background-color: red;
+                // height: 20%;
+            }
         }
     }
 

@@ -18,6 +18,12 @@ export default class VideoPlayer extends React.Component {
           this.videoNode.parentElement.classList.remove('video-port-full')
         }
       })
+      this.player.on('pause', () => {
+        this.props.paused(this.videoNode)
+      })
+      this.player.on('play', () => {
+        this.props.played(this.videoNode)
+      })
     });
     this.player.mobileUi()
   }

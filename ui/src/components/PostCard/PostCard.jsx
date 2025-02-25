@@ -49,14 +49,6 @@ const PostCard = ({
         } else if (el.nodeName != 'VIDEO') {
           curVid = el.getElementsByTagName('video')[0]
         }
-        if (curVid != null && curVid.nodeName === 'VIDEO') {
-          const vids = document.getElementsByTagName('video')
-          for (let i = 0; i < vids.length; i++) {
-            if (vids[i] != curVid) {
-              vids[i].pause()
-            }
-          }
-        }
         isButtonClick = false
         return
       }
@@ -78,6 +70,16 @@ const PostCard = ({
       }
     }
   };
+  const onVideoPlayed = (el) => {
+    const vids = document.getElementsByTagName('video')
+    for (let i = 0; i < vids.length; i++) {
+      if (vids[i] != el) {
+        vids[i].pause()
+      }
+    }
+  }
+  const onVideoPaused = (el) => {
+  }
 
   const handleAuxClick = (e) => {
     // mouse middle button
@@ -226,7 +228,7 @@ const PostCard = ({
           {showImage && post.images.length > 1 && (
             <PostImageGallery post={post} isMobile={isMobile} />
           )}
-          {showVideo && <PostVideo post={post} />}
+          {showVideo && <PostVideo post={post} onVideoPlayed={onVideoPlayed} onVideoPaused={onVideoPaused} />}
         </div>
         <div className="post-card-bottom">
           <div className="left">

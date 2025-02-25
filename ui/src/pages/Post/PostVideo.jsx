@@ -1,20 +1,7 @@
 import PropTypes from 'prop-types';
 import VideoPlayer from '../../components/PostCard/VideoPlayer';
 
-// {
-//   "id": "18107aae643bae60958f8bed",
-//   "s3Path": null,
-//   "cmafPath": {
-//     "String": "https://cdn.bulan.mn/v/20241212/18107aae643bae60958f8bed.m3u8",
-//     "Valid": true
-//   },
-//   "format": ".mp4",
-//   "thumbnailID": 0,
-//   "thumbnailURL": "https://cdn.bulan.mn/t/20241212/18107aae643bae60958f8bed.0000000.jpg"
-// }
-
-
-const PostVideo = ({ post }) => {
+const PostVideo = ({ post, onVideoPaused, onVideoPlayed }) => {
   const { video } = post;
 
   let w = '16'
@@ -45,11 +32,12 @@ const PostVideo = ({ post }) => {
   arCss = `${w}${h}`
 
   const videoJsOptions = {
-    autoplay: false,
+    autoplay: true,
     controls: true,
     responsive: true,
     loop: true,
     fluid: true,
+    muted: true,
     disablePictureInPicture: true,
     aspectRatio: ar,
     poster: video.thumbnailURL,
@@ -57,6 +45,15 @@ const PostVideo = ({ post }) => {
       src: video.cmafPath.String,
       type: 'application/x-mpegURL'
     }],
+    nativeControlsForTouch: false,
+    played: onPlayed,
+    paused: onPaused,
+  };
+  function onPlayed(videoNode) {
+    onVideoPlayed(videoNode)
+  }
+  function onPaused(videoNode) {
+    onVideoPaused(videoNode)
   };
 
   return <div className='post-video'>
