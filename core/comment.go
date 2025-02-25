@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/discuitnet/discuit/internal/httperr"
@@ -315,7 +316,8 @@ func scanComments(ctx context.Context, db *sql.DB, rows *sql.Rows, viewer *uid.I
 // addComment adds a record to the comments table. It does not check if the post
 // is deleted or locked.
 func addComment(ctx context.Context, db *sql.DB, post *Post, author *User, parentID *uid.ID, commentBody string) (*Comment, error) {
-	commentBody, usersMentioned := mentionsToLink(commentBody)
+	commentBody = communityMentionsToLink(commentBody)
+	commentBody, usersMentioned := userMentionsToLink(commentBody)
 	commentBody = utils.TruncateUnicodeString(commentBody, maxCommentBodyLength)
 	var (
 		parent    *Comment
@@ -443,14 +445,17 @@ func addComment(ctx context.Context, db *sql.DB, post *Post, author *User, paren
 		}()
 	}
 	if len(usersMentioned) > 0 {
-		for _, v := range usersMentioned {
-			// Send notifications.
-			if author.Username != v && !(parent != nil && parent.Author.Username == v) {
-				go func() {
-					if err := CreateCommentMentionNotification(context.Background(), db, post, id, author, v); err != nil {
-						log.Printf("Create comment_mention notification failed: %v\n", err)
-					}
-				}()
+		for i, v := range usersMentioned {
+			// set limit for max notifications sent. it might get abused without limit
+			if i < 20 {
+				// Send notifications.
+				if author.Username != v && !(parent != nil && parent.Author.Username == v) {
+					go func() {
+						if err := CreateCommentMentionNotification(context.Background(), db, post, id, author, v); err != nil {
+							log.Printf("Create comment_mention notification failed: %v\n", err)
+						}
+					}()
+				}
 			}
 		}
 	}
@@ -913,12 +918,25 @@ func GetSiteComments(ctx context.Context, db *sql.DB, limit int, next *string, v
 	return comments, nextNext, nil
 }
 
-func mentionsToLink(body string) (string, []string) {
+func userMentionsToLink(body string) (string, []string) {
 	re := regexp.MustCompile(`@([a-zA-Z0-9_]+)`)
 	users := []string{}
 	newBod := re.ReplaceAllStringFunc(body, func(match string) string {
 		users = append(users, match[1:])
+		// TODO: replace with root url later
 		return fmt.Sprintf("[%s](https://bulan.mn/%s)", match, match) // Markdown link
 	})
 	return newBod, users
+}
+
+func communityMentionsToLink(body string) string {
+	re := regexp.MustCompile(`\/([\w-]+)`)
+	newBod := re.ReplaceAllStringFunc(body, func(match string) string {
+		word := match[1:] // Remove the leading "/"
+		if strings.Contains(body, "/"+word+"/") {
+			return match // Return original if it's a phrase or path
+		}
+		return fmt.Sprintf("[%s](https://bulan.mn%s)", match, match) // Markdown link
+	})
+	return newBod
 }

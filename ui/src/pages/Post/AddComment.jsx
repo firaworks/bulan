@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { adjustTextareaHeight, APIError, mfetch } from '../../helper';
 import {
@@ -11,6 +11,7 @@ import {
 } from '../../slices/mainSlice';
 import AsUser from './AsUser';
 import { useTranslation } from 'react-i18next';
+import SelectMentionedUser from './SelectMentionedUser';
 
 const AddComment = ({
   isMod = false,
@@ -31,6 +32,13 @@ const AddComment = ({
   const empty = body.length === 0;
 
   const postId = post.publicId;
+  const commentsObj = useSelector((state) => state.comments.items[postId]);
+  const commenters = commentsObj ? commentsObj.commenters : [];
+
+  const [isSuggestionOpen, setIsSuggestionOpen] = useState(false);
+  const [partialUsername, setPartialUsername] = useState('');
+  const [cursorPosX, setCursorPosX] = useState(0);
+  const [cursorPosY, setCursorPosY] = useState(0);
 
   const [userGroup, setUserGroup] = useState('normal');
 
@@ -128,6 +136,111 @@ const AddComment = ({
     if (onCancel) onCancel();
   };
 
+  const calcCursorPos = (e) => {
+    const containerEle = e.parentElement;
+    const mirroredEle = document.createElement('div');
+    mirroredEle.textContent = e.value;
+    containerEle.append(mirroredEle);
+    const textareaStyles = window.getComputedStyle(e);
+    [
+      'border',
+      'boxSizing',
+      'fontFamily',
+      'fontSize',
+      'fontWeight',
+      'letterSpacing',
+      'lineHeight',
+      'padding',
+      'textDecoration',
+      'textIndent',
+      'textTransform',
+      'whiteSpace',
+      'wordSpacing',
+      'wordWrap',
+    ].forEach((property) => {
+      mirroredEle.style[property] = textareaStyles[property];
+    });
+    // mirroredEle.style.borderColor = 'transparent';
+    mirroredEle.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        white-space: pre-wrap;
+        color: transparent;
+        borderColor: transparent;
+    `;
+    const parseValue = (v) => v.endsWith('px') ? parseInt(v.slice(0, -2), 10) : 0;
+    const borderWidth = parseValue(textareaStyles.borderWidth);
+    const cursorPos = e.selectionStart;
+    const textBeforeCursor = e.value.substring(0, cursorPos);
+    const textAfterCursor = e.value.substring(cursorPos);
+    const pre = document.createTextNode(textBeforeCursor);
+    const post = document.createTextNode(textAfterCursor);
+    const caretEle = document.createElement('span');
+    caretEle.style.cssText = `
+      position: relative;
+      top: 0;
+      left: 0;
+      visibility: hidden;
+      whiteSpace: pre;
+      font: inherit; // Inherit font from textarea
+    `;
+    caretEle.innerHTML = '&nbsp;';
+    mirroredEle.innerHTML = '';
+    mirroredEle.append(pre, caretEle, post);
+    const rect = caretEle.getBoundingClientRect();
+    const posY = caretEle.offsetTop
+    const posX = caretEle.offsetLeft + 20
+    containerEle.removeChild(mirroredEle)
+    return { posX, posY }
+  }
+
+  const handleInput = (e) => {
+    const textarea = e.target
+    const text = e.target.value;
+    const cursorPosition = e.target.selectionStart;
+    const atIndex = text.lastIndexOf('@'); // Find the last @ symbol
+    if (atIndex !== -1) {
+      // Check if it's a valid mention (character before and after)
+      const charBefore = atIndex > 0 ? text[atIndex - 1] : ''; // Character before @
+      const charAfter = cursorPosition < text.length ? text[cursorPosition] : ''; // Character after
+
+      const isValidMention = (charBefore === '' || /\s/.test(charBefore)) && // Before @ is whitespace or start of line
+        text.substring(atIndex).match(/\s/) == null
+
+      if (isValidMention) {
+        const mentioningPartialUsername = text.substring(atIndex + 1);
+        setPartialUsername(mentioningPartialUsername)
+        const caretPos = calcCursorPos(textarea)
+        setCursorPosX(caretPos.posX)
+        setCursorPosY(caretPos.posY)
+        setIsSuggestionOpen(true)
+      } else {
+        setIsSuggestionOpen(false)
+      }
+    } else {
+      setIsSuggestionOpen(false)
+    }
+  };
+
+  const handleSuggestionSelect = (e) => {
+    const textarea = textareaRef.current
+    const text = textarea.value;
+    const atIndex = text.lastIndexOf('@') // Find the last @ symbol
+    const mentioningPartialUsername = text.substring(atIndex + 1)
+    const newText = text.substring(0, atIndex + 1) + e.username + ' ' // Replace with full name + space
+    setBody(newText)
+    setPartialUsername('')
+    setIsSuggestionOpen(false)
+    // Set cursor position after the inserted name
+    textarea.selectionStart = atIndex + e.username.length + 2; // +2 for @ and space
+    textarea.selectionEnd = textarea.selectionStart;
+    textarea.focus(); //Refocus on the textarea
+  }
+
   return (
     <div className={'post-comments-new' + (editing ? ' is-editing' : '')}>
       <textarea
@@ -140,9 +253,13 @@ const AddComment = ({
         onKeyDown={handleKeyDown}
         onClick={handleTextareaClick}
         disabled={disabled || sendingRequest}
-        onInput={(e) => adjustTextareaHeight(e, 4 /* border size */)}
+        onInput={(e) => {
+          adjustTextareaHeight(e, 4 /* border size */)
+          handleInput(e)
+        }}
         onChange={(e) => setBody(e.target.value)}
       ></textarea>
+      <SelectMentionedUser open={isSuggestionOpen} partialUsername={partialUsername} commenters={commenters} posX={cursorPosX} posY={cursorPosY} onSelect={handleSuggestionSelect} />
       {(!main || (main && clicked)) && (
         <div className="post-comments-new-buttons">
           <Link className="button button-icon-simple" to="/markdown_guide" target="_blank">

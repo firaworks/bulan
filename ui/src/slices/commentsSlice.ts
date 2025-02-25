@@ -1,4 +1,4 @@
-import { Comment } from '../serverTypes';
+import { Comment, User } from '../serverTypes';
 import { AppDispatch, UnknownAction } from '../store';
 import { addComment, commentsTree, Node, searchTree } from './commentsTree';
 import { commentsCountIncremented } from './postsSlice';
@@ -12,6 +12,7 @@ export interface CommentsState {
       zIndexTop: number;
       fetchedAt: number;
       lastFetchedAt: number;
+      commenters: User[];
     };
   };
 }
@@ -50,6 +51,8 @@ export default function commentsReducer(
         next,
       } = action.payload as { postId: string; comments: Comment[]; next: string | null };
       if (state.ids.includes(postId)) return state;
+      let allCommenters = [...new Set(commentsList.map(comment => comment.author?.username).filter(username => username !== undefined))]
+      let commenters: User[] = allCommenters.map(username => commentsList.find(comment => comment.author?.username === username)?.author)
       return {
         ...state,
         items: {
@@ -60,6 +63,7 @@ export default function commentsReducer(
             zIndexTop: defaultCommentZIndex,
             fetchedAt: Date.now(),
             lastFetchedAt: Date.now(),
+            commenters: commenters
           },
         },
       };

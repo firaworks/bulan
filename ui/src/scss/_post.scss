@@ -400,6 +400,7 @@
     }
 
     .post-comments-new {
+        position: relative;
         display: flex;
         flex-direction: column;
         margin-bottom: var(--gap);
@@ -410,6 +411,7 @@
 
         textarea {
             // border: var(--card-border);
+            position: relative;
             width: 100%;
             min-height: 140px;
             padding: 10px;

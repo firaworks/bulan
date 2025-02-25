@@ -163,7 +163,7 @@ const SelectCommunity = ({ initial = '', onFocus, onChange, disabled = false }) 
                 alt=""
               />
               <div className="page-new-select-suggest-name">{s.name}</div>
-              <div className="page-new-select-suggest-detail">{kRound(s.noMembers)} members</div>
+              <div className="page-new-select-suggest-detail">{kRound(s.noMembers)} {s.noMembers > 1 ? t('members') : t('member')}</div>
             </div>
           ))}
         </div>
