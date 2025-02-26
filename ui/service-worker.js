@@ -150,7 +150,7 @@ const getNotificationInfo = (notification, csrfToken) => {
     options: {
       body: '',
       icon: '',
-      badge: '/logo-pwa-badge.png',
+      badge: '/notification-badge.png',
       tag: notification.id,
       data: {
         notificationId: notification.id,
