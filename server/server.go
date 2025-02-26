@@ -788,6 +788,11 @@ func (s *Server) insertMetaTags(doc *html.Node, r *http.Request) {
 				{Key: "content", Val: upVotes + sep + noComments + sep + post.Title},
 			})
 			image := ""
+			if post.Type == core.PostTypeText {
+				if post.Image != nil {
+					image = absoluteURL(*post.Image.URL)
+				}
+			}
 			if post.Type == core.PostTypeImage {
 				if post.Image != nil {
 					image = absoluteURL(*post.Image.URL)

@@ -531,6 +531,9 @@ func populatePostAuthors(ctx context.Context, db *sql.DB, posts []*Post, viewerA
 func populatePostsImages(ctx context.Context, db *sql.DB, posts []*Post) error {
 	imagePosts := []*Post{}
 	for _, post := range posts {
+		if post.Type == PostTypeText {
+			imagePosts = append(imagePosts, post)
+		}
 		if post.Type == PostTypeImage && !post.DeletedContent {
 			// Exclude posts whose content is deleted, also.
 			imagePosts = append(imagePosts, post)
@@ -583,6 +586,47 @@ func populatePostsImages(ctx context.Context, db *sql.DB, posts []*Post) error {
 
 	if err = rows.Err(); err != nil {
 		return err
+	}
+	// for textposts that didn't get their image generated
+	for _, post := range imagePosts {
+		if post.Type == PostTypeText && post.Image == nil {
+			//try to generate image for post
+			img, err := images.GenerateTextPostImage(ctx, db, post.Title, post.Body.String, post.AuthorUsername, post.AuthorID)
+			if err != nil {
+				log.Printf("could not generate og:image of post %s\n", post.ID)
+				// Continue on error...
+			} else {
+				var imageID uid.ID
+				imageID.Clear()
+				err := msql.Transact(ctx, db, func(tx *sql.Tx) error {
+					id, err := images.SaveImageTx(ctx, tx, "disk", img, &images.ImageOptions{
+						Width:  1200,
+						Height: 630,
+						Format: images.ImageFormatWEBP,
+						Fit:    images.ImageFitCover,
+					})
+					imageID = id
+					return err
+				})
+				if err != nil {
+					log.Printf("could not save generated image for post %s\n", post.ID)
+					// Continue on error...
+				} else {
+					if !imageID.Zero() {
+						var rows [][]msql.ColumnValue
+						row := []msql.ColumnValue{
+							{Name: "post_id", Value: post.ID},
+							{Name: "image_id", Value: imageID},
+						}
+						rows = append(rows, row)
+						query, args := msql.BuildInsertQuery("post_images", rows...)
+						if _, err = db.ExecContext(ctx, query, args...); err != nil {
+							return nil
+						}
+					}
+				}
+			}
+		}
 	}
 	return nil
 }
@@ -708,6 +752,40 @@ func createPost(ctx context.Context, db *sql.DB, opts *createPostOpts) (*Post, e
 	if _, err = tx.ExecContext(ctx, query, args...); err != nil {
 		tx.Rollback()
 		return nil, err
+	}
+
+	// generate image preview of text posts
+	if opts.postType == PostTypeText {
+		usr, _ := GetUser(ctx, db, opts.author, nil)
+		img, err := images.GenerateTextPostImage(ctx, db, post.Title, post.Body.String, post.AuthorUsername, usr.ID)
+		if err != nil {
+			log.Printf("could not generate og:image of post %s\n", post.ID)
+			// Continue on error...
+		} else {
+			imageID, err := images.SaveImageTx(ctx, tx, "disk", img, &images.ImageOptions{
+				Width:  1200,
+				Height: 630,
+				Format: images.ImageFormatWEBP,
+				Fit:    images.ImageFitCover,
+			})
+			if err != nil {
+				log.Printf("could not save generated image for post %s\n", post.ID)
+				// Continue on error...
+			} else {
+				// Insert the rows into post_images table.
+				var rows [][]msql.ColumnValue
+				row := []msql.ColumnValue{
+					{Name: "post_id", Value: post.ID},
+					{Name: "image_id", Value: imageID},
+				}
+				rows = append(rows, row)
+				query, args := msql.BuildInsertQuery("post_images", rows...)
+				if _, err = tx.ExecContext(ctx, query, args...); err != nil {
+					tx.Rollback()
+					return nil, err
+				}
+			}
+		}
 	}
 
 	if opts.postType == PostTypeImage {
