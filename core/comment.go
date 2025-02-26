@@ -930,13 +930,14 @@ func userMentionsToLink(body string) (string, []string) {
 }
 
 func communityMentionsToLink(body string) string {
-	re := regexp.MustCompile(`\/([\w-]+)`)
+	re := regexp.MustCompile(`b/([a-zA-Z0-9_-]+)`)
 	newBod := re.ReplaceAllStringFunc(body, func(match string) string {
-		word := match[1:] // Remove the leading "/"
-		if strings.Contains(body, "/"+word+"/") {
-			return match // Return original if it's a phrase or path
+		word := match[2:] // Remove the leading "b/"
+		fmt.Printf("%v - %v\n", match, word)
+		if strings.Contains(word, "-") { // Check for hyphens
+			return match
 		}
-		return fmt.Sprintf("[%s](https://bulan.mn%s)", match, match) // Markdown link
+		return fmt.Sprintf("[%s](https://bulan.mn/%s)", word, word) // Markdown link
 	})
 	return newBod
 }
