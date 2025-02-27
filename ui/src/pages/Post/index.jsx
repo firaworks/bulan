@@ -437,7 +437,7 @@ const Post = () => {
                   </>
                 )*/}
                 {loggedIn && isMod && (
-                  <Dropdown target={<button className="button-red">{t("actions.mod")}</button>}>
+                  <Dropdown target={<button className="button-red" >{t("actions.mod")}</button>}>
                     <div className="dropdown-list">
                       <button
                         className="button-clear dropdown-item"

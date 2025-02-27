@@ -415,8 +415,10 @@
         "alert_2": "Энэ постыг нээрэнгээсээ бүр устгах юм уу?"
     },
     "download_image": "Зургийг татах",
-    "to_x": "X / Twitter",
+    "to_x": "Twitter / X",
     "to_fb": "Facebook",
+    "to_fb_messenger": "Messenger",
+    "to_threads": "Threads",
     "settings": {
         "home_feed": "Нүүр хуудас дээрх постууд",
         "home_feed_selections": {
