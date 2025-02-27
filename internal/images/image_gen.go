@@ -10,7 +10,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/discuitnet/discuit/internal/uid"
 	"github.com/fogleman/gg"
 	"github.com/golang/freetype/truetype"
 	"golang.org/x/image/font"
@@ -24,7 +23,7 @@ const (
 	marginX     = 50
 )
 
-func GenerateTextPostImage(ctx context.Context, db *sql.DB, title, body, username string, userID uid.ID) ([]byte, error) {
+func GenerateTextPostImage(ctx context.Context, db *sql.DB, title, body, username string) ([]byte, error) {
 	fontPath := "./internal/images/assets/OpenSans-Regular.ttf"
 	logoPath := "./internal/images/assets/bulan-logo.png"
 	siteName := "bulan.mn"
@@ -81,6 +80,7 @@ func GenerateTextPostImage(ctx context.Context, db *sql.DB, title, body, usernam
 	// 		dc.DrawImage(mask.Image(), avatarX, avatarY)
 	// 	}
 	// }
+
 	// Username
 	dc.SetFontFace(usernameFace)
 	dc.SetColor(color.Black)

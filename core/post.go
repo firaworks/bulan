@@ -599,7 +599,7 @@ func populatePostsImages(ctx context.Context, db *sql.DB, posts []*Post) error {
 			// check if the post was prior to the text post image generating update
 			if now.Before(t) {
 				//try to generate image for post
-				img, err := images.GenerateTextPostImage(ctx, db, post.Title, post.Body.String, post.AuthorUsername, post.AuthorID)
+				img, err := images.GenerateTextPostImage(ctx, db, post.Title, post.Body.String, post.AuthorUsername)
 				if err != nil {
 					log.Printf("could not generate og:image of post %s\n", post.ID)
 					// Continue on error...
@@ -765,8 +765,7 @@ func createPost(ctx context.Context, db *sql.DB, opts *createPostOpts) (*Post, e
 
 	// generate image preview of text posts
 	if opts.postType == PostTypeText {
-		usr, _ := GetUser(ctx, db, opts.author, nil)
-		img, err := images.GenerateTextPostImage(ctx, db, post.Title, post.Body.String, post.AuthorUsername, usr.ID)
+		img, err := images.GenerateTextPostImage(ctx, db, post.Title, post.Body.String, post.AuthorUsername)
 		if err != nil {
 			log.Printf("could not generate og:image of post %s\n", post.ID)
 			// Continue on error...
