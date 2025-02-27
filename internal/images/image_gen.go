@@ -24,8 +24,8 @@ const (
 )
 
 func GenerateTextPostImage(ctx context.Context, db *sql.DB, title, body, username string) ([]byte, error) {
-	title = truncateString(title, 80)
-	body = truncateString(body, 400)
+	title = truncateString(title, 60)
+	body = truncateString(body, 150)
 	fontPath := "./internal/images/assets/OpenSans-Regular.ttf"
 	logoPath := "./internal/images/assets/bulan-logo.png"
 	siteName := "bulan.mn"
@@ -34,11 +34,11 @@ func GenerateTextPostImage(ctx context.Context, db *sql.DB, title, body, usernam
 	dc.SetColor(color.RGBA{R: 245, G: 245, B: 245, A: 255})
 	dc.Clear()
 
-	titleFace, err := loadFontFace(fontPath, 48)
+	titleFace, err := loadFontFace(fontPath, 60)
 	if err != nil {
 		return nil, err
 	}
-	bodyFace, err := loadFontFace(fontPath, 36)
+	bodyFace, err := loadFontFace(fontPath, 54)
 	if err != nil {
 		return nil, err
 	}
@@ -120,8 +120,13 @@ func GenerateTextPostImage(ctx context.Context, db *sql.DB, title, body, usernam
 		}
 	}
 
+	titleLines := 1
+	if lengthInRunes(title) > 39 {
+		titleLines = 2
+	}
+	titleHeight := float64(titleFace.Metrics().Height.Round() * titleLines)
 	drawText(dc, titleFace, title, marginX, avatarSize+40, imageWidth-2*marginX, 0)
-	drawText(dc, bodyFace, body, marginX, avatarSize+80+float64(titleFace.Metrics().Height.Round())*1.2+20, imageWidth-2*marginX, imageHeight-avatarSize-40-float64(titleFace.Metrics().Height.Round())*1.2-20-marginX)
+	drawText(dc, bodyFace, body, marginX, avatarSize+80+titleHeight, imageWidth-2*marginX, imageHeight-avatarSize-40-float64(titleFace.Metrics().Height.Round())*1.2-20-marginX)
 
 	img := dc.Image()
 	var buf bytes.Buffer
@@ -159,6 +164,11 @@ func loadFontFace(fontPath string, size float64) (font.Face, error) {
 		return nil, err
 	}
 	return truetype.NewFace(f, &truetype.Options{Size: size}), nil
+}
+
+func lengthInRunes(s string) int {
+	runes := []rune(s)
+	return len(runes)
 }
 
 func truncateString(s string, maxLength int) string {
