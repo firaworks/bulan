@@ -24,6 +24,8 @@ const (
 )
 
 func GenerateTextPostImage(ctx context.Context, db *sql.DB, title, body, username string) ([]byte, error) {
+	title = truncateString(title, 80)
+	body = truncateString(body, 400)
 	fontPath := "./internal/images/assets/OpenSans-Regular.ttf"
 	logoPath := "./internal/images/assets/bulan-logo.png"
 	siteName := "bulan.mn"
