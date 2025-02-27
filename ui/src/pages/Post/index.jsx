@@ -105,9 +105,6 @@ const Post = () => {
 
   useEffect(() => {
     if (community && post) {
-      if (typeof post.image != "undefined") {
-        console.log(post.image)
-      }
       const seps = location.pathname.split('/');
       if (seps.length > 0 && seps[1] !== community.name) {
         seps[1] = community.name;
