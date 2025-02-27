@@ -27,6 +27,7 @@ func GenerateTextPostImage(ctx context.Context, db *sql.DB, title, body, usernam
 	fontPath := "./internal/images/assets/OpenSans-Regular.ttf"
 	logoPath := "./internal/images/assets/bulan-logo.png"
 	siteName := "bulan.mn"
+	username = "@" + username
 	dc := gg.NewContext(imageWidth, imageHeight)
 	dc.SetColor(color.RGBA{R: 245, G: 245, B: 245, A: 255})
 	dc.Clear()
@@ -43,7 +44,6 @@ func GenerateTextPostImage(ctx context.Context, db *sql.DB, title, body, usernam
 	if err != nil {
 		return nil, err
 	}
-
 	// Calculate positions for lower right corner
 	// avatarSize := 80 // or your desired size
 	// avatarX := imageWidth - avatarSize - marginX

@@ -105,6 +105,7 @@ const Post = () => {
 
   useEffect(() => {
     if (community && post) {
+      console.log(post)
       const seps = location.pathname.split('/');
       if (seps.length > 0 && seps[1] !== community.name) {
         seps[1] = community.name;

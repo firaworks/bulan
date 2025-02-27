@@ -765,7 +765,8 @@ func createPost(ctx context.Context, db *sql.DB, opts *createPostOpts) (*Post, e
 
 	// generate image preview of text posts
 	if opts.postType == PostTypeText {
-		img, err := images.GenerateTextPostImage(ctx, db, post.Title, post.Body.String, post.AuthorUsername)
+		usr, _ := GetUser(ctx, db, opts.author, nil)
+		img, err := images.GenerateTextPostImage(ctx, db, post.Title, post.Body.String, usr.Username)
 		if err != nil {
 			log.Printf("could not generate og:image of post %s\n", post.ID)
 			// Continue on error...
