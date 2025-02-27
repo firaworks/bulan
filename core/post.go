@@ -590,38 +590,47 @@ func populatePostsImages(ctx context.Context, db *sql.DB, posts []*Post) error {
 	// for textposts that didn't get their image generated
 	for _, post := range imagePosts {
 		if post.Type == PostTypeText && post.Image == nil {
-			//try to generate image for post
-			img, err := images.GenerateTextPostImage(ctx, db, post.Title, post.Body.String, post.AuthorUsername, post.AuthorID)
+			now := time.Now()
+			imageGenStartedAt := "2025-02-28T00:00:00Z"
+			t, err := time.Parse(time.RFC3339, imageGenStartedAt)
 			if err != nil {
-				log.Printf("could not generate og:image of post %s\n", post.ID)
-				// Continue on error...
-			} else {
-				var imageID uid.ID
-				imageID.Clear()
-				err := msql.Transact(ctx, db, func(tx *sql.Tx) error {
-					id, err := images.SaveImageTx(ctx, tx, "disk", img, &images.ImageOptions{
-						Width:  1200,
-						Height: 630,
-						Format: images.ImageFormatWEBP,
-						Fit:    images.ImageFitCover,
-					})
-					imageID = id
-					return err
-				})
+				panic(err)
+			}
+			// check if the post was prior to the text post image generating update
+			if now.Before(t) {
+				//try to generate image for post
+				img, err := images.GenerateTextPostImage(ctx, db, post.Title, post.Body.String, post.AuthorUsername, post.AuthorID)
 				if err != nil {
-					log.Printf("could not save generated image for post %s\n", post.ID)
+					log.Printf("could not generate og:image of post %s\n", post.ID)
 					// Continue on error...
 				} else {
-					if !imageID.Zero() {
-						var rows [][]msql.ColumnValue
-						row := []msql.ColumnValue{
-							{Name: "post_id", Value: post.ID},
-							{Name: "image_id", Value: imageID},
-						}
-						rows = append(rows, row)
-						query, args := msql.BuildInsertQuery("post_images", rows...)
-						if _, err = db.ExecContext(ctx, query, args...); err != nil {
-							return nil
+					var imageID uid.ID
+					imageID.Clear()
+					err := msql.Transact(ctx, db, func(tx *sql.Tx) error {
+						id, err := images.SaveImageTx(ctx, tx, "disk", img, &images.ImageOptions{
+							Width:  1200,
+							Height: 630,
+							Format: images.ImageFormatWEBP,
+							Fit:    images.ImageFitCover,
+						})
+						imageID = id
+						return err
+					})
+					if err != nil {
+						log.Printf("could not save generated image for post %s\n", post.ID)
+						// Continue on error...
+					} else {
+						if !imageID.Zero() {
+							var rows [][]msql.ColumnValue
+							row := []msql.ColumnValue{
+								{Name: "post_id", Value: post.ID},
+								{Name: "image_id", Value: imageID},
+							}
+							rows = append(rows, row)
+							query, args := msql.BuildInsertQuery("post_images", rows...)
+							if _, err = db.ExecContext(ctx, query, args...); err != nil {
+								return nil
+							}
 						}
 					}
 				}
