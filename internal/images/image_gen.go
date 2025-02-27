@@ -8,6 +8,7 @@ import (
 	"image/color"
 	"image/png"
 	"os"
+	"regexp"
 	"strings"
 	"unicode"
 
@@ -186,11 +187,39 @@ func lengthInRunes(s string) int {
 }
 
 func truncateString(s string, maxLength int) string {
+	s = removeMarkdown(s)
 	runes := []rune(s)
 	if len(runes) > maxLength {
 		return string(runes[:maxLength]) + "..."
 	}
 	return s
+}
+
+func removeMarkdown(text string) string {
+	// Regular expressions to match markdown symbols
+	markdownRegexes := []*regexp.Regexp{
+		regexp.MustCompile(`\*`),                  // Asterisks (bold, italic)
+		regexp.MustCompile(`_`),                   // Underscores (bold, italic)
+		regexp.MustCompile(`#+`),                  // Hash symbols (headings)
+		regexp.MustCompile(`~+`),                  // Tildes (strikethrough)
+		regexp.MustCompile(`>`),                   // Greater-than (blockquotes)
+		regexp.MustCompile(`\[(.*?)\]\((.*?)\)`),  // Links
+		regexp.MustCompile(`!\[(.*?)\]\((.*?)\)`), // Images
+		regexp.MustCompile("`+"),                  // Code (inline and blocks)
+		regexp.MustCompile(`\-{3,}`),              // Horizontal rules
+		regexp.MustCompile(`\+{3,}`),              // Horizontal rules
+		regexp.MustCompile(`\=+`),                 // Horizontal rules
+	}
+
+	// Replace markdown symbols with empty strings
+	for _, regex := range markdownRegexes {
+		text = regex.ReplaceAllString(text, "")
+	}
+
+	// Remove any remaining leading/trailing whitespace
+	text = strings.TrimSpace(text)
+
+	return text
 }
 
 func wrapText(text string, face font.Face, maxWidth float64, maxHeight float64) []string {
