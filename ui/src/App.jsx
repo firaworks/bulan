@@ -59,6 +59,7 @@ import i18next from 'i18next';
 import ResetPassword from './pages/ResetPassword';
 import PasswordResetPrompt from './components/PasswordResetPrompt';
 import { useAnalytics } from './useAnalytics';
+import { userFbLogin } from './useFacebookLogin'
 
 // Value taken from _mixins.scss file.
 const tabletBreakpoint = 1170;
@@ -277,6 +278,7 @@ export default App;
 const AppSwitch = () => {
   // GoogleAnalytics
   useAnalytics()
+  userFbLogin()
 
   return (
     <>
