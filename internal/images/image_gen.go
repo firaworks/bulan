@@ -9,6 +9,7 @@ import (
 	"image/png"
 	"os"
 	"strings"
+	"unicode"
 
 	"github.com/fogleman/gg"
 	"github.com/golang/freetype/truetype"
@@ -121,8 +122,21 @@ func GenerateTextPostImage(ctx context.Context, db *sql.DB, title, body, usernam
 	}
 
 	titleLines := 1
-	if lengthInRunes(title) > 39 {
+	if lengthInRunes(title) > 32 {
 		titleLines = 2
+		runes := []rune(title)
+		breakAt := 30
+		for breakAt > 1 {
+			if !unicode.IsSpace(runes[breakAt]) {
+				breakAt--
+			} else {
+				break
+			}
+		}
+		if breakAt == 1 {
+			// break the word at 30 by force
+			title = string(runes[:30]) + " " + string(runes[30:])
+		}
 	}
 	titleHeight := float64(titleFace.Metrics().Height.Round() * titleLines)
 	drawText(dc, titleFace, title, marginX, avatarSize+40, imageWidth-2*marginX, 0)
