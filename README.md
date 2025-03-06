@@ -1,7 +1,8 @@
-# Discuit
+# Bulan
 
-This is the codebase that powers [Discuit](https://discuit.net), which is an
-open-source community platform, an alternative to Reddit.
+This is the codebase that powers [Bulan](https://bulan.mn), which is forked from an
+open-source community platform [Discuit](https://discuit.org), an alternative to Reddit.
+At Bulan we have forked and added our various custom logics.
 
 Built with:
 
@@ -127,56 +128,11 @@ In the root directory are these directories:
 - `server`: Contains the REST API backend.
 - `ui` - Contains the React frontend.
 
-## Roadmap
-
-- [x] Dark mode.
-- [x] User created communities.
-- UI preferences:
-  - [ ] Compact mode.
-  - [ ] Enable or disable infinite scroll.
-  - [x] Choose which notifications to get.
-  - [x] Change default feed sort.
-- Filtering:
-  - [x] Mute communities.
-  - [x] Mute users.
-  - [ ] Filter posts by topic.
-  - [ ] An explore page (modeled after Youtube's home page).
-  - [ ] Filter link-posts by URL or domain.
-- Moderation:
-  - [x] Pinned posts and comments.
-  - [ ] Lock individual comments (so they cannot be replied to).
-  - [ ] A single page for handling reports for users who moderate multiple communities.
-  - [ ] Temporary bans.
-- [ ] User and community mentions (@user and +community).
-- [x] Image posts.
-- [ ] Poll posts.
-- [x] Video embeds (Youtube, Vimeo, etc).
-- [x] Image galleries.
-- [ ] Server side rendering (for better SEO).
-- [ ] Direct messages.
-- [x] Saved posts and comments (modeled after Youtube playlists).
-- [ ] Multiple feeds (modeled after Twitter Lists).
-- [ ] Search.
-- [ ] Moderation log.
-- [ ] RSS feeds.
-- [ ] Wiki pages for communities.
-- [x] User profile pictures.
-- [x] User badges (displayed on profile page).
-- [ ] Post drafts.
-- [ ] History (viewed posts).
-- [ ] Something like Reddit's flairs to group posts within a community.
-
 ## Contributing
 
-Discuit is free and open-source software, and you're welcome to contribute to
-its development.
-
-If you're thinking of working on something substantial, however, (like a major
-feature) please create an issue, or contact [the
-maintainer](https://discuit.net/@previnder), to discuss it before commencing
-work.
-
-The documentation of the API can be found at [docs.discuit.net](https://docs.discuit.net).
+Bulan's fork of Discuit is free and open-source software, you can tinker 
+and modify it as much as you'd like on your own. If you feel like we need 
+your contribution, feel free to contact us.
 
 ## License
 
