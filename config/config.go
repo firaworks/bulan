@@ -109,7 +109,7 @@ func Parse(path string) (*Config, error) {
 		PaginationLimitMax: 50,
 		DefaultFeedSort:    core.FeedSortHot,
 		MaxImageSize:       25 * (1 << 20),
-		MaxImagesPerPost:   10,
+		MaxImagesPerPost:   20,
 		MaxVideoSize:       100 * (1 << 20),
 		MaxVideoDuration:   180,
 
