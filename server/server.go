@@ -139,6 +139,7 @@ func New(db *sql.DB, conf *config.Config) (*Server, error) {
 	r.Handle("/api/_postVote", s.withHandler(s.postVote)).Methods("POST")
 	r.Handle("/api/_uploadImage", s.withHandler(s.imageUpload)).Methods("POST")
 	r.Handle("/api/_uploadVideo", s.withHandler(s.videoUpload)).Methods("POST")
+	r.Handle("/api/video/status/{videoID}", s.withHandler(s.getVideoStatus)).Methods("GET")
 
 	r.Handle("/api/posts/{postID}/comments", s.withHandler(s.getPostComments)).Methods("GET")
 	r.Handle("/api/posts/{postID}/comments", s.withHandler(s.addComment)).Methods("POST")

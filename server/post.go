@@ -101,7 +101,7 @@ func (s *Server) addPost(w *responseWriter, r *request) error {
 				if err != nil {
 					return httperr.NewBadRequest("convert_start_unsaved", "Error while marking convert video.")
 				}
-				return w.writeJSON("success")
+				return w.writeJSON(req.Video.VideoID.String())
 			} else {
 				return httperr.NewBadRequest("invalid_video_id", "Invalid video ID.")
 			}

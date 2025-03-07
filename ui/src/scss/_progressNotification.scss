@@ -1,0 +1,236 @@
+// .snacks {
+//     position: fixed;
+//     z-index: 3000;
+//     bottom: 15px;
+//     left: 15px;
+//     display: flex;
+//     flex-direction: column;
+
+//     .snack {
+//         min-width: 260px;
+//         background: var(--color-fg);
+//         color: var(--color-bg);
+//         border-radius: var(--border-radius);
+//         padding: 8px 12px;
+//         margin-top: 10px;
+//         display: flex;
+//         align-items: center;
+//         justify-content: space-between;
+
+//         @include mixins.mobile() {
+//             position: fixed;
+//             bottom: 15px;
+//             left: 50%;
+//             transform: translateX(-50%);
+//         }
+
+//         .button-icon {
+//             transform: scale(0.9);
+//             color: var(--color-bg);
+
+//             &:hover,
+//             &.is-active {
+//                 background: rgba(var(--base-bg), 0.1);
+//             }
+//         }
+//     }
+// }
+
+// Progress Notification styles
+.progress-notification {
+    position: fixed;
+    background: var(--color-fg);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+    z-index: 1000;
+    transition: opacity 0.3s, transform 0.3s;
+
+
+    // Close button
+    .button-icon {
+        transform: scale(0.9);
+        color: var(--color-bg);
+
+        &:hover,
+        &.is-active {
+            background: rgba(var(--base-bg), 0.1);
+        }
+    }
+
+
+    // Position classes
+    &.position-top-right {
+        top: 16px;
+        right: 16px;
+    }
+
+    &.position-top-left {
+        top: 16px;
+        left: 16px;
+    }
+
+    &.position-top-center {
+        top: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    &.position-bottom-right {
+        bottom: 16px;
+        right: 16px;
+    }
+
+    &.position-bottom-left {
+        bottom: 16px;
+        left: 16px;
+    }
+
+    &.position-bottom-center {
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    // Visibility states
+    &.visible {
+        opacity: 1;
+        transform: translateX(0);
+
+        &.position-top-center,
+        &.position-bottom-center {
+            transform: translateX(-50%);
+        }
+    }
+
+    &.hidden {
+        opacity: 0;
+        transform: translateY(-10px);
+
+        &.position-top-center {
+            transform: translate(-50%, -10px);
+        }
+
+        &.position-bottom-left,
+        &.position-bottom-right {
+            transform: translateY(10px);
+        }
+
+        &.position-bottom-center {
+            transform: translate(-50%, 10px);
+        }
+    }
+}
+
+// Content container
+.notification-content {
+    padding: 12px;
+}
+
+// Header styles
+.notification-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+}
+
+// Status icon styles
+.status-icon {
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.processing {
+        color: #3b82f6;
+        animation: spin 1.5s linear infinite;
+    }
+
+    &.success {
+        color: #10b981;
+    }
+
+    &.error {
+        color: #ef4444;
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.notification-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-bg);
+    margin: 0;
+}
+
+
+// Progress bar
+.progress-container {
+    width: 100%;
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 4px;
+    background-color: var(--color-fg);
+    border-radius: 2px;
+    margin-bottom: 6px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: #3b82f6;
+    border-radius: 2px;
+    transition: width 0.3s ease-in-out;
+}
+
+.progress-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+// Status messages
+.status-message {
+    font-size: 13px;
+    margin-top: 4px;
+
+    &.success {
+        color: #10b981;
+        font-weight: 500;
+    }
+
+    &.error {
+        color: #ef4444;
+        font-weight: 500;
+        margin-bottom: 4px;
+    }
+}
+
+// Error details
+.error-details {
+    font-size: 12px;
+    color: #6b7280;
+    background-color: #fee2e2;
+    border: 1px solid #fecaca;
+    border-radius: 4px;
+    padding: 8px;
+    margin-top: 4px;
+}

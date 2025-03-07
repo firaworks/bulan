@@ -60,6 +60,7 @@ import ResetPassword from './pages/ResetPassword';
 import PasswordResetPrompt from './components/PasswordResetPrompt';
 import { useAnalytics } from './useAnalytics';
 import { userFbLogin } from './useFacebookLogin'
+import { VideoProgressNotification } from './components/SpecializedNotifications';
 
 // Value taken from _mixins.scss file.
 const tabletBreakpoint = 1170;
@@ -214,6 +215,20 @@ const App = () => {
     }
   }, [settingsChanged]);
 
+  // Video Processing progress
+  const [showProgress, setShowProgress] = useState(false);
+  const [videoId, setVideoId] = useState(null);
+
+  // Check if we're coming from a video upload
+  useEffect(() => {
+    if (location.state && location.state.videoId) {
+      setVideoId(location.state.videoId);
+      setShowProgress(true);
+      // Clear the location state to prevent showing notification on page refresh
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
+
   if (!isOnline && showOfflinePage) {
     return <Offline />;
   }
@@ -269,6 +284,12 @@ const App = () => {
         open={createCommunityOpen}
         onClose={() => dispatch(createCommunityModalOpened(false))}
       />
+      {showProgress && videoId && (
+        <VideoProgressNotification
+          videoId={videoId}
+          onClose={() => setShowProgress(false)}
+        />
+      )}
     </>
   );
 };

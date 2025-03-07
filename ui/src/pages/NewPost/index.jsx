@@ -341,8 +341,10 @@ const NewPost = () => {
         }
         newPost = await res.json();
         if (postType === 'video') {
-          alert(t('new_post.your_video_will_appear_later'))
-          history.goBack();
+          history.push({
+            pathname: '/',
+            state: { videoId: newPost }
+          });
           return
         }
       }
