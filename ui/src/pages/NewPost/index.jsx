@@ -410,10 +410,25 @@ const NewPost = () => {
       setChanged(true);
       if (overrideTitle.current === true && res.title !== '') {
         setTitle(res.title);
+        // Give React time to update the DOM with the new title
+        setTimeout(() => {
+          forceTextareaResize();
+        }, 50);
       }
     } catch (error) {
       console.error(error);
     }
+  };
+  // Utility function to force textareas to resize
+  const forceTextareaResize = () => {
+    // Find all textareas with adjustable class
+    const textareas = document.querySelectorAll('textarea.page-new-post-title');
+    textareas.forEach(textarea => {
+      // Reset height first
+      textarea.style.height = 'auto';
+      // Set the height based on scrollHeight
+      textarea.style.height = textarea.scrollHeight + 'px';
+    });
   };
   const handleLinkPaste = (e) => {
     let paste = (e.clipboardData || window.clipboardData).getData('text');
