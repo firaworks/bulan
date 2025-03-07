@@ -63,11 +63,11 @@ export const PostContentDeleteModal = ({ open, onClose, onDelete, post }) => {
     <Modal open={open} onClose={onClose}>
       <div className="modal-card">
         <div className="modal-card-head">
-          <div className="modal-card-title">{t("post_modal.delete_post")} {postContentType}</div>
+          <div className="modal-card-title">{t("post_modal.delete_post")}</div>
           <ButtonClose onClick={onClose} />
         </div>
         <div className="modal-card-content">
-          <p>{t("post_modal.alert_2")} {postContentType}?</p>
+          <p>{t("post_modal.alert_2")}</p>
         </div>
         <div className="modal-card-actions">
           <button className="button-main" onClick={onDelete}>

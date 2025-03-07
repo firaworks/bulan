@@ -341,7 +341,7 @@ const NewPost = () => {
         }
         newPost = await res.json();
         if (postType === 'video') {
-          history.push({
+          history.replace({
             pathname: '/',
             state: { videoId: newPost }
           });

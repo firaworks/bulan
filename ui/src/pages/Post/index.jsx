@@ -282,8 +282,7 @@ const Post = () => {
     return `${t("new_comment.alert_11")} (${userGroupSingular(post.deletedAs, true)})`;
   };
 
-  const deletePostContentButtonText = `${t('_delete')} ${post.type === 'image' ? (post.images.length > 1 ? 'images' : 'image') : post.type
-    }`;
+  const deletePostContentButtonText = `${post.type === 'image' ? (post.images.length > 1 ? 'images' : 'image') : t(post.type)} ${t('_delete')}`;
 
   return (
     <div className="page-content page-post wrap">
