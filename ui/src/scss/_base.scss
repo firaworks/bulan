@@ -52,7 +52,6 @@
     --base-9: 225, 225, 225;
     --base-10: 255, 255, 255;
     --base-brand: 59, 89, 153; // Same as #3b5999;
-    // --base-brand: 107, 2, 242; // Same as #6b02f2;
     --base-white: var(--base-10);
     --base-black: var(--base-0);
     --base-red: 236, 72, 72; //#ec4848;
@@ -322,6 +321,7 @@ body {
     position: relative;
     z-index: 1;
     min-height: calc(100vh - var(--navbar-height));
+
     // overflow-x: auto; // is-sticky doesn't work with this
     @include mixins.mobile() {
         overflow-x: auto;
@@ -377,6 +377,7 @@ h3 {
 
 h1 {
     font-size: 3.5rem;
+
     @include mixins.mobile() {
         font-size: 2.5rem;
     }
@@ -384,6 +385,7 @@ h1 {
 
 h2 {
     font-size: 2.5rem;
+
     @include mixins.mobile() {
         font-size: 2rem;
     }
@@ -391,6 +393,7 @@ h2 {
 
 h3 {
     font-size: 2rem;
+
     @include mixins.mobile() {
         font-size: 1.5rem;
     }
@@ -1073,6 +1076,7 @@ a,
 .page-content {
     padding-top: var(--page-top-margin);
     min-height: calc(100vh - var(--navbar-height));
+
     &.page-grid {
         display: grid;
         grid-template-columns: var(--grid-home);

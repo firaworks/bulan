@@ -1,0 +1,110 @@
+/* VideoPlayer.css */
+
+/* Control bar styling */
+.bulan-video-player .vjs-control-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 40px;
+    background-color: var(--base-black);
+    border-radius: 0;
+}
+
+/* Progress bar styling to look like Reddit */
+.bulan-video-player .vjs-progress-control {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    height: 8px;
+    transition: height 0.2s;
+}
+
+.bulan-video-player .vjs-progress-control:hover {
+    height: 10px;
+}
+
+.bulan-video-player .vjs-progress-holder {
+    height: 4px;
+    transition: height 0.2s;
+}
+
+.bulan-video-player .vjs-progress-control:hover .vjs-progress-holder {
+    height: 6px;
+}
+
+/* Make the progress bar orange like Reddit */
+.bulan-video-player .vjs-play-progress {
+    background-color: var(--base-brand);
+}
+
+.bulan-video-player .vjs-load-progress {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Make the play button and other controls white */
+.bulan-video-player .vjs-control {
+    color: var(--base-white);
+}
+
+.bulan-video-player .vjs-control:hover {
+    color: var(--color-button-main-hover);
+}
+
+/* Time display styling */
+.bulan-video-player .vjs-current-time,
+.bulan-video-player .vjs-time-divider,
+.bulan-video-player .vjs-duration {
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Hide elements we don't want */
+.bulan-video-player .vjs-remaining-time,
+.bulan-video-player .vjs-picture-in-picture-control,
+.bulan-video-player .vjs-playback-rate,
+.bulan-video-player .vjs-volume-panel .vjs-volume-control,
+.bulan-video-player .vjs-captions-button,
+.bulan-video-player .vjs-chapters-button,
+.bulan-video-player .vjs-descriptions-button,
+.bulan-video-player .vjs-audio-button,
+.bulan-video-player .vjs-subs-caps-button {
+    display: none !important;
+}
+
+/* Make the play button larger */
+.bulan-video-player .vjs-play-control {
+    font-size: 1.2em;
+    width: 40px;
+}
+
+/* Fix mute toggle button width */
+.bulan-video-player .vjs-mute-control {
+    width: 40px;
+}
+
+/* Make controls more visible on mouse-over */
+.bulan-video-player:hover .vjs-control-bar {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: all 0.1s ease;
+}
+
+/* Progress bar seeking dot */
+.bulan-video-player .vjs-play-progress:before {
+    font-size: 0.9em;
+    top: -0.25em;
+}
+
+/* Make progress bar dot orange */
+.bulan-video-player .vjs-play-progress:before {
+    color: var(--base-brand);
+}
+
+/* Handle touch screen styling */
+.bulan-video-player.vjs-touch-enabled .vjs-control-bar {
+    height: 44px;
+}

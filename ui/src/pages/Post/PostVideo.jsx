@@ -50,10 +50,14 @@ const PostVideo = ({ post, onVideoPaused, onVideoPlayed }) => {
     paused: onPaused,
   };
   function onPlayed(videoNode) {
-    onVideoPlayed(videoNode)
+    if (typeof onVideoPlayed !== 'undefined') {
+      onVideoPlayed(videoNode)
+    }
   }
   function onPaused(videoNode) {
-    onVideoPaused(videoNode)
+    if (typeof onVideoPaused !== 'undefined') {
+      onVideoPaused(videoNode)
+    }
   };
 
   return <div className='post-video'>
