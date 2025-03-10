@@ -5,6 +5,7 @@ import Dropdown from '../../components/Dropdown';
 import { copyToClipboard } from '../../helper';
 import { snackAlert } from '../../slices/mainSlice';
 import { useTranslation } from 'react-i18next';
+import { useIsMobile } from '../../hooks';
 
 const Target = ({ ...props }) => {
   const [t, i18n] = useTranslation("global");
@@ -22,6 +23,7 @@ const Target = ({ ...props }) => {
 const PostShareButton = ({ post }) => {
   const [t, i18n] = useTranslation("global");
   const dispatch = useDispatch();
+  const isMobile = useIsMobile();
 
   const url = `${window.location.origin}/${post.communityName}/post/${post.publicId}`;
   const handleCopyURL = () => {
@@ -67,6 +69,35 @@ const PostShareButton = ({ post }) => {
   const twitterText = `"${post.title}" ${url}`;
   const fbAppID = '1202053838003461'
   const redirectUri = encodeURIComponent(window.location.href);
+  const handleShareToFbMessenger = () => {
+    // Encode URL and title for sharing
+    const encodedUrl = encodeURIComponent(url);
+    // Base messenger URL
+    const messengerBaseUrl = 'https://www.facebook.com/dialog/send';
+    // Parameters
+    const params = new URLSearchParams({
+      app_id: fbAppID,
+      link: url,
+      redirect_uri: window.location.href, // Redirect back to current page
+    });
+
+    if (isMobile) {
+      // Try to open the Messenger app with deep linking
+      const messengerAppUrl = `fb-messenger://share?link=${encodedUrl}`;
+      // First try to open the app, if it fails (after a timeout) redirect to web version
+      const fallbackTimer = setTimeout(() => {
+        window.location.href = `${messengerBaseUrl}?${params.toString()}`;
+      }, 1000);
+      window.location.href = messengerAppUrl;
+      // If the app opens, clear the fallback timer
+      window.addEventListener('pagehide', () => {
+        clearTimeout(fallbackTimer);
+      }, { once: true });
+    } else {
+      // On desktop, just open messenger.com in a new tab
+      window.open(`${messengerBaseUrl}?${params.toString()}`, '_blank');
+    }
+  }
 
   return (
     <Dropdown target={<Target />}>
@@ -104,17 +135,17 @@ const PostShareButton = ({ post }) => {
           &nbsp;
           {t("to_threads")}
         </a>
-        <a
+        <button
+          onClick={handleShareToFbMessenger}
           className="button-clear dropdown-item"
           target="_blank"
-          href={`https://www.facebook.com/dialog/send?app_id=${fbAppID}&link=${url}&redirect_uri=${redirectUri}`}
           rel="noreferrer"
           style={{ display: 'block' }}
         >
           <svg style={{ verticalAlign: 'middle' }} width={28} height={28} fill='currentColor' viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><title>Messenger</title><path d="M.001 11.639C.001 4.949 5.241 0 12.001 0S24 4.95 24 11.639c0 6.689-5.24 11.638-12 11.638-1.21 0-2.38-.16-3.47-.46a.96.96 0 00-.64.05l-2.39 1.05a.96.96 0 01-1.35-.85l-.07-2.14a.97.97 0 00-.32-.68A11.39 11.389 0 01.002 11.64zm8.32-2.19l-3.52 5.6c-.35.53.32 1.139.82.75l3.79-2.87c.26-.2.6-.2.87 0l2.8 2.1c.84.63 2.04.4 2.6-.48l3.52-5.6c.35-.53-.32-1.13-.82-.75l-3.79 2.87c-.25.2-.6.2-.86 0l-2.8-2.1a1.8 1.8 0 00-2.61.48z" /></svg>
           &nbsp;
           {t("to_fb_messenger")}
-        </a>
+        </button>
         <button className="button-clear dropdown-item" style={{ display: 'block' }} onClick={handleCopyURL}>
           <svg style={{ verticalAlign: 'middle' }} width={28} height={28} fill="none" viewBox="0 0 28 28" strokeWidth="1.5" stroke="currentColor" >
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
